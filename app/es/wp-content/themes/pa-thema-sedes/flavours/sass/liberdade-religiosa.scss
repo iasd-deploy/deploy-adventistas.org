@@ -1,0 +1,21 @@
+/**
+* Name: Liberdade Religiosa
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#b1383c;
+$theme-alt-color: 					#a26e4a;
+$theme-main-nav-base-color:			$theme-alt-color;
+$theme-footer-base-color:			$theme-alt-color;
+$theme-header-background-img:		'flavours/liberdade-religiosa/header.jpg';
+$theme-logo: 						'flavours/liberdade-religiosa/logo.png';
+$theme-logo-retina: 				'flavours/liberdade-religiosa/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

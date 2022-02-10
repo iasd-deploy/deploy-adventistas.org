@@ -1,0 +1,15 @@
+{
+    "name": "internetdsa/pa-thema-institucional",
+    "version": "master",
+    "type": "wordpress-theme",
+    "dist": {
+        "url": "git@bitbucket.org:internetdsa/pa-thema-institucional.git",
+        "type": "git"
+    },
+    "source": {
+        "url": "git@bitbucket.org:internetdsa/pa-thema-institucional.git",
+        "type": "git",
+        "reference": "develop"
+    }
+    
+}

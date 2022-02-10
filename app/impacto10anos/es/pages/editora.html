@@ -1,0 +1,34 @@
+	<div id="row1" class="row">
+    	<div class="col-md-8">
+    		<h1>Imprimir esperanza</h1>
+    		<p>Antes de recebir el libro el mismo pasó por muchas cosas. Fueron tantas manos que trabajaron en él, tantos ojos atentos a los detalles, ¡tantos kilómetros recorridos! ¿Quieres conocer ese trayecto? Mira el video.</p>
+    	</div>
+    	<div class="col-md-4">
+	    	<div class="selo">
+		    	<a href="javascript:void(0);" onclick="vervideo()" ><img id="editora-img" src="images/play3.png"></a>
+	    	</div>
+	    </div>
+	</div>
+	<div id="row2" class="row">
+
+	    <div id="popupVid" class="embed-responsive embed-responsive-16by9">
+	    	<iframe id="video" class="embed-responsive-item" src="https://www.youtube.com/embed/R0cnDIB3xc0?rel=0" frameborder="0" allowfullscreen></iframe>
+	    </div>
+	    <span class="glyphicon glyphicon-remove-circle fechar2">
+
+    </div>
+
+    <script type="text/javascript">				
+
+		var links2 = document.getElementById("editora-img");
+		var nav2 = document.getElementById("editora");
+
+		links2.onmouseenter = function () {
+		    nav2.classList.add("onNavHover");  
+		}
+
+		links2.onmouseout = function () {
+		    nav2.classList.remove("onNavHover");
+		}
+		
+	</script>

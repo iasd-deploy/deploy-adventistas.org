@@ -1,0 +1,21 @@
+/**
+* Name: Ministério da Saúde
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#a3af1f;
+$theme-alt-color: 					#8a5c1f;
+$theme-main-nav-base-color:			$theme-main-color;
+$theme-footer-base-color:			$theme-alt-color;
+$theme-header-background-img:		'flavours/saude/header.jpg';
+$theme-logo: 						'flavours/saude/logo.png';
+$theme-logo-retina: 				'flavours/saude/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

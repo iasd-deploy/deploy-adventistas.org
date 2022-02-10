@@ -1,0 +1,15 @@
+<Files *.php>
+deny from all
+</Files>
+<Files "player_radiont.php">
+Order Allow,Deny
+Allow from all
+</Files>
+<Files "player_tvnt.php">
+Order Allow,Deny
+Allow from all
+</Files>
+<Files "player.php">
+Order Allow,Deny
+Allow from all
+</Files>

@@ -1,0 +1,21 @@
+/**
+* Name: ASA
+* Thumbnail: thumbnail.png
+* Version: 10/11/2014
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#bb922e;
+$theme-alt-color: 					#0c3231;
+$theme-main-nav-base-color:			$theme-alt-color;
+$theme-footer-base-color:			$theme-main-color;
+$theme-header-background-img:		'flavours/asa/header.jpg';
+$theme-logo: 						'flavours/asa/logo.png';
+$theme-logo-retina: 				'flavours/asa/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

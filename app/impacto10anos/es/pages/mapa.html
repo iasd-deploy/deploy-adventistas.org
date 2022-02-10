@@ -1,0 +1,634 @@
+	
+	<div class="col-md-6">
+		<div id="map-south-america">
+			<ul class="south-america">
+				<li class="sam1"><a href="#argentina">Argentina</a></li>
+				<li class="sam2"><a href="#bolivia">Bolivia</a></li>
+				<li class="sam3"><a href="#brasil">Brasil</a></li>
+				<li class="sam4"><a href="#chile">Chile</a></li>
+				<li class="sam6"><a href="#ecuador">Ecuador</a></li>
+				<li class="sam9"><a href="#paraguay">Paraguay</a></li>
+				<li class="sam10"><a href="#peru">Peru</a></li>
+				<li class="sam12"><a href="#uruguay">Uruguay</a></li>
+
+			</ul>
+		</div>
+		<!-- END OF THE CSSMap - South America -->
+
+		<!-- CSSMap SCRIPT -->
+		<script type="text/javascript" src="https://cssmapsplugin.com/5/jquery.cssmap.min.js"></script>
+
+		<!-- Script de configuração do mapa -->
+		<script type="text/javascript">
+
+			$(document).ready(function(){
+
+				rLink = "";
+
+				$("#map-south-america").CSSMap({
+				  
+				  "size": 430,
+				  "mapStyle": "deful",
+				  "loadingText": "Carregando...",
+				  "responsive": "auto",
+				  "multipleClick": {
+				    "enable": false,
+				    "searchUrl": "index.php",
+				    "searchLink": "Search",
+				    "searchLinkVar": "region",
+				    "separator": "+",
+				    "hideSearchLink": true,
+				    "clicksLimit": 0
+				},
+
+					onClick: function terra(e){
+
+						
+
+						if (rLink != ""){
+
+							var aLink = rLink;
+							
+							rLink = e.children("A").eq(0).attr("href");
+
+							rLink = rLink + "x";
+
+							//alert(rLink);
+
+							$(aLink).fadeOut(100, function() {
+						    	
+						    	$(rLink).fadeIn(1000);
+						    	return false;
+
+							});
+
+						} else {
+
+								rLink = e.children("A").eq(0).attr("href");
+								
+								rLink = rLink + "x";
+								
+								$(rLink).fadeIn(1000);
+								return false;
+						} 
+								
+					},
+
+					onSecondClick: function pato(b){
+
+						rLink = b.children("A").eq(0).attr("href");
+
+						rLink = rLink + "x";
+
+						$(rLink).fadeOut(100);
+
+					}
+
+				});
+
+			});
+
+		</script>
+	</div>
+	<div class="col-md-6">
+		<h1>... a todo linaje y nación</h1>
+		<p>En diez años, la Asociación Casa Editora Sudamericana y la Casa Publicadora Brasileña han producido más de 170 millones de libros misioneros. A continuación se muestra la tirada de cada año.</p>
+		<div id="dados" class="table-responsive">
+			 
+			<table id="brasilx" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/brasil.jpg" title="ícone Brasil,bandeiras,bandeira   " alt="ícone Brasil,bandeiras,bandeira "></th>
+			    	<th><h2>BRASIL</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td>2007</td>
+			    	<td>Os Dez Mandamentos</td>
+			     	<td>2.203.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperança Para Viver</td>
+			     	<td>2.203.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2009</td>
+			    	<td>Sinais de Esperança</td>
+			    	<td>4.018.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tempo de Esperança</td>
+			    	<td>7.475.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2011</td>
+			     	<td>Ainda Existe Esperança</td>
+			     	<td>8.528.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2012/2013</td>
+			    	<td>A Grande Esperança</td>
+			    	<td>34.200.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2014</td>
+			    	<td>A Única Esperança</td>
+			    	<td>16.642.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2014/2015</td>
+			     	<td>Viva Com Esperança</td>
+			     	<td>16.943.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2016</td>
+			    	<td>Esperança Viva</td>
+			    	<td>15.204.500</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2017</td>
+			    	<td>Em Busca de Esperança</td>
+			    	<td>16.432.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="argentinax" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/argentina.jpg" title="Ícone da bandeira da Argentina" alt="Ícone da bandeira da Argentina"></th>
+			    	<th><h2>ARGENTINA</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	<tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>70.100</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			     	<td>224.250</td>
+			    </tr>
+			    <tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>666.600</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			    	<td>1.235.500</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2011</td>
+			    	<td>Todavía Existe Esperanza</td>
+			     	<td>840.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>3.774.330.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			    	<td>1.043.440</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			    	<td>Viva con Esperanza</td>
+			     	<td>1.104.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>1.150.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>1.005.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="perux" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/peru.jpg" title="Ícone da bandeira da Peru" alt="Ícone da bandeira da Peru"></th>
+			    	<th><h2>PERU</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>550.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			    	<td>302.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>1.110.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			     	<td>700.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2011</td>
+			    	<td>Todavía Existe Esperanza</td>
+			    	<td>800.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>5.435.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			     	<td>1.200.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			    	<td>Viva con Esperanza</td>
+			    	<td>2.327.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>1.500.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>2.000.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="boliviax" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/bolivia.jpg" title="Ícone da bandeira da Bolivia" alt="Ícone da bandeira da Bolivia"></th>
+			    	<th><h2>BOLIVIA</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>35.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			     	<td>49.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>400.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			    	<td>130.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2011</td>
+			     	<td>Todavía Existe Esperanza</td>
+			     	<td>200.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>1.825.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			    	<td>480.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			     	<td>Viva con Esperanza</td>
+			     	<td>510.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>750.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>915.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="chilex" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/chile.jpg" title="Ícone da bandeira da Chile" alt="Ícone da bandeira da Chile"></th>
+			    	<th><h2>CHILE</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+
+			  	<tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>221.100</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			     	<td>350.200</td>
+			    </tr>
+			    <tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>500.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			    	<td>1.000.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2011</td>
+			    	<td>Todavía Existe Esperanza</td>
+			     	<td>750.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>3.000.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			     	<td>850.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			    	<td>Viva con Esperanza</td>
+			    	<td>755.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>700.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>640.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="paraguayx" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/paraguay.jpg" title="Ícone da bandeira da Paraguay" alt="Ícone da bandeira da Paraguay"></th>
+			    	<th><h2>PARAGUAY</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>7.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			    	<td>8.750</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>36.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			     	<td>114.500</td>
+			    </tr>
+			    <tr>
+			    	<td>2011</td>
+			    	<td>Todavía Existe Esperanza</td>
+			    	<td>140.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>260.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			     	<td>100.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			    	<td>Viva con Esperanza</td>
+			    	<td>108.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>100.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>150.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="uruguayx" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/uruguay.jpg" title="Ícone da bandeira da Uruguay" alt="Ícone da bandeira da Uruguay"></th>
+			    	<th><h2>URUGUAY</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>6.800</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			     	<td>8.800</td>
+			    </tr>
+			    <tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>37.400</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			    	<td>55.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2011</td>
+			     	<td>Todavía Existe Esperanza</td>
+			     	<td>80.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>240.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			    	<td>80.000</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			     	<td>Viva con Esperanza</td>
+			     	<td>96.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>60.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>80.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<table id="ecuadorx" class="mx table text-center">
+			  <thead>
+			    <tr>
+			    	<th><img src="images/bandeiras/ecuador.jpg" title="Ícone da bandeira da Ecuador" alt="Ícone da bandeira da Ecuador"></th>
+			    	<th><h2>ECUADOR</h2></th>
+			    	<th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			    	<td>2007</td>
+			    	<td>Los Diez Mandamientos</td>
+			     	<td>60.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2008</td>
+			    	<td>Esperanza para Vivir</td>
+			    	<td>57.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2009</td>
+			    	<td>Señales de Esperanza</td>
+			    	<td>250.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2010</td>
+			    	<td>Tiempo de Esperanza</td>
+			     	<td>265.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2011</td>
+			    	<td>Todavía Existe Esperanza</td>
+			    	<td>290.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2012/2013</td>
+			    	<td>La Gran Esperanza</td>
+			    	<td>1.465.670</td>
+
+			    </tr>
+			    <tr>
+			    	<td>2014</td>
+			    	<td>La Única Esperanza</td>
+			     	<td>446.560</td>
+			    </tr>
+			    <tr>
+			    	<td>2015</td>
+			    	<td>Viva con Esperanza</td>
+			    	<td>300.000</td>
+
+			    </tr>
+			   	<tr>
+			    	<td>2016</td>
+			    	<td>Esperanza Viva</td>
+			    	<td>200.000</td>
+			    </tr>
+			    <tr>
+			    	<td>2017</td>
+			    	<td>En Busca de Esperanza</td>
+			    	<td>210.000</td>
+			    </tr>
+			  </tbody>
+			</table>
+
+		</div>
+	</div>

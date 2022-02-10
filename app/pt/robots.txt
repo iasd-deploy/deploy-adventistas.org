@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /wp-content/uploads/
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+Disallow: /wp-content/plugins/
+
+Sitemap: http://www.adventistas.org/pt/sitemap_index.xml

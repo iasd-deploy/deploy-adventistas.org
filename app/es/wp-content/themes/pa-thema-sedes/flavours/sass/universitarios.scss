@@ -1,0 +1,21 @@
+/**
+* Name: Ministério dos Universitários
+* Thumbnail: thumbnail.png
+* Version: 05/10/2018
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#3c54b6;
+$theme-alt-color: 					#ab2142;
+$theme-main-nav-base-color:			$theme-main-color;
+$theme-footer-base-color:			$theme-main-color;
+$theme-header-background-img:		'flavours/universitarios/header.jpg';
+$theme-logo: 						'flavours/universitarios/logo.png';
+$theme-logo-retina: 				'flavours/universitarios/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

@@ -1,0 +1,690 @@
+/**
+* Name: Missão Calebe
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+* Description: Tema para o projeto Missão Calebe 2014
+*/
+
+
+$theme-main-color:                 	#ffd638;
+$theme-alt-color:                   #e7a300;
+$theme-main-nav-base-color:         #ffd638;
+$theme-footer-base-color:           $theme-main-color;
+//$theme-header-background-img:     'flavours/missao-calebe/header.jpg';
+//$theme-logo:                      'flavours/missao-calebe/logo.png';
+//$theme-logo-retina:               'flavours/missao-calebe/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";
+
+
+
+$bg_facebook: #2d5ea0;
+$bg_ios: #fff;
+$bg_gapps: #fff;
+
+@mixin hover($color) {
+	background-color: darken($color, 5%);
+}
+
+@mixin hover-menu($color) {
+	background: desaturate(darken($color, 5%), 20%);
+}
+
+@mixin border($weight, $color) {
+	border: $weight solid $color !important;
+}
+
+iframe.oembed {
+	width: 667px;
+	height: 375px;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	.iasd-global_navbar {
+		background-image: none !important;
+
+		.iasd-global_navbar-main {
+
+			.navbar-brand {
+				color: #5f5b4d;
+			}
+
+			.navbar-nav {
+				& >li {
+					& >a {
+						color: #5f5b4d;
+
+						&:hover {
+							border-bottom-color: #5f5b4d;
+						}
+					}
+				}
+			}
+
+			.search-link{
+
+				&:before{
+					color: #5f5b4d;
+				}
+			}
+		}
+	}
+
+	& > header {
+		background-image: none;
+		background-repeat: repeat;
+		height: 120px;
+
+		.navbar-brand {
+			margin-top: 15px;
+		}
+	}
+
+	.slider {
+		background: #e9c435;
+	}
+
+	.maps {
+		display: block;
+		height: 561px;
+
+		.widget {
+			padding-top: 80px;
+
+			h2 {
+				font-size: 38px;
+			}
+		}
+
+		.map {
+				padding-top: 80px;
+		}
+	}
+
+	.apps {
+		background: #ededed;
+		padding: 60px 0;
+
+		h3 {
+			color: #c14801;
+			font-size: 33px;
+			margin: 0 0 30px;
+		}
+
+		h4 {
+			margin-bottom: 20px;
+		}
+
+		.texto {
+			text-align: left;
+			margin-top: 20px;
+		}
+	}
+
+	.icons {
+		padding: 50px 0;
+
+		h2 {
+			margin: 0 0 40px 0;
+		}
+
+		figure {
+			img {
+				border-radius: 10px;
+			}
+
+			figcaption {
+				margin-top: 8px;
+				color: #505050;
+				font-size: 14px;
+				font-style: italic;
+			}
+
+			&:hover {
+				figcaption {
+					color: #000;
+				}
+			}
+		}
+	}
+
+
+	.social {
+		background: #ededed;
+		padding: 30px 0;
+
+		.iasd-widget {
+			width: 33.3333333333%;
+			float: left;
+			position: relative;
+			min-height: 1px;
+			padding-left: 15px;
+			padding-right: 15px;
+
+			a:hover h2, a:focus h2 {
+				color: #e7a300;
+			}
+		}
+	}
+
+	.content {
+		padding: 50px 0;
+	}
+
+	.entry-content {
+		ol, ul {
+			margin: 20px;
+		}
+
+		ol {
+			li {
+				list-style: decimal !important;
+			}
+		}
+
+		.passos_content {
+			h2 {
+				font-size: 25px;
+				font-weight: 300;
+				letter-spacing: -1px;
+				word-spacing: 6px;
+				text-transform: uppercase;
+				margin-top: 50px;
+				text-align: center;
+			}
+
+			ol {
+				padding: 0 0 0 40px !important;
+
+				li {
+					margin-top: 30px !important;
+					list-style: decimal-leading-zero !important;
+					font-style: italic;
+
+					p {
+						font-style: normal;
+					}
+				}
+
+				&.passos {
+					font-size: 20px;
+
+					li {
+						p, ul li, ol li {
+							font-size: 13px;
+						}
+
+						ul, ol {
+							padding: 0 0 0 50px !important;
+						}
+
+						ul li, ol li {
+							margin-top: 12px !important;
+							line-height: 12px;
+						}
+					}
+				}
+			}	
+		}
+	}
+
+
+	>footer {
+		background: url('../img/flavours/missao-calebe/footer.jpg') center;
+		margin-top: 0;
+		
+		h1 {
+			color: #c14801;
+		}
+
+		a {
+			color: rgba( #000, .7 );
+
+			&:hover {
+				color: rgba( #000, 1 );
+			}
+		}
+
+		.info {
+			color: #3a3a3a;
+
+			.copyright {
+				color: #3a3a3a;
+			}
+		}
+	}
+}
+
+body.pt_BR {
+	header {
+		.navbar-brand {
+			background: url('../img/flavours/missao-calebe/imgs_pt_BR/logo_calebe.png') no-repeat top right;
+			width: 122px;
+			height: 78px;
+			display: block;
+			margin-left: 0;
+		}
+	}
+
+	.maps {
+		background: url('../img/flavours/missao-calebe/imgs_pt_BR/maps.jpg') center;
+	}
+
+	>footer {
+		.info {
+			background: url('../img/flavours/missao-calebe/imgs_pt_BR/iasd_footer.png') no-repeat top right;
+		}
+	}
+}
+
+body.es_ES {
+	header {
+		background-image: none;
+
+		.navbar-brand {
+			background: url('../img/flavours/missao-calebe/imgs_es_ES/logo_calebe.png') no-repeat top right;
+			width: 122px;
+			height: 78px;
+			display: block;
+			margin-left: 0;
+		}
+	}
+
+	.maps {
+		background: url('../img/flavours/missao-calebe/imgs_es_ES/maps.jpg') center;
+	}
+
+	>footer {
+		.info {
+			background: url('../img/flavours/missao-calebe/imgs_es_ES/iasd_footer.png') no-repeat top right;
+		}
+	}
+}
+
+.iasd-main_navbar {
+	margin-top: 0;
+
+	.navbar {
+		border: none;
+	}
+
+	.menu-principal {
+		text-transform: uppercase;
+
+		.menu-item > a {
+			padding: 49px 20px;
+			color: #3C382D;
+
+			&:hover, &:focus {
+				@include hover-menu($theme-main-color);
+				color: #000;
+			}
+		}
+
+		.sub-menu {
+			li {
+				@include hover-menu($theme-main-color);
+
+				a {
+					padding: 5px 15px; 
+
+					&:hover, &:focus {
+						background: none;
+					}
+				}
+			}
+		}
+
+		.current-menu-item {
+			@include hover-menu($theme-main-color);
+		}
+	}
+
+	.navbar-nav {
+		width: auto;
+		//margin-top: 38px;
+
+		&.navbar-right {
+
+			&:last-child {
+				margin-right: 15px;
+			}
+		}
+	}
+}
+
+
+.iasd-main_navbar .navbar-nav li ul {
+	//display: table;
+}
+
+
+
+.btn-facebook {
+	background: url('../img/flavours/missao-calebe/facebook.png') no-repeat $bg_facebook;
+	color: #fff;
+
+	&:hover { 
+		@include hover($bg_facebook);
+	}
+}
+
+.btn-maps {
+	//background: url('../img/flavours/missao-calebe/facebook.png') no-repeat $bg_facebook;
+	color: #000;
+	border: 1px solid #000;
+	margin-top: 20px;
+
+	&:hover { 
+		@include hover($theme-main-color);
+		color: #000;
+	}
+}
+
+.btn-gapps {
+	background: url('../img/flavours/missao-calebe/ico_gapps.png') no-repeat $bg_gapps;
+	color: #000;
+	padding-left: 35px !important;
+	@include border(1px, #000);
+
+	&:hover { 
+		@include hover($bg_gapps);
+		color: #000;
+	}
+}
+
+.btn-ios {
+	background: url('../img/flavours/missao-calebe/ico_ios.png') no-repeat $bg_ios;
+	color: #000;
+	padding-left: 35px !important;
+	@include border(1px, #000);
+
+	&:hover { 
+		@include hover($bg_ios);
+		color: #000;
+	}
+}
+
+.btn-icon {
+	background-position: 12px 8px;
+	border: none;
+	padding-left: 30px;
+}
+
+
+.iasd-main-highlight {
+	figcaption * {
+		color: #5f5b4d;
+	}
+
+	&:hover {
+		* {
+			color: #000 !important;
+		}
+	}
+}
+
+.single-testemunhos {
+	aside {
+		margin-top: 23px;
+	}
+}
+
+.home {
+	.slider {
+		height: 600px;
+
+		.veja-mais {
+			background-color: $theme-main-color;
+			color: #000;
+
+			&:hover {
+				@include hover($theme-main-color);
+				color: #000;
+			}
+		}
+	}
+}
+
+.iasd-main_navbar .navbar-header .navbar-brand, .navbar > .container .navbar-brand {
+	//padding-left: 0;
+	margin-left: 0;
+}
+
+.iasd-global_navbar-main {
+	.container {
+		padding: 0;
+	}
+}
+.page-template-page-map-php {
+	@include hover-menu($theme-main-color);
+}
+.iframe_map {
+	height: 70%;
+	margin-top: 4px;
+}
+
+.tdc_faq {
+
+	.panel {
+		border: none;
+		background: lighten(#f5f0ea, 10%);
+	}
+
+	.panel-heading {
+		padding: 0;
+		background: #f5f0ea;
+	}
+
+	.panel-body {
+		p:last-child {
+			margin: 0;
+		}
+	}
+
+	h4 {
+		margin-bottom: 0;
+		color: #000;
+		padding: 10px 15px;
+		font-size: 15px;
+
+		&:hover {
+			color: #000;
+		}
+	}
+
+	.collapsed {
+		h4 {
+			color: #808285;
+		}
+	}
+}
+
+#comments {
+	margin-top: 50px;
+}
+
+.page-template-page-imprensa-php {
+	.iasd-archive {
+
+		ul.lista_releases {
+			margin: none !important;
+			
+			li {
+				list-style: none !important;
+
+				a {
+					&:hover {
+						border-bottom: none;
+					}
+				}
+
+				time {
+					font-weight: normal;
+					margin: 0;
+				}
+
+				p {
+					display: none !important;
+				}
+			}
+		}
+	}
+}
+
+.page-template-page-imprensa-php {
+.iasd-archive > article ul {
+	padding: 0 !important;
+}
+}
+/* ******** */
+/* Home DSA */
+/* ******** */
+@media (min-width: 768px) {
+	body.missao-calebe .dsa-home-carousel {
+		margin-bottom: -80px;
+		//top: -40px;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-item > div {
+		background-position: center center !important;
+		height: 600px;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-item section {
+		margin-top: auto;
+		padding-top: 190px;
+		position: relative;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-item section article {
+		color: #fbf6f0;
+		display: table-cell;
+		height: 275px;
+		position: relative;
+		vertical-align: middle;
+		//width: 455px;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-item section article a {
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		-ms-border-radius: 5px;
+		-o-border-radius: 5px;
+		border-radius: 5px;
+		bottom: 0;
+		display: inline-block;
+		left: 0;
+		margin: 30px 0 0 0;
+		padding: 10px 20px;
+		//position: absolute;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-item section article h1 {
+		font-family: "Futura Std", Helvetica, Arial, sans-serif;
+		font-size: 48px;
+		font-weight: 300;
+		line-height: 50px;
+		margin: -60px 0 0 0;
+		text-shadow: 1px 1px 0 rgba(51, 51, 51, 0.5);
+		text-transform: uppercase;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-item section article p {
+		font-size: 18px;
+		font-style: italic;
+		line-height: 21px;
+		margin: 15px 0 0 0;
+		text-shadow: 1px 1px 0 rgba(51, 51, 51, 0.5);
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-controls {
+		bottom: 10px;
+		left: 50%;
+		//margin: 0 0 0 -470px;
+		position: absolute;
+		//text-align: left;
+		//width: 400px;
+		margin-left: -50px;
+	}
+
+	body.missao-calebe .dsa-home-carousel .owl-controls .owl-page span {
+		background: #fbf6f0;
+		height: 10px;
+		margin: 5px;
+		width: 10px;
+	}
+
+	body.missao-calebe .iasd-global_navbar-more.open {
+		padding-bottom: 70px;
+	}
+
+	body.missao-calebe .iasd-global_navbar-search.open {
+		padding: 50px 0 55px;
+	}
+
+	body.missao-calebe .iasd-institutional {
+		//background-image: url('../img/imgs_pt_BR/iasd_dsa_home.png?1402509986');
+		background-size: 455px 51px;
+		height: 51px;
+		left: 50%;
+		margin: -51px 0 0 -470px;
+		position: relative;
+		top: 100px;
+		width: 455px;
+		z-index: 1;
+	}
+}
+
+@media (min-width: 768px) and (min--moz-device-pixel-ratio: 1.3), (min-width: 768px) and (-o-min-device-pixel-ratio: 2.6 / 2), (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1.3), (min-width: 768px) and (min-device-pixel-ratio: 1.3), (min-width: 768px) and (min-resolution: 1.3dppx) {
+	body.missao-calebe .iasd-institutional {
+		//background-image: url('../img/imgs_pt_BR/iasd_dsa_home@2x.png?1402509986');
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	body.missao-calebe .dsa-home-carousel .owl-controls {
+		//margin: 0 0 0 -360px;
+	}
+	body.missao-calebe .iasd-institutional {
+		margin: -51px 0 0 -360px;
+	}
+}
+
+@media (min-width: 768px) {
+	body.missao-calebe.es_ES .iasd-institutional {
+		//background-image: url('../img/imgs_es_ES/iasd_dsa_home.png?1402509986');
+		background-size: 455px 51px;
+	}
+}
+@media (min-width: 768px) and (min--moz-device-pixel-ratio: 1.3), (min-width: 768px) and (-o-min-device-pixel-ratio: 2.6 / 2), (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1.3), (min-width: 768px) and (min-device-pixel-ratio: 1.3), (min-width: 768px) and (min-resolution: 1.3dppx) {
+	body.missao-calebe.es_ES .iasd-institutional {
+		//background-image: url('../img/imgs_es_ES/iasd_dsa_home@2x.png?1402509986');
+	}
+}
+
+@media (max-width:767px) {
+	body {
+		.maps {
+			display: block;
+			height: 400px;
+
+			.widget {
+				padding-top: 20px;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+

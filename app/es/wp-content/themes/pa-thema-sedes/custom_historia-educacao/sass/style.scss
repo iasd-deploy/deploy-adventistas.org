@@ -1,0 +1,499 @@
+$primary-color: #26273a;
+
+#he {
+	a {
+		color: $primary-color;
+	}
+
+	.iasd-global_navbar-main {
+
+		a {
+			color: #fff;
+		}
+	}
+
+	section	{
+		padding: 50px 0;
+	}
+
+	.space {
+		margin: 80px 0;
+	}
+
+	.img-responsive {
+		margin: 0 auto;
+	}
+
+	.iasd-global_navbar {
+		background: image-url("background.jpg") top center !important;
+	}
+
+	&>header {
+		background: image-url("background.jpg") top center;
+		height: 494px;
+
+		.container {
+			display: table;
+			height: 100%; /* For at least Firefox */
+			min-height: 100%;
+
+			.logo {
+				display: table-cell;
+				vertical-align: middle;
+			}
+		}
+	}
+
+	.menu_contextual {
+		background: $primary-color;
+
+		padding: 60px 0;
+
+		ul {
+			margin: 0 auto;
+
+			li {
+				margin-left: 25px;
+				border: 1px solid #66605d;
+				transition: all .15s ease-out 0;	
+
+				&.current-menu-item {
+					background: #faf7f3;
+						
+					a {
+						color: #362f2d;
+					}
+				}
+
+				&:hover {
+					background: #faf7f3;
+
+					a {
+						color: #362f2d;
+					}
+				}
+
+				a {
+					font-size: 15px;
+					text-transform: uppercase;
+					color: invert($primary-color);
+					font-style: italic;
+					padding: 15px 30px;
+					display: block;
+				}
+
+				&:first-child {
+					margin-left: 0;
+				}
+			}
+
+		}
+	}
+
+	a {
+		figure{
+			position: relative;
+			border-radius: 5px;
+			
+			figcaption {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				display: table;
+
+				div {
+					box-shadow: inset 0 0 10em #000;
+					display: table-cell;
+					vertical-align: middle;
+					color: #fff;
+					-moz-transition: all .15s ease-out 0;
+					transition: all .15s ease-out 0;
+
+					h2 {
+						text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+					}
+				}
+			}
+		}
+	}
+
+	.videos_semana {
+		figure{
+			height: 292px;
+		}
+
+		h1{
+			color: #2f2c36;
+			margin-bottom: 40px;
+			font-size: 40px;
+			font-weight: 300;
+
+			small {
+				color: #362f2d;
+				display: block;
+				font-size: 15px;
+				margin-top: 20px;
+			}
+		}
+
+		a {
+			figure{
+				figcaption {
+					div {
+						box-shadow: inset 0 0 10em #000;
+						background-color: rgba(0,0,0,0.5);
+						vertical-align: initial;
+						padding-top: 60px;
+
+						h2 {
+							text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+							padding: 0 30px;
+						}
+					}
+				}
+			}
+
+			&:hover {
+				figcaption {
+					div {
+						box-shadow: inset 0 0 20em #000;
+					}
+				}
+			}
+		}
+	}
+
+	.videos {
+		background: $primary-color;
+		display: block;
+
+
+		h1{
+			color: #fff;
+			margin-bottom: 40px;
+			font-size: 40px;
+			font-weight: 300;
+
+			small {
+				color: #c99f82;
+				display: block;
+				font-size: 15px;
+				margin-top: 20px;
+			}
+		}
+
+		a {
+			color: invert($primary-color);
+		}
+
+		.video {
+			a {
+
+				figure {
+					height: 128px;
+					margin-bottom: 10px;
+
+					figcaption {
+						div {
+							box-shadow: inset 0 0 10em #000;
+							background: rgba(0,0,0,0.5);
+
+							h2 {
+								font-size: 18px;
+								margin: 0;
+								padding: 0 15px;
+
+								small {
+									display: block;
+									margin-top: 3px;
+									font-size: 14px;
+									color: rgba(255, 255, 255, 0.57);
+								}
+							}
+						}
+					}	
+
+					&:hover {
+						figcaption {
+							div {
+								box-shadow: inset 0 0 15em #000;
+								background: rgba(0,0,0,0.05);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&>footer {
+		margin-top: 0;
+		background: #ddd7ce !important;
+
+		h1 {
+			color: #3a3a3a !important;
+		}
+
+		.info .copyright {
+			color: #3a3a3a !important;
+		}
+	}
+
+	.pg_interna {
+		figcaption {
+			text-align: center;
+			background: rgba(255,255,255,0.8);
+			padding: 10px 0;
+			color: #938574;
+			border-radius: 0 0 5px 5px;
+			font-style: italic;
+			font-size: 0.9em;
+		}
+	}
+}
+
+#he.es_ES>footer .info {
+	background-image: image-url("es_ES/iasd_footer.png");
+}
+
+#he.pt_BR>footer .info {
+	background-image: image-url("pt_BR/iasd_footer.png");
+}
+
+body>footer .info address .social-media>li>a:after {
+	color: #000;
+}
+
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+	#he {
+		
+		.videos_semana {
+			a {
+				figure{
+					height: 221px;
+
+					figcaption {
+						div {
+							vertical-align: middle;
+							background-position: center 40px;
+							padding-top: 0;
+						}
+					}
+				}
+
+				&:hover {
+					figcaption {
+						div {
+							background-position: center 40px;
+						}
+					}
+				}
+			}
+		}
+
+
+		.videos {
+			.video {
+				a {
+
+					figure {
+						height: 96px;
+
+						figcaption {
+
+							div {
+								box-shadow: none;
+								background: rgba(0, 0, 0, 0.63);
+
+								h2 {
+									font-size: 15px;
+									padding: 0 20px;
+									text-shadow: 0px 0px 8px rgba(0, 0, 0, 1);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 568px) {
+	#he {
+		
+		.menu_contextual {
+			ul {
+
+				li {
+					margin-left: 0;
+					display: block;
+
+					&.current-menu-item {
+
+						a {
+							background: #faf7f3;
+							color: #362f2d;
+						}
+					}
+				}
+			}
+		}
+
+		.videos_semana {
+			a {
+				figure{
+					height: 238px;
+					margin-bottom: 20px;
+
+					figcaption {
+						div {
+							background-position: center 50px;
+
+							h2 {
+								top: 50px;
+								padding: 0 20px;
+							}
+						}
+					}
+				}
+
+				&:hover {
+					figcaption {
+						div {
+							background-position: center 50px;
+						}
+					}
+				}
+			}
+		}
+
+
+		.videos {
+			.video {
+				a {
+
+					figure {
+						height: 96px;
+						margin-bottom: 0;
+
+						img {
+							clip: rect(0px, 370px, 96px, 0px);
+							position: absolute;
+						}
+
+						figcaption {
+
+							div {
+								box-shadow: none;
+								background: rgba(0, 0, 0, 0.63);
+
+								h2 {
+									font-size: 15px;
+									padding: 0 20px;
+									text-shadow: 0px 0px 8px rgba(0, 0, 0, 1);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/* Custom, iPhone Retina */ 
+@media only screen and (max-width : 320px) {
+
+	#he {
+
+		header {
+			height: 330px;
+		}
+		
+		.menu_contextual {
+			ul {
+
+				li {
+					margin-left: 0;
+					display: block;
+
+					&.current-menu-item {
+
+						a {
+							background: #faf7f3;
+							color: #362f2d;
+						}
+					}
+				}
+			}
+		}
+
+		.videos_semana {
+			a {
+				figure{
+					height: 187px;
+					margin-bottom: 20px;
+
+					figcaption {
+						div {
+							background-position: center 30px;
+
+							h2 {
+								top: 50px;
+								padding: 0 20px;
+								font-size: 23px;
+							}
+						}
+					}
+				}
+
+				&:hover {
+					figcaption {
+						div {
+							background-position: center 50px;
+						}
+					}
+				}
+			}
+		}
+
+
+		.videos {
+			.video {
+				a {
+
+					figure {
+						height: 96px;
+						margin-bottom: 0;
+
+						img {
+							clip: rect(0px, 370px, 96px, 0px);
+							position: absolute;
+						}
+
+						figcaption {
+
+							div {
+								box-shadow: none;
+								background: rgba(0, 0, 0, 0.63);
+
+								h2 {
+									font-size: 15px;
+									padding: 0 20px;
+									text-shadow: 0px 0px 8px rgba(0, 0, 0, 1);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+

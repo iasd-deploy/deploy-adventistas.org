@@ -1,0 +1,20 @@
+<?php exit(0); ?>
+{"user_id":29,"user_login":"rogerioferraz","user_remoteaddr":"177.150.222.113","user_hostname":"113.222.150.177.isp.timbrasil.com.br","user_lastlogin":"2015-04-04 09:50:34"}
+{"user_id":3,"user_login":"marcos.bomfim","user_remoteaddr":"201.57.206.130","user_hostname":"201.57.206.130","user_lastlogin":"2015-04-09 18:21:48"}
+{"user_id":25,"user_login":"drussilatorres","user_remoteaddr":"177.72.127.109","user_hostname":"177.72.127.109.novotempo.org.br","user_lastlogin":"2015-04-15 14:18:32"}
+{"user_id":3,"user_login":"marcos.bomfim","user_remoteaddr":"177.72.127.133","user_hostname":"177.72.127.133.novotempo.org.br","user_lastlogin":"2015-04-20 14:14:49"}
+{"user_id":3,"user_login":"marcos.bomfim","user_remoteaddr":"201.57.206.130","user_hostname":"201.57.206.130","user_lastlogin":"2015-04-22 20:46:17"}
+{"user_id":3,"user_login":"marcos.bomfim","user_remoteaddr":"189.90.97.38","user_hostname":"udf.life.com.br","user_lastlogin":"2015-04-29 16:07:20"}
+{"user_id":25,"user_login":"drussilatorres","user_remoteaddr":"177.72.127.109","user_hostname":"177.72.127.109.novotempo.org.br","user_lastlogin":"2015-04-30 10:45:06"}
+{"user_id":25,"user_login":"drussilatorres","user_remoteaddr":"177.72.127.109","user_hostname":"177.72.127.109.novotempo.org.br","user_lastlogin":"2015-04-30 10:45:14"}
+{"user_id":27,"user_login":"elkeane","user_remoteaddr":"201.57.206.130","user_hostname":"201.57.206.130","user_lastlogin":"2015-05-02 19:38:17"}
+{"user_id":33,"user_login":"silviatapia","user_remoteaddr":"177.235.179.93","user_hostname":"b1ebb35d.virtua.com.br","user_lastlogin":"2015-05-03 17:52:04"}
+{"user_id":27,"user_login":"elkeane","user_remoteaddr":"201.57.206.130","user_hostname":"201.57.206.130","user_lastlogin":"2015-05-05 16:04:38"}
+{"user_id":27,"user_login":"elkeane","user_remoteaddr":"201.57.206.130","user_hostname":"201.57.206.130","user_lastlogin":"2015-05-07 18:36:29"}
+{"user_id":25,"user_login":"drussilatorres","user_remoteaddr":"177.72.127.109","user_hostname":"177.72.127.109.novotempo.org.br","user_lastlogin":"2015-06-16 08:51:37"}
+{"user_id":27,"user_login":"elkeane","user_remoteaddr":"201.57.206.130","user_hostname":"201.57.206.130","user_lastlogin":"2015-08-03 10:18:30"}
+{"user_id":25,"user_login":"drussilatorres","user_remoteaddr":"177.72.127.109","user_hostname":"177.72.127.109.novotempo.org.br","user_lastlogin":"2015-08-04 08:15:32"}
+{"user_id":3,"user_login":"marcos.bomfim","user_remoteaddr":"177.72.127.133","user_hostname":"177.72.127.133.novotempo.org.br","user_lastlogin":"2015-08-20 15:40:57"}
+{"user_id":34,"user_login":"flavia.goncalves","user_remoteaddr":"177.72.127.137","user_hostname":"177.72.127.137.novotempo.org.br","user_lastlogin":"2015-08-24 16:41:30"}
+{"user_id":34,"user_login":"flavia.goncalves","user_remoteaddr":"177.72.127.137","user_hostname":"177.72.127.137.novotempo.org.br","user_lastlogin":"2015-08-24 16:46:32"}
+{"user_id":3,"user_login":"marcos.bomfim","user_remoteaddr":"177.72.127.133","user_hostname":"177.72.127.133.novotempo.org.br","user_lastlogin":"2015-09-23 10:50:54"}

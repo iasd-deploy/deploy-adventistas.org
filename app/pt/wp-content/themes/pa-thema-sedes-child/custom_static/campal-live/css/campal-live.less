@@ -1,0 +1,303 @@
+@color-bg: #000;
+@color-headings: #AFA19D;
+@color-text: #fff;
+@color-alt: #EE6161;
+@color-divs: rgba(255, 255, 255, 0.2);
+
+body{
+	background-color: @color-bg;
+	color: @color-text;
+}
+
+
+// NAVBAR
+.es_ES .iasd-global_navbar,
+.iasd-global_navbar {
+	background-repeat: repeat;
+	background-position: top center;
+}
+
+body > header{
+	background-color: @color-bg;
+	background-repeat: repeat;
+	background-position: center -40px;
+	position: relative;
+	height: 407px;
+	
+	.campal-title{
+		margin-top: 100px;
+		padding: 40px 0;
+		background: rgba(0, 0, 0, 0.57);
+	}
+
+	.logo {
+		width: 340px;
+		height: 42px;
+		display: inline-block;
+		background-image: url('../img/logo-campal-jovem.png');
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 100%;
+		text-indent: -5000px;
+		left: 50%;
+		margin-left: -170px;
+		overflow: hidden;
+		position: relative;
+		text-align: center;
+	}
+}
+
+body > section{
+
+	// Widgets
+	.section-title,
+	.iasd-widget h1{
+		font-family: "Futura Std";
+		font-size: 25px;
+		font-weight: 300;
+		color: @color-headings;
+		letter-spacing: -0.42px;
+		text-transform: uppercase;
+		border-bottom: none;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+		margin: 0 0 10px 0 !important;
+	}
+
+	&.live{
+		padding-bottom: 40px;
+
+		h2{
+			display: inline;
+		}
+		a:link, a:visited{
+			font-weight: 400;
+			font-size: 20px;
+			color: @color-headings;
+			letter-spacing: 0.3px;
+			padding: 8px 25px;
+			display: inline-block;
+
+		}
+		a:hover, a:focus, a:active, a.active{
+			font-weight: 700;
+			color: #fff;
+		}
+		
+		.player{
+			padding-top: 20px;
+			display: none;
+
+			.next-transmission{
+				background: rgba(255, 255, 255, 0.1);
+				padding: 80px;
+				text-align: center;
+				-moz-border-radius: 5px;
+				-webkit-border-radius: 5px;
+				border-radius: 5px;
+			}
+		}
+
+		.broadcast-schedules{
+			padding-top: 40px;
+
+			h3{
+				font-weight: 900;
+				font-style: italic;
+				font-size: 20px;
+				color: @color-headings;
+				letter-spacing: 0.3px;
+			}
+
+			ul{
+				margin:10px 0;
+				padding:0;
+				list-style: none;
+
+				li{
+					display: inline-block;
+					border-right: 1px solid @color-divs;
+					padding: 0 20px;
+
+					.date{
+						font-size: 18px;
+						letter-spacing: 0.27px;
+						display: block;
+						text-align: center;
+						margin-bottom: 5px;
+					}
+					.hour{
+						font-size: 24px;
+						letter-spacing: 0.37px;
+						display: block;
+						text-align: center;
+					}
+				}
+				li:first-child{
+					padding-left: 0;
+				}
+				li:last-child{
+					border-right: none;
+				}
+			}
+		}
+	}
+
+	&.videos{
+		padding-top: 50px;
+
+		.iasd-widget h1{
+			color: @color-headings;
+			margin-top: 5px;
+		}
+		.iasd-widget a{
+			h2{
+				margin-top: 10px !important;
+				margin-bottom: 0 !important;
+				color: #fff;	
+			}
+		}
+		.video-item{
+			min-height: 190px;
+			max-height: 190px;
+			height: 190px !important;
+			display: block;
+		}
+	}
+	
+	&.sidebar{
+		padding: 80px 0;
+		background-color: #290304;
+		
+		// Correção de cor nos Widgets
+		.iasd-widget a{
+			color: @color-text !important;
+		}
+		.iasd-widget a:hover h2, .iasd-widget a:focus h2{
+			color: @color-alt;
+		}
+		.iasd-widget-posts_grid figure .post-taxonomy-tag{
+			background: @color-alt;
+		}
+		.iasd-widget-posts_grid figure .post-taxonomy-tag:after{
+			border-color: transparent transparent transparent @color-alt;
+		}
+
+
+
+		.iasd-widget h1,
+		.iasd-main-title{
+		    -moz-box-shadow: 0 4px 0 @color-divs;
+		    -webkit-box-shadow: 0 4px 0 @color-divs;
+		    box-shadow: 0 4px 0 @color-divs;
+		    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+		    color: @color-headings;	
+		}
+		
+		.iasd-widget-posts_list ul{
+			margin: 0 !important;
+		}
+
+		.iasd-widget-posts_grid .post-horizontal-list-item>a,
+		.iasd-widget-posts_list ul li,
+		.iasd-widget-social_links ul li {
+		    -moz-box-shadow: 0 1px 0 @color-divs;
+		    -webkit-box-shadow: 0 1px 0 @color-divs;
+		    box-shadow: 0 1px 0 @color-divs;
+		}
+		.more-link{
+			-moz-box-shadow: inset 0 1px 0 @color-divs;
+		    -webkit-box-shadow: inset 0 1px 0 @color-divs;
+		    box-shadow: inset 0 1px 0 @color-divs;
+		}
+
+		.iasd-widget-social_links ul{
+			list-style: none !important;
+    		padding: 0 !important;
+			
+			h2{
+				margin: 0 !important;
+			}
+    		li{
+    			margin: 0 !important;
+		    	padding: 0 !important;
+				
+				a {
+				    display: table;
+				}
+				.info{
+					display: table-cell;
+				    height: 40px;
+				    padding: 10px 0 5px 15px!important;
+				    vertical-align: middle;
+				}
+		    	.social-icon{
+					display: table-cell !important;
+				    vertical-align: middle !important;
+				}
+    		}
+    		li:last-child{
+    			-moz-box-shadow: none;
+			    -webkit-box-shadow: none;
+			    box-shadow: none;
+    		}
+		}
+	}
+}
+
+
+
+// FOOTER
+
+body > footer {
+	background-image: url('../img/footer.jpg');
+  	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	-webkit-box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.1);
+	margin-top: 50px;
+	padding: 50px 0;
+}
+// body > footer .info {
+// 	background-image: url('../img/pt_BR/iasd_footer.png?1423659280');
+// 	background-repeat: no-repeat;
+// 	background-position: top right;
+// 	background-size: 160px 223px;
+// 	float: right;
+// 	padding: 260px 0 0 0;
+// 	text-align: right;
+// 	width: 220px;
+// }
+body > footer .info address .social-media > li > a:after {
+	color: #290304;
+}
+
+
+
+
+
+
+
+
+.embed-responsive {
+	position: relative;
+	display: block;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+}
+.embed-responsive.embed-responsive-16by9 {
+	padding-bottom: 56.25%;
+}
+.embed-responsive .embed-responsive-item, .embed-responsive embed, .embed-responsive iframe, .embed-responsive object, .embed-responsive video {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}

@@ -1,0 +1,8 @@
+*.sql
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+revisions.sh
+user.sh
+wp-content/uploads/*

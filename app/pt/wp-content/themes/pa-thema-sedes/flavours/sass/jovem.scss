@@ -1,0 +1,21 @@
+/**
+* Name: Ministério do  Jovem
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#ff4224;
+$theme-alt-color: 					#003551;
+$theme-main-nav-base-color:			$theme-main-color;
+$theme-footer-base-color:			$theme-main-color;
+$theme-header-background-img:		'flavours/jovem/header.jpg';
+$theme-logo: 						'flavours/jovem/logo.png';
+$theme-logo-retina: 				'flavours/jovem/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

@@ -1,0 +1,21 @@
+/**
+* Name: Ministério da Família
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#e59660;
+$theme-alt-color: 					#62aabf;
+$theme-main-nav-base-color:			$theme-main-color;
+$theme-footer-base-color:			$theme-main-color;
+$theme-header-background-img:		'flavours/familia/header.jpg';
+$theme-logo: 						'flavours/familia/logo.png';
+$theme-logo-retina: 				'flavours/familia/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

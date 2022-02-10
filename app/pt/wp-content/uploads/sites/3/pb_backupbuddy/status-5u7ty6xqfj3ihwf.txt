@@ -1,0 +1,9 @@
+{"event":"error","time":1408026172,"u":"43","run":"0.01","mem":"3.21","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026174,"u":"92","run":"0.00","mem":"3.21","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026200,"u":"84","run":"0.01","mem":"3.33","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026203,"u":"08","run":"0.01","mem":"3.21","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026207,"u":"08","run":"0.01","mem":"3.21","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026209,"u":"37","run":"0.00","mem":"3.21","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026226,"u":"98","run":"0.01","mem":"3.34","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026227,"u":"97","run":"0.00","mem":"3.33","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
+{"event":"error","time":1408026229,"u":"51","run":"0.01","mem":"3.21","data":"Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php \/ not defined to boolean TRUE."}
