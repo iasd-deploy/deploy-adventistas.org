@@ -1,32 +1,40 @@
 <?php
 
-// BEGIN iThemes Security - No modifiques ni borres esta línea
-// iThemes Security Config Details: 2
-define( 'DISALLOW_FILE_EDIT', true ); // Desactivar editor de archivos - Seguridad > Ajustes > Ajustes WordPress > Editor de archivos
-// END iThemes Security - No modifiques ni borres esta línea
-
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'www_es');
+define( 'DB_NAME', $_ENV['WP_DB_NAME'] ."_es");
 
 /** MySQL database username */
-define('DB_USER', 'advaurora');
+define( 'DB_USER', $_ENV['WP_DB_USER']);
 
 /** MySQL database password */
-define('DB_PASSWORD', 'ekj9LKowu7ZKnfTKxjJNniuXPnqWjF');
+define( 'DB_PASSWORD', $_ENV['WP_DB_PASSWORD']);
 
 /** MySQL hostname */
-define('DB_HOST', 'rds-institucional.internetdsa.com');
+define( 'DB_HOST', $_ENV['WP_DB_HOST'] .':3306');
 
 /** Database Charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8');
+define( 'DB_CHARSET', 'utf8mb4' );
 
 /** The Database Collate type. Don't change this if in doubt. */
-define('DB_COLLATE', '');
+define( 'DB_COLLATE', 'utf8mb4_unicode_ci' );
+
+define( 'AS3CF_SETTINGS', serialize( array(
+    'provider' => 'aws',
+    'access-key-id' => $_ENV['WP_S3_ACCESS_KEY'],
+    'secret-access-key' => $_ENV['WP_S3_SECRET_KEY'],
+	'bucket' => $_ENV['WP_S3_BUCKET']
+) ) );
+
+define( 'FORCE_SSL', true );
+define( 'FORCE_SSL_ADMIN',true );
+$_SERVER['HTTPS']='on';
 
 /** Ajustes adventistas.org */
-define('DISALLOW_FILE_EDIT', TRUE); // Sucuri Security: Fri, 03 Apr 2015 18:49:40 +0000
-define('SITE', 'institucional');
+define( 'DISALLOW_FILE_EDIT', true );
+define( 'WP_AUTO_UPDATE_CORE', false );
+define( 'SITE', 'institucional' );
+define( 'PA_LANG', true);
 
 /* Multisite */
 define('WP_ALLOW_MULTISITE', true );
@@ -37,14 +45,8 @@ define('PATH_CURRENT_SITE', '/es/');
 define('SITE_ID_CURRENT_SITE', 1);
 define('BLOG_ID_CURRENT_SITE', 1);
 
-define( 'AWS_ACCESS_KEY_ID', getenv("AWS_ACCESS_KEY_ID") );
-define( 'AWS_SECRET_ACCESS_KEY', getenv("AWS_SECRET_ACCESS_KEY") );
-
 define('WP_POST_REVISIONS', 10);
 
-define('FORCE_SSL', true);
-define('FORCE_SSL_ADMIN',true);
-$_SERVER['HTTPS']='on';
 
 /**#@+
  * Authentication Unique Keys and Salts.
