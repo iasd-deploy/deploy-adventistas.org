@@ -1,7 +1,0 @@
-[Aug 14, 2014 14:50:15 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
-[Aug 14, 2014 14:50:29 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
-[Aug 14, 2014 14:50:31 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
-[Aug 14, 2014 14:50:39 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
-[Aug 14, 2014 14:50:46 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
-[Aug 14, 2014 14:50:47 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
-[Aug 14, 2014 14:50:49 -3-error] [] Multisite detected but PB_BACKUPBUDDY_MULTISITE_EXPERIMENT definition not found in wp-config.php / not defined to boolean TRUE.
