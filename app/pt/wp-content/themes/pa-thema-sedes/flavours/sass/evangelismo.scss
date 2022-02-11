@@ -1,0 +1,21 @@
+/**
+* Name: Evangelismo
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#81281a;
+$theme-alt-color: 					#c7882f;
+$theme-main-nav-base-color:			$theme-alt-color;
+$theme-footer-base-color:			$theme-alt-color;
+$theme-header-background-img:		'flavours/evangelismo/header.jpg';
+$theme-logo: 						'flavours/evangelismo/logo.png';
+$theme-logo-retina: 				'flavours/evangelismo/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

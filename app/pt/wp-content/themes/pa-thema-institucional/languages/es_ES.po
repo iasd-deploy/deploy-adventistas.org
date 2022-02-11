@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tema Institucional IASD v\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-15 10:32-0300\n"
+"PO-Revision-Date: 2020-01-15 10:32-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# @ iasd
+#: 404.php:9
+msgid "Igreja Adventista do Sétimo Dia"
+msgstr "Iglesia Adventista del Sétimo Día"
+
+# @ iasd
+#: 404.php:10
+msgid "Desculpe-nos, aconteceu um erro inesperado :("
+msgstr "Discúlpenos, ocurrió un error inesperado :("
+
+# @ iasd
+#: 404.php:11
+msgid "A página \""
+msgstr "La página \""
+
+# @ iasd
+#: 404.php:11
+msgid "\" não existe no Portal Adventista."
+msgstr "\"no existe en el Portal Adventista."
+
+# @ iasd
+#: 404.php:12
+msgid "Clique aqui para retornar à página anterior"
+msgstr "Click aquí para regresar a la página anterior"
+
+# @ iasd
+#: 404.php:12
+msgid "« Clique aqui para retornar à página anterior"
+msgstr "« Click aquí para regresar a la página anterior"
+
+# @ iasd
+#: 404.php:14
+msgid "Faça uma busca"
+msgstr "Haga una búsqueda"
+
+# @ iasd
+#: 404.php:17
+msgid "Insira as palavras-chave aqui"
+msgstr "Insiera palabras llave aquí"
+
+# @ iasd
+#: 404.php:19
+msgid "Buscar"
+msgstr "Buscar"
+
+# @ iasd
+#: header.php:57
+msgid "Atenção"
+msgstr "Atención"
+
+# @ iasd
+#: header.php:57
+msgid ""
+"o seu navegador está desatualizado e pode colocar seu computador em risco."
+msgstr "Su navegador está desactualizado"
+
+# @ iasd
+#: header.php:58
+msgid "Clique aqui para atualizar seu navegador"
+msgstr "cliack aquí para actualizar su navegador"
+
+# @ iasd
+#: header.php:92
+msgid "Menu"
+msgstr "Menú"
+
+#: page-cover.php:66 page-grid.php:61 page.php:41
+msgid "Veja Também"
+msgstr "Vea también"

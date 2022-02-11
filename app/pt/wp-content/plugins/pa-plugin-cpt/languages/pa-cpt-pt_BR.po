@@ -1,0 +1,304 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PA - Plugin - Cards\n"
+"POT-Creation-Date: 2015-06-15 14:31-0300\n"
+"PO-Revision-Date: 2015-06-15 14:31-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.4\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../pa-plugin-cpt.php:14 ../pa-plugin-cpt.php:16 ../pa-plugin-cpt.php:35
+msgid "Cards"
+msgstr "Cartões"
+
+#: ../pa-plugin-cpt.php:15
+msgid "Card"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:17
+msgid "Parent card:"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:18
+msgid "All cards"
+msgstr "Todos os cartões"
+
+#: ../pa-plugin-cpt.php:19
+msgid "View Card"
+msgstr "Visualizar Cartão"
+
+#: ../pa-plugin-cpt.php:20
+msgid "Add New Card"
+msgstr "Adicionar Novo Cartão"
+
+#: ../pa-plugin-cpt.php:21 ../pa-plugin-cpt.php:115
+msgid "Add New"
+msgstr "Adicionar Novo"
+
+#: ../pa-plugin-cpt.php:22
+msgid "Edit Card"
+msgstr "Editar Cartão"
+
+#: ../pa-plugin-cpt.php:23
+msgid "Update Card"
+msgstr "Actualizar Cartão"
+
+#: ../pa-plugin-cpt.php:24
+msgid "Search Card"
+msgstr "Buscar Cartão"
+
+#: ../pa-plugin-cpt.php:25 ../pa-plugin-cpt.php:121
+msgid "Not found"
+msgstr "Não Encontrado"
+
+#: ../pa-plugin-cpt.php:26 ../pa-plugin-cpt.php:122
+msgid "Not found in Trash"
+msgstr "Nenhum arquito encontrado na lixeira"
+
+#: ../pa-plugin-cpt.php:29
+msgid "cards"
+msgstr "cartoes"
+
+#: ../pa-plugin-cpt.php:62
+msgid "Cards Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:63 ../pa-plugin-cpt.php:64
+msgid "Card Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:65
+msgid "All Card Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:66
+msgid "Parent Card Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:67
+msgid "Parent Card Category:"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:68
+msgid "New Card Category Name"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:69
+msgid "Add New Card Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:70
+msgid "Edit Card Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:71
+msgid "Update Card Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:72
+msgid "View Card Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:73
+msgid "Separate Card Category with commas"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:74
+msgid "Add or remove Cards Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:75 ../pa-plugin-cpt.php:173
+msgid "Choose from the most used"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:76
+msgid "Popular Cards Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:77
+msgid "Search Cards Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:78 ../pa-plugin-cpt.php:176
+msgid "Not Found"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:81
+msgid "cards/cat"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:108 ../pa-plugin-cpt.php:131
+msgid "Infographics"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:109 ../pa-plugin-cpt.php:110 ../pa-plugin-cpt.php:111
+msgid "Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:112
+msgid "Parent Infographic:"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:113
+msgid "All Infographics"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:114
+msgid "Add New Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:116
+msgid "New Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:117
+msgid "Edit Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:118
+msgid "Update Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:119
+msgid "View Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:120
+msgid "Search Infographic"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:125
+msgid "infographics"
+msgstr "infograficos"
+
+#: ../pa-plugin-cpt.php:160
+msgid "Infographics Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:161 ../pa-plugin-cpt.php:162
+msgid "Infographic Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:163
+msgid "All Infographics Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:164
+msgid "Parent Infographic Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:165
+msgid "Parent Infographic Category:"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:166
+msgid "New Infographic Category Name"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:167
+msgid "Add New Infographic Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:168
+msgid "Edit Infographic Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:169
+msgid "Update Infographic Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:170
+msgid "View Infographic Category"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:171
+msgid "Separate Infographic Category with commas"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:172
+msgid "Add or remove Infographics Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:174
+msgid "Popular Infographics Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:175
+msgid "Search Infographics Categories"
+msgstr ""
+
+#: ../pa-plugin-cpt.php:249
+msgid "Thumbnail"
+msgstr ""
+
+#: ../theme_files/archive-2.php:23 ../theme_files/archive-cards.php:23
+#: ../theme_files/archive-infographic.php:23
+msgid ""
+"<h1>Chegaram! <br />Compartilhe estes cartões <small>Lorem ipsum dolor sit "
+"amet, consectetur adipiscing elit. Aliquam vitae nulla quis turpis cursus "
+"pharetra. Fusce blandit nec tortor sit amet ullamcorper.</small></h1>"
+msgstr ""
+"<h1>Chegaram! <br />Compartilhe estes cartões <small>Este é seu o lugar para "
+"baixar as artes de cartões com versos bíblicos, com frases de impacto e "
+"felicitações que postamos diariamente em nossas redes sociais. Aqui você "
+"poderá baixar para imprimir, compartilhar e guardar.</small></h1>"
+
+#: ../theme_files/archive-2.php:31 ../theme_files/archive-cards.php:31
+#: ../theme_files/archive-infographic.php:31
+msgid ""
+"<h1>Infográficos<small>Uma maneira simples de entender as coisas</small></h1>"
+msgstr ""
+
+#: ../theme_files/archive-2.php:57 ../theme_files/archive-cards.php:57
+#: ../theme_files/single-card.php:22 ../theme_files/single.php:22
+msgid "Faça download do cartão"
+msgstr ""
+
+#: ../theme_files/archive-2.php:58 ../theme_files/archive-cards.php:58
+#: ../theme_files/single-card.php:23 ../theme_files/single.php:23
+msgid "Compartilhe esse cartão no Facebook"
+msgstr ""
+
+#: ../theme_files/archive-2.php:59 ../theme_files/archive-cards.php:59
+#: ../theme_files/single-card.php:24 ../theme_files/single.php:24
+msgid "Compartilhe esse cartão no Twitter"
+msgstr ""
+
+#: ../theme_files/archive-2.php:60 ../theme_files/archive-cards.php:60
+#: ../theme_files/single-card.php:25 ../theme_files/single.php:25
+msgid "Compartilhe esse cartão no Pinterest"
+msgstr ""
+
+#: ../theme_files/archive-2.php:72 ../theme_files/archive-cards.php:72
+#: ../theme_files/archive-infographic.php:72
+msgid "Mostrar mais"
+msgstr ""
+
+#: ../theme_files/archive-infographic.php:57
+#: ../theme_files/single-infographic.php:30
+msgid "Faça download do infográfico"
+msgstr ""
+
+#: ../theme_files/archive-infographic.php:58
+#: ../theme_files/single-infographic.php:31
+msgid "Compartilhe esse infográfico no Facebook"
+msgstr ""
+
+#: ../theme_files/archive-infographic.php:59
+#: ../theme_files/single-infographic.php:32
+msgid "Compartilhe esse infográfico no Twitter"
+msgstr ""
+
+#: ../theme_files/archive-infographic.php:60
+#: ../theme_files/single-infographic.php:33
+msgid "Compartilhe esse infográfico no Pinterest"
+msgstr ""

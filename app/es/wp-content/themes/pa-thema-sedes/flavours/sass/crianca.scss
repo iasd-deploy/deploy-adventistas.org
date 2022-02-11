@@ -1,0 +1,21 @@
+/**
+* Name: Ministério da Criança
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#e6645a;
+$theme-alt-color: 					#78a326;
+$theme-main-nav-base-color:			$theme-main-color;
+$theme-footer-base-color:			$theme-main-color;
+$theme-header-background-img:		'flavours/crianca/header.jpg';
+$theme-logo: 						'flavours/crianca/logo.png';
+$theme-logo-retina: 				'flavours/crianca/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

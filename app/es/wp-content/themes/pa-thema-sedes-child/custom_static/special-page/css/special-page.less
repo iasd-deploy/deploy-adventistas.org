@@ -1,0 +1,403 @@
+@headings-font: "Futura Std";
+@color-alt: #6F7C2F;
+
+// Formatando o fundo da página
+body{
+	background-position: top center;
+	background-repeat: no-repeat;
+	max-width: 1920px;
+	margin: auto;
+
+	& > header {
+		background-color: rgba(0,0,0,0.11) !important;
+		background-image: none;
+
+		.identifier.institutional.headquarters h2{
+			display: none;
+		}
+	}
+	& > footer {
+		margin-top: 0;
+		max-width: 1920px;
+		background-repeat: no-repeat;
+		background-position: top center;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+	}
+}
+.es_ES .iasd-global_navbar,
+.iasd-global_navbar{
+	background-color: rgba(0,0,0,0.2) !important;
+	background-image: none;
+
+	.iasd-global_navbar-main{
+		background-color: transparent;
+	}
+}
+.iasd-main_navbar{
+	.navbar{
+		border-top: 1px solid rgba(255,255,255,0.35);
+	}
+
+	.navbar-nav>li>a:hover, 
+	.navbar-nav>li>a:focus{
+		background-color: rgba(0,0,0,0.05) !important;
+		border-color: rgba(0,0,0,0.2);
+	}
+	.navbar-nav li ul li{
+		background: rgba(0,0,0,0.6);
+	}
+	.navbar-nav li ul li:hover, 
+	.navbar-nav li ul li:focus{
+		background: rgba(0,0,0,0.8);	
+	}
+	.navbar-nav li ul>li+li>a{
+		-moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.1);
+	    -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.1);
+	    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.1);
+	}
+}
+
+// Sessões
+.iasd-special-page{
+	font-size: 18px;
+
+	p{
+		font-size: 18px;
+		line-height: 25px;
+	}
+	a{
+		&:link, &:visited{
+			color:#fff;
+		}
+		&:hover, &:focus, &:active{
+			text-decoration: underline;
+		}	
+	}
+
+	.entry-content{
+		.special-page-title{
+			margin-bottom: 40px;
+			text-align: center;
+			h1{
+				font-size: 52px;
+				line-height: 1;
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			small{
+				text-align: center !important;
+				font-size: 28px;
+				letter-spacing: 0px;
+				line-height: 1;
+				p{
+					text-align: center !important;
+				}
+			}
+		}
+	}
+	
+	section{
+		padding: 80px 0;
+		max-width: 1920px;
+		&.content-flex-image{
+			padding: 0;
+		}
+		h2{
+			font-family: @headings-font;
+			font-weight: 300;
+			font-size: 42px;
+			letter-spacing: -0.7px;
+			text-align: center;
+			text-transform: uppercase;
+			line-height: 1.2;
+		}
+		p.lead{
+			font-weight: 400;
+			margin-top: 30px;
+			text-align: center;
+			font-size: 20px;
+			letter-spacing: -0.34px;
+		}
+		.section-header{
+			margin-bottom: 80px;
+		}
+		.section-footer{
+			padding: 50px 0; 
+		}
+		.btn-special{
+			background: @color-alt;
+			border-radius: 4px;
+			font-weight: 900;
+			font-size: 20px;
+			text-transform: uppercase;
+			letter-spacing: -0.34px;
+			padding-left: 80px;
+			padding-right: 80px;
+		}
+	}
+
+	section#motivos-de-desmond{
+		
+		.card{
+			text-align: center;
+			min-height: 640px;
+			h3{
+				margin-top: 0;
+				font-weight: 900;
+				font-size: 30px;
+				letter-spacing: -0.5px;
+			}	
+		}
+	}
+
+	section#cristao-e-a-guerra{
+		position: relative;
+		padding: 100px 0;
+		background-color: #1e2011;
+		
+		.video-container{
+			position: absolute;
+			top:0%;
+			left:0%;
+			height:100%;
+			width:100%;
+			overflow: hidden;
+
+			video {
+				position:absolute;
+				z-index:0;
+				margin: auto;
+			}
+			video.fillWidth {
+				width: auto;
+				height: 100%;
+			}
+		}
+
+
+		p{
+			margin-bottom: 20px;
+		}
+		p.first-child{
+			font-weight: bold;
+			font-size: 23px;
+			letter-spacing: -0.39px;
+			line-height: 31px;
+		}
+	}
+
+
+	section#nossos-soldados{
+		padding-bottom: 150px;
+
+		.card{
+			margin-top: 50px;
+
+			img{
+				float: left;
+				margin-right: 35px;
+			}
+
+			h3{
+				font-weight: 900;
+				font-size: 30px;
+				letter-spacing: -0.5px;
+
+				small{
+					display: block;
+					font-weight: bold;
+					font-size: 22px;
+					letter-spacing: -0.37px;
+					color: #fff;
+					margin-top: 15px;
+				}
+			}
+
+			&.right{
+				text-align: right;
+				img{
+					float: right;
+					margin-right: 0;
+					margin-left: 35px;
+				}
+			}
+		}
+
+		.section-footer{
+			margin-top: 350px;
+		}
+	}
+	
+	section#deus-e-a-guerra{
+		padding-bottom: 150px;
+		.card{
+			position: relative;
+			h3{
+				font-weight: 900;
+				font-size: 44px;
+				letter-spacing: -0.74px;
+				margin-bottom: 25px;
+			}
+			.person-link{
+				position: relative;
+				display: block;
+				.play{
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: url(../img/play-big.png) no-repeat center center;
+				}
+				img{
+					width: 100%;
+					height: auto;
+				}
+			}
+			.person{
+				margin-top: 25px;
+				padding-bottom: 50px;
+				p.name{
+					font-weight: 900;
+					font-size: 19px;
+				}
+				p{
+					font-weight: italic;
+					font-size: 16px;
+					color: #FFFFFF;
+					letter-spacing: -0.27px;
+					line-height: 23px;
+				}
+			}
+			&.right{
+				text-align: right;
+				.person-link{
+					img{
+						left: auto;
+						right: -40px;
+					}
+				}
+			}
+		}
+	}
+
+	section#mais-posts{
+		background-color: #282b1a;
+		background-position: center bottom;
+		background-repeat: no-repeat;
+
+		.video-item{
+			h3{
+				font-weight: 900;
+				font-size: 20px;
+				letter-spacing: 0px;
+				text-align: center;
+			}
+		}
+
+		.credits{
+			text-align: center;
+			padding-top: 120px; 
+			font-size: 14px;
+
+			table{
+				margin:50px auto 0 auto;
+				td{
+					width: 50%;
+					padding:3px 10px;
+					vertical-align: top;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 768px){
+	.iasd-special-page{
+		.entry-content{
+			.special-page-title{
+				h1{
+					font-size: 41px;
+				}
+				small{
+					font-size: 24px;
+				}
+			}
+		}
+	    section{
+	    	h2{
+	    		font-size: 34px;
+	    	}
+			.btn-special{
+				padding-left: 8px;
+				padding-right: 8px;
+			}
+		}
+		section#motivos-de-desmond{
+			.card{
+				min-height: auto; 
+				margin-bottom: 70px;
+			}
+			.section-footer{
+				padding: 0;
+			}
+		}
+		section#nossos-soldados{
+			.card{
+				text-align: center;
+				img{
+					float: none;
+					margin-right: auto;
+					margin-left: auto;
+				}
+				&.right{
+					text-align: center;
+					img{
+						float: none;
+						margin-right: auto;
+						margin-left: auto;		
+					}
+				}	
+			}
+		}
+		section#deus-e-a-guerra{
+			padding-bottom: 80px;
+			.card{
+				margin-bottom: 80px;
+				&.right .person{
+					padding-right:160px;
+					img{
+						right: -14px;
+					}
+				}
+			}
+		}
+		section#mais-posts{
+			.col-md-4{
+				margin-bottom: 40px;
+			}
+		}
+	}
+}
+
+.embed-responsive {
+	position: relative;
+	display: block;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+}
+.embed-responsive.embed-responsive-16by9 {
+	padding-bottom: 56.25%;
+}
+.embed-responsive .embed-responsive-item, .embed-responsive embed, .embed-responsive iframe, .embed-responsive object, .embed-responsive video {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}

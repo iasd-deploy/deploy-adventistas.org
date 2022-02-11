@@ -1,0 +1,21 @@
+/**
+* Name: AFAM
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#cf702f;
+$theme-alt-color: 					#783638;
+$theme-main-nav-base-color:			$theme-alt-color;
+$theme-footer-base-color:			$theme-alt-color;
+$theme-header-background-img:		'flavours/afam/header.jpg';
+$theme-logo: 						'flavours/afam/logo.png';
+$theme-logo-retina: 				'flavours/afam/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

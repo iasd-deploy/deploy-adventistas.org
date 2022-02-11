@@ -1,0 +1,21 @@
+/**
+* Name: Ministério da Mulher
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#c44465;
+$theme-alt-color: 					#69488e;
+$theme-main-nav-base-color:			$theme-alt-color;
+$theme-footer-base-color:			$theme-alt-color;
+$theme-header-background-img:		'flavours/mulher/header.jpg';
+$theme-logo: 						'flavours/mulher/logo.png';
+$theme-logo-retina: 				'flavours/mulher/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

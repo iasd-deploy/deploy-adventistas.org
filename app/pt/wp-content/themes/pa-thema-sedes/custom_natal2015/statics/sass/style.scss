@@ -1,0 +1,299 @@
+@import "compass";
+@import "compass/css3";
+@import "compass/css3/opacity";
+
+$color1: #0F2B3E;
+$color2: #F3F3E9;
+$color3: #951419;
+
+section {
+	padding: 60px 0;
+}
+
+.iasd-global_navbar {
+	background: none !important;
+}
+
+.navbar-default {
+	background: #840D12 !important;
+}
+
+body {
+
+	&>header {
+		background: $color3;
+		height: 600px;
+	}
+
+	&>footer {
+		background: $color1;
+		@include background-image(linear-gradient($color3, adjust-lightness($color3, -10%)));
+		margin-top: 0;
+	}
+}
+
+h2 {
+	color: $color3;
+	font-size: 36px;
+	text-transform: uppercase;
+	margin-bottom: 60px;
+
+	small {
+		color: $color2;
+		text-transform: none;
+		display: block;
+		margin-top: 10px;
+	}
+}
+
+.botoes {
+	background: $color3;
+
+	.botao {
+		opacity: 0.8;
+		@include transition(opacity, 0.3s ease-out);
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.icon {
+		height: 100px;
+		width: 100px;
+		color: $color2;
+		display: block;
+		margin: 0 auto;
+		border-radius: 0;
+		border: none;
+	}
+
+	.title {
+		font-size: 20px;
+		color: #F3F3F0;
+		line-height: 24px;
+	}
+}
+
+.artigos {
+	background: $color2;
+
+	h2 {
+
+		small {
+			color: $color1;
+		}
+	}
+
+	.artigo {
+		background: #EBEBE8;
+		box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.28);
+		border-radius: 8px;
+		padding: 50px;
+		min-height: 450px;
+		opacity: 0.8;
+		@include transition(opacity, 0.3s ease-out);
+
+		&:hover {
+			opacity: 1;
+		}
+
+		img {
+			border: 4px solid #FFFFFF;
+		}
+
+		.titulo {
+			font-size: 20px;
+			color: #D80B47;
+			line-height: 29px;
+			display: block;
+			margin: 24px 0;
+			font-weight: bold;
+			line-height: 25px;
+		}
+
+		.descricao {
+			color: $color1;
+		}
+	}
+}
+
+.cartoes {
+	background: $color1;
+
+	.cartao {
+		margin-bottom: 70px;
+
+		img {
+			margin-bottom: 10px;
+		}
+	}
+}
+
+.icon {
+	font-family: FontAwesome;
+	width: 40px;
+	height: 40px;
+	border: 1px solid $color2;
+	display: inline-block;
+	border-radius: 50%;
+	color: $color2;
+	font-size: 18px;
+	line-height: 40px;
+	@include transition(opacity, 0.3s ease-out);
+
+	&:hover {
+		color: $color1;
+		background: $color2;
+	}
+}
+
+.icon_download:before {
+	content: "\f019";
+}
+
+.icon_facebook:before {
+	content: "\f09a";
+}
+
+.icon_twitter:before {
+	content: "\f099";
+}
+
+.icon_pinterest:before {
+	content: "\f0d2";
+}
+
+.icon_music {
+	background: image-url("icon_music.svg") center top no-repeat !important;
+}
+
+.icon_gift {
+	background: image-url("icon_gift.svg") center top no-repeat !important;
+}
+
+.icon_rocket {
+	background: image-url("icon_rocket.svg") center top no-repeat !important;
+}
+
+.icon_paperclip {
+	background: image-url("icon_paperclip.svg") center top no-repeat !important;
+}
+
+.pt_BR {
+	.logo {
+		background: image-url("pt_BR/logo.png") center top no-repeat;
+		height: image-height("pt_BR/logo.png");
+	}
+
+	.videos {
+		background: image-url("pt_BR/bg.jpg") center top;
+		height: image-height("pt_BR/bg.jpg");
+	}
+}
+
+.es_ES {
+
+	header {
+		background-image: none;
+	}
+
+	.logo {
+		background: image-url("es_ES/logo.png") center top no-repeat;
+		height: image-height("es_ES/logo.png");
+	}
+
+	.videos {
+		background: image-url("es_ES/bg.jpg") center top;
+		height: image-height("es_ES/bg.jpg");
+	}
+}
+
+.videos {
+	.video {
+		margin-top: 65px;
+	}
+}
+
+
+
+//iphone
+@media (max-width: 568px) {
+
+	body>header {
+		height: 395px;
+	}
+
+	.video, .botao, .artigos .col-md-4, .caroes .col-md-4 {
+		margin-bottom: 40px;
+
+		&:nth-last-child(1) {
+			margin-bottom: 0;
+		}
+	}
+
+	.pt_BR {
+		.videos {
+			height: auto;
+			background-size: 1152px 360px;
+		}
+
+		.logo {
+			background-size: 388px 420px;
+			background-repeat: no-repeat;
+		}
+	}
+
+	.es_ES {
+		.videos {
+			height: auto;
+			background-size: 1152px 360px;
+		}
+
+		.logo {
+			background-size: 386px 420px;
+			background-repeat: no-repeat;
+		}
+	}
+
+	.videos {
+		padding: 40px 0;
+
+		.video {
+			margin: 20px 0;
+		}
+	}
+}
+
+@media (min-width:768px) {
+	.logo {
+		top: 250px;
+		left: 0;
+	}
+
+	.videos {
+		.video {
+			margin-top: 40px;
+		}
+	}
+}
+
+@media (min-width:992px) {
+	.logo {
+		top: 270px;
+		left: 55px;
+	}
+
+	.videos {
+		.video {
+			margin-top: 65px;
+		}
+	}
+}
+
+/*
+@media(max-width:767px){}
+@media(min-width:768px){}
+@media(min-width:992px){}
+
+*/

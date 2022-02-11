@@ -1,0 +1,21 @@
+/**
+* Name: Escola Sabatina
+* Thumbnail: thumbnail.png
+* Version: 13/11/2013
+*/
+
+
+
+// Theme Options
+// -------------------------
+
+$theme-main-color: 					#608f4b;
+$theme-alt-color: 					#c95d53;
+$theme-main-nav-base-color:			$theme-main-color;
+$theme-footer-base-color:			$theme-main-color;
+$theme-header-background-img:		'flavours/escola-sabatina/header.jpg';
+$theme-logo: 						'flavours/escola-sabatina/logo.png';
+$theme-logo-retina: 				'flavours/escola-sabatina/logo@2x.png';
+
+@import "iasd-variables";
+@import "iasd-bootstrap";

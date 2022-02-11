@@ -1,0 +1,316 @@
+
+
+
+
+
+
+
+
+.revista {
+	background: #0b121f;
+}
+
+.revista .titulo {
+	background: #121d33;
+	padding: 40px 0;
+}
+
+.revista .titulo h1 {
+	color: #c16031;
+	padding: 10px 0;
+	margin: 0 0 20px;
+}
+
+.revista .titulo p {
+	color: #fff;
+	font-weight: 300;
+}
+
+.revista .embed {
+	padding: 40px 0;
+}
+
+.videos .video {
+	margin-bottom: 20px;
+}
+
+.videos .video img {
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%);
+	filter: url(grayscale.svg); /* Firefox 4+ */
+	filter: gray; /* IE 6-9 */
+}
+
+.videos .video:hover img {
+	transition: opacity .25s ease-in-out;
+	-moz-transition: opacity .25s ease-in-out;
+	-webkit-transition: opacity .25s ease-in-out;
+	-webkit-filter: grayscale(0);
+	-moz-filter: grayscale(0);
+	-ms-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	filter: grayscale(0);
+	filter: none; /* Firefox 4+ */
+	filter: none; /* IE 6-9 */
+}
+
+.videos img {
+	border-radius: 5px;
+}
+
+.videos figcaption {
+	margin-top: 5px;
+}
+
+.videos a, .videos a:visited, .faq a, .faq a:visited, .disqus a, .disqus a:visited {
+	color: #57351c;
+}
+
+.videos a:hover, .videos a:focus, .faq a:hover, .faq a:focus, .disqus a:hover, .disqus a:focus {
+	color: #996843;
+}
+
+.infografico {
+	margin: 50px 0 0;
+	background: #121d33;
+	color: #fff;
+}
+
+.infografico .slider {
+	margin-bottom: 30px;
+}
+
+.infografico .owl-carousel {
+	padding: 0 30px 30px 30px;
+}
+
+.infografico .titulo {
+	margin: 30px 0;
+}
+
+.infografico .slider-content {
+	background: #0e1728;
+}
+
+.infografico .slider-content .item {
+	padding: 30px 0 30px;
+}
+
+.infografico .slider-content img {
+}
+
+.infografico h2 {
+	color: #c16031;
+}
+
+.infografico p {
+	font-weight: 300;
+}
+
+.infografico .info {
+	background-color: #15223b;
+	width: 100%;
+	height: 211px;
+	display: block;
+	padding: 30px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.infografico .info:hover {
+	background-color: #182643;
+}
+
+.infografico .imagem {
+	width: 170px;
+	height: 149px;
+	float: left;
+	background: no-repeat;
+}
+
+.infografico .info .textos {
+	margin: 30px 0 0;
+}
+
+#ewg.pt_BR .infografico .jejum {
+	background-image: url(../img/pt_BR/jejum.png);
+}
+
+#ewg.pt_BR .infografico .caminhada {
+	background-image: url(../img/pt_BR/caminhada.png);
+}
+
+#ewg.es_ES .infografico .jejum {
+	background-image: url(../img/es_ES/jejum.png);
+}
+
+#ewg.es_ES .infografico .caminhada {
+	background-image: url(../img/es_ES/caminhada.png);
+}
+
+.infografico .info .titulo {
+	text-transform: uppercase;
+	color: #fff;
+	font-size: 18px;
+	display: block;
+}
+
+.infografico .info .botao {
+	color: #c16031;
+	padding: 5px 10px;
+	border: 1px solid #c16031;
+	border-radius: 5px;
+}
+
+
+.faq h4 {
+	font-size: 16px;
+}
+
+#ewg.es_ES>footer .info {
+	background-image: url(../img/es_ES/iasd_footer.png);
+}
+
+#ewg.pt_BR>footer .info {
+	background-image: url(../img/pt_BR/iasd_footer.png);
+}
+
+#ewg>footer {
+	background: #ddd7ce !important;
+}
+
+#ewg > footer h1, #ewg > footer .info .copyright {
+	color: #3a3a3a !important;
+}
+
+#ewg > footer a, #ewg > footer a:visited {
+	color: #3F3A34;
+}
+
+#ewg > footer a:hover, #ewg > footer a:focus {
+	color: #4a4a49;
+}
+
+.issuuembed div div:nth-child(2) {
+	display: none;
+}
+
+.panel {
+	background: rgba(255,255,255, 0.2);
+	font-size: 0.8em;
+}
+
+.materiais {
+	margin: 40px 0;
+}
+
+.materiais .container .row div div {
+	color: #3a3a3a;
+	background-color: #eee9e3;
+	border: 1px solid #e0d8cd;
+	border-radius: 3px;
+	padding: 40px;
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+	#ewg > header{
+		background-position: -400px 0;
+	}
+}
+
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 568px) {
+	#ewg > header{
+		background-position: -500px -80px;
+		height: 240px;
+	}
+
+	#ewg header .logo {
+		top: 30px;
+		width: 300px;
+	}
+
+	#ewg header .seta {
+		top: 200px;
+	}
+
+	.infografico .imagem {
+		width: 130px;
+		height: 149px;
+		float: right;
+		background: no-repeat;
+	}
+
+	#ewg.pt_BR .infografico .jejum {
+	background-image: url(../img/pt_BR/jejum_s.png);
+	}
+
+	#ewg.pt_BR .infografico .caminhada {
+		background-image: url(../img/pt_BR/caminhada_s.png);
+	}
+
+	#ewg.es_ES .infografico .jejum {
+		background-image: url(../img/es_ES/jejum_s.png);
+	}
+
+	#ewg.es_ES .infografico .caminhada {
+		background-image: url(../img/es_ES/caminhada_s.png);
+	}
+}
+
+/* Custom, iPhone Retina */ 
+@media only screen and (max-width : 320px) {
+	#ewg > header{
+		background-position: -500px -70px;
+		height: 440px;
+	}
+
+	#ewg header .logo {
+		top: 120px;
+		width: 290px;
+	}
+
+	#ewg header .seta {
+		top: 250px;
+	}
+
+	.infografico .imagem {
+		width: 90px;
+		height: 149px;
+		float: right;
+		background: no-repeat;
+	}
+
+	#ewg.pt_BR .infografico .jejum {
+		background-image: url(../img/pt_BR/jejum_s2.png);
+	}
+
+	#ewg.pt_BR .infografico .caminhada {
+		background-image: url(../img/pt_BR/caminhada_s2.png);
+	}
+
+	#ewg.es_ES .infografico .jejum {
+		background-image: url(../img/es_ES/jejum_s2.png);
+	}
+
+	#ewg.es_ES .infografico .caminhada {
+		background-image: url(../img/es_ES/caminhada_s2.png);
+	}
+
+	.infografico .info .titulo {
+		font-size: 14px;
+		line-height: 16px;
+	}
+
+	.infografico .info .botao {
+		font-size: 11px;
+	}
+
+}
+
+
