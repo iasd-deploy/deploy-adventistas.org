@@ -44,8 +44,20 @@ class Vc_Vendor_AdvancedCustomFields {
 			$this,
 			'mapEditorsShortcodes',
 		) );
+		add_filter( 'acf/ajax/shortcode_capability', array(
+			$this,
+			'acfAjaxShortcodeCapability',
+		) );
 
 		do_action( 'vc-vendor-acf-load', $this );
+	}
+
+	public function acfAjaxShortcodeCapability( $cap ) {
+		if ( isset( $_POST['_vcnonce'] ) && vc_verify_public_nonce() ) {
+			return 'exist';
+		}
+
+		return $cap;
 	}
 
 	/**
@@ -53,7 +65,7 @@ class Vc_Vendor_AdvancedCustomFields {
 	 * @since 4.3.3
 	 */
 	public function enqueueJs() {
-		wp_enqueue_script( 'vc_vendor_acf', vc_asset_url( 'js/vendors/advanced_custom_fields.js' ), array( 'jquery' ), '1.0', true );
+		wp_enqueue_script( 'vc_vendor_acf', vc_asset_url( 'js/vendors/advanced_custom_fields.js' ), array( 'jquery-core' ), '1.0', true );
 	}
 
 	/**

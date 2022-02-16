@@ -1,3 +1,127 @@
+20.12.2021 - ver 6.8.0
+  - Update: Deprecated jQuery removed from the plugin
+  - Fix: Button animation works properly on Safari
+  - Fix: Image gallery works properly on WordPress 5.8
+  - Fix: "Load more" button works properly to load content with Ajax
+  - Fix: WPBakery works properly with Layer Slider
+  - Fix: Role management for users works properly for the Super Admin role
+  - Fix: WPBakery works properly with WPML
+  - Fix: WPBakery works properly with ACF
+  - Fix: Post grid loading works properly
+  - Fix: Post grid categories work properly on mobile
+  - Fix: Post grid autoplay works properly
+  - Fix: Post grid works properly with ACF
+  - Fix: Post grid images full sizes works properly
+  - Fix: Scrollbar works properly for Raw HTML
+  - Fix: Post grid pagination works properly
+  - Fix: Charts work properly in the editor
+  - Fix: Update filters for vc_shortcode_content_filter
+  - Fix: Empty ACF values are not displayed
+  - Fix: Editor loads properly for all user roles
+  - Deprecated: Class WPBakeryVisualComposerAbstract will be removed in 6.9.0
+
+06.07.2021 - ver 6.7.0
+  - New: Custom breakpoint controls to adjust stacking behavior
+  - New: Option to disable animations in Masonry grid added
+  - New: Filter for wpb map element settings added
+  - New: Filter for changing heading tag added
+  - Compatibility: WooCommerce does not generate warnings
+  - Fix: Lightbox image filenames are correct
+  - Fix: Jump for “vclink” removed
+  - Fix: Owl carousel does not mix content
+  - Fix: Initial value on attributes work properly
+  - Fix: URLs updated to https
+  - Fix: Case sensitive single image size updated
+
+22.02.2021 - ver 6.6.0
+  - New: prettyPhoto removed and Lightbox2 added to the plugin (prettyPhoto will stay for backward compatibility)
+  - New: Call to Action element allows to align titles and select tags
+  - New: FlexSlider updated to 2.7.2 version and RTL support improved in WooCommerce products
+  - Update: $post variable added to the grid items filter ‘vc_gitem_post_data_get_link_real_title’
+  - Update: Catalan translation added
+  - Fix: Frontend editor initialization works properly
+  - Fix: Drag and drop for section element works properly in the backend editor
+  - Fix: WPBakery button in the Gutenberg editor works properly
+  - Fix: Request element parameters are passed properly in the edit form
+
+16.12.2020 - ver 6.5.0
+  - Update: Compatibility with WordPress 5.6
+  - Update: Compatibility with PHP8
+  - Fix: Template saving works properly
+  - Fix: Super admin editor access in multisite works properly
+  - Fix: setPost() method do_action_ref_array passes arguments correctly
+  - Fix: Modify with selected grid template loads properly
+  - Fix: Edit with WPBakery in Gutenberg control appears correctly
+  - Fix: Edit form loading spinner displayed correctly
+
+17.11.2020 - ver 6.4.2
+  - Fix: WooCommerce 4.7 compatibility issues resolved
+
+24.09.2020 - ver 6.4.1
+  - Fix: Role manager unfiltered html access improved
+  - Fix: Role manager Frontend editor access improved
+  - Update: German translation updated
+
+11.09.2020 - ver 6.4.0
+  - New: Rank Math SEO compatibility introduced
+  - New: Option to exclude categories in the loop parameters
+  - New: Option to ignore sticky posts in the loop parameters
+  - Update: jquery updated to jquery-core
+  - Update: show_in_rest is checked for Gutenberg compatibility
+  - Update: setTitle allows HTML entities
+  - Update: Role manager access improved for WordPress user roles
+  - Fix: Multisite setup works properly for super admin user role
+  - Fix: Yoast SEO latest version is fully compatible with the editor
+  - Fix: Autocomplete works properly
+
+21.08.2020 - ver 6.3.0
+  - Added: Role manager for unfiltered_html available
+  - Update: Filter for screen sizes in the navigation bar
+  - Update: Trigger event to prepare tab content
+  - Update: Description for the limit in WooCommerce shortcodes
+  - Update: LiteSpeed cache compatibility updated
+  - Update: Flickr element render API
+  - Update: HTML for image captions enabled
+  - Fix: Posts grid elements with "load more" option animates properly
+  - Fix: Dependency for not_empty in vc_link attribute type
+  - Fix: Target blank link selector
+  - Fix: Entity characters in french language
+  - Fix: Class vc_tta-o-non-responsive on parent nodes
+  - Fix: Undo/redo content disappearing with edit-only access
+
+20.04.2020 - ver 6.2.0
+  - Update: Performance improvements for the editor
+  - Update: Filter for ajax grid rendering added
+  - Update: Filters for post_custom_css and shortcodes_custom_css added
+  - Update: NL translation added for the plugin
+  - Update: BR translation added for the plugin
+  - Update: Standards and code styles updated
+  - Update: Classic and Gutenberg editor toggle updated
+  - Update: Portrait video support added
+  - Compatibility: Rank Math SEO compatibility improved
+  - Fix: Ajax add to cart works properly
+  - Fix: Plugin update works properly with multi-language version
+  - Fix: Sorted_list attribute works properly
+  - Fix: Shop Manager role works properly with the plugin
+  - Fix: Post id works properly in the preview mode
+  - Fix: Loading configuration works properly
+  - Fix: Order by post works properly
+  - Fix: oEmbed works properly in text blocks
+  - Fix: addShortcodesCustomCss works properly
+
+13.12.2019 - ver 6.1.0
+  - Added: Catalan, Ukrainian, Hungarian translations
+  - Update: WordPress 5.3 Compatibility
+  - Update: FontAwesome update to 5.10.2
+  - Update: loop attribute not found rows and order by relevance
+  - Update: PrettyPhoto https support
+  - Fix: RTL controls on backend
+  - Fix: RTL column reverse
+  - Fix: Disabled post revisions desing options
+  - Fix: Save row/section as template
+  - Fix: HoverBox improvements
+  - Remove: IE9 support
+
 17.07.2019 - ver 6.0.5
   - Fix: LESS vendor folder available
   - Fix: All Media in Text Block works properly
@@ -1022,7 +1146,7 @@
    - WP 3.5 compatibility fixes added
 
 29.12.2012 - ver 3.4.9
-   - Introduced developers methods more info https://kb.wpbakery.com/index.php?title=Category:Visual_Composer
+   - Introduced developers methods more info https://kb.wpbakery.com/
    - Exceprts now are working for posts/pages created with WPBakery Page Builder
    - Nivo slider updated (ver. 3.1)
    - Responsive css can be turned off from WPBakery Page Builder settings page

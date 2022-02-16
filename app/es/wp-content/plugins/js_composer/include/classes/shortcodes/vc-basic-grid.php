@@ -111,9 +111,9 @@ class WPBakeryShortCode_Vc_Basic_Grid extends WPBakeryShortCode_Vc_Pageable {
 	public function shortcodeScripts() {
 		parent::shortcodeScripts();
 
-		wp_register_script( 'vc_grid-js-imagesloaded', vc_asset_url( 'lib/bower/imagesloaded/imagesloaded.pkgd.min.js' ), array( 'jquery' ), WPB_VC_VERSION, true );
+		wp_register_script( 'vc_grid-js-imagesloaded', vc_asset_url( 'lib/bower/imagesloaded/imagesloaded.pkgd.min.js' ), array( 'jquery-core' ), WPB_VC_VERSION, true );
 		wp_register_script( 'vc_grid', vc_asset_url( 'js/dist/vc_grid.min.js' ), array(
-			'jquery',
+			'jquery-core',
 			'underscore',
 			'vc_pageable_owl-carousel',
 			'vc_waypoints',
@@ -298,8 +298,8 @@ class WPBakeryShortCode_Vc_Basic_Grid extends WPBakeryShortCode_Vc_Pageable {
 		if ( ! is_array( $shortcode ) ) {
 			return wp_json_encode( array( 'status' => 'Nothing found' ) );
 		}
-		visual_composer()->registerAdminCss();
-		visual_composer()->registerAdminJavascript();
+		wpbakery()->registerAdminCss();
+		wpbakery()->registerAdminJavascript();
 		// Set post id
 		$this->post_id = (int) $vc_request_param['page_id'];
 
@@ -563,7 +563,7 @@ class WPBakeryShortCode_Vc_Basic_Grid extends WPBakeryShortCode_Vc_Pageable {
 	 * @return mixed
 	 */
 	public static function convertButton2ToButton3( $atts ) {
-		if ( isset( $atts['button_style'] ) || isset( $atts['button_size'] ) || isset( $atts['button_color'] ) ) {
+		if ( ! empty( $atts['button_style'] ) || ! empty( $atts['button_size'] ) || ! empty( $atts['button_color'] ) ) {
 			// we use old button 2 attributes:
 			$style = isset( $atts['button_style'] ) ? $atts['button_style'] : 'rounded';
 			$size = isset( $atts['button_size'] ) ? $atts['button_size'] : 'md';
