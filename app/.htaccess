@@ -104,6 +104,6 @@ Redirect 302    /cultospresenciales https://www.adventistas.org/es/institucional
 Redirect 302    /umavozdeesperanca  https://www.adventistas.org/pt/institucional/organizacao/declaracoes-e-documentos-oficiais/uma-voz-de-esperanca/
 Redirect 302    /unavozdeesperanza  https://www.adventistas.org/es/institucional/organizacion/declaraciones-y-documentos-oficiales/una-voz-de-esperanza/
 
-RewriteEngine On
-RewriteCond %{HTTP_HOST} !^www\.
-RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=302,L]
+# RewriteEngine On
+# RewriteCond %{HTTP_HOST} !^www\.
+# RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=302,L]
