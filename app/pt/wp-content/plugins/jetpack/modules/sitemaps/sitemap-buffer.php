@@ -6,7 +6,7 @@
  * maintaining the constraints.
  *
  * @since 4.8.0
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 /**
@@ -108,13 +108,13 @@ abstract class Jetpack_Sitemap_Buffer {
 	 */
 	public function __construct( $item_limit, $byte_limit, $time ) {
 		$this->is_full_flag = false;
-		$this->timestamp = $time;
+		$this->timestamp    = $time;
 
 		$this->finder = new Jetpack_Sitemap_Finder();
-		$this->doc = new DOMDocument( '1.0', 'UTF-8' );
+		$this->doc    = new DOMDocument( '1.0', 'UTF-8' );
 
-		$this->item_capacity = max( 1, intval( $item_limit ) );
-		$this->byte_capacity = max( 1, intval( $byte_limit ) ) - strlen( $this->doc->saveXML() );
+		$this->item_capacity = max( 1, (int) $item_limit );
+		$this->byte_capacity = max( 1, (int) $byte_limit ) - strlen( $this->doc->saveXML() );
 	}
 
 	/**
@@ -125,27 +125,6 @@ abstract class Jetpack_Sitemap_Buffer {
 	 * @return DOMElement $root
 	 */
 	abstract protected function get_root_element();
-
-	/**
-	 * Append an item to the buffer, if there is room for it,
-	 * and set is_empty_flag to false. If there is no room,
-	 * we set is_full_flag to true. If $item is null,
-	 * don't do anything and report success.
-	 *
-	 * @since 4.8.0
-	 *
-	 * @param string $item The item to be added.
-	 *
-	 * @return bool True if the append succeeded, False if not.
-	 */
-	public function try_to_add_item( $item ) {
-		_deprecated_function(
-			'Jetpack_Sitemap_Buffer::try_to_add_item',
-			'5.3.0',
-			'Jetpack_Sitemap_Buffer::append'
-		);
-		$this->append( $item );
-	}
 
 	/**
 	 * Append an item to the buffer, if there is room for it,
@@ -173,7 +152,7 @@ abstract class Jetpack_Sitemap_Buffer {
 			return false;
 		} else {
 			$this->item_capacity -= 1;
-			$added_element = $this->array_to_xml_string( $array, $this->get_root_element(), $this->doc );
+			$added_element        = $this->array_to_xml_string( $array, $this->get_root_element(), $this->doc );
 
 			$this->byte_capacity -= strlen( $this->doc->saveXML( $added_element ) );
 
@@ -189,8 +168,8 @@ abstract class Jetpack_Sitemap_Buffer {
 	 * @return string The contents of the buffer (with the footer included).
 	 */
 	public function contents() {
-		if( $this->is_empty() ) {
-			// The sitemap should have at least the root element added to the DOM
+		if ( $this->is_empty() ) {
+			// The sitemap should have at least the root element added to the DOM.
 			$this->get_root_element();
 		}
 		return $this->doc->saveXML();
@@ -280,8 +259,8 @@ abstract class Jetpack_Sitemap_Buffer {
 	 * @since 4.8.0 Rename, add $depth parameter, and change return type.
 	 * @since 5.3.0 Refactor, remove $depth parameter, add $parent and $root, make access protected.
 	 *
-	 * @param array  $array A recursive associative array of tag/child relationships.
-	 * @param DOMElement $parent (optional) an element to which new children should be added.
+	 * @param array       $array A recursive associative array of tag/child relationships.
+	 * @param DOMElement  $parent (optional) an element to which new children should be added.
 	 * @param DOMDocument $root (optional) the parent document.
 	 *
 	 * @return string|DOMDocument The rendered XML string or an object if root element is specified.
@@ -291,7 +270,7 @@ abstract class Jetpack_Sitemap_Buffer {
 
 		if ( null === $parent ) {
 			$return_string = true;
-			$parent = $root = new DOMDocument();
+			$parent        = $root = new DOMDocument();
 		}
 
 		if ( is_array( $array ) ) {

@@ -40,7 +40,7 @@ class REST
      * @param string $expectedClass
      * @param array $config
      * @param array $retryMap
-     * @return array decoded result
+     * @return mixed decoded result
      * @throws \Google\Service\Exception on server side error (ie: not authenticated,
      *  invalid or malformed post body, invalid url)
      */
@@ -104,7 +104,6 @@ class REST
         $body = self::decodeBody($response, $request);
         if ($expectedClass = self::determineExpectedClass($expectedClass, $request)) {
             $json = \json_decode($body, \true);
-            $expectedClass = 'WPMailSMTP\\Vendor\\' . $expectedClass;
             return new $expectedClass($json);
         }
         return $response;

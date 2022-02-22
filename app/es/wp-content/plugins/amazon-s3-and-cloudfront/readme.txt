@@ -2,9 +2,9 @@
 Contributors: bradt, deliciousbrains, ianmjones
 Tags: uploads, amazon, s3, amazon s3, digitalocean, digitalocean spaces, google cloud storage, gcs, mirror, admin, media, cdn, cloudfront
 Requires at least: 4.9
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 5.5
-Stable tag: 2.5.3
+Stable tag: 2.5.5
 License: GPLv3
 
 Copies files to Amazon S3, DigitalOcean Spaces or Google Cloud Storage as they are uploaded to the Media Library. Optionally configure Amazon CloudFront or another CDN for faster delivery.
@@ -13,7 +13,7 @@ Copies files to Amazon S3, DigitalOcean Spaces or Google Cloud Storage as they a
 
 FORMERLY WP OFFLOAD S3 LITE
 
-https://www.youtube.com/watch?v=_PVybEGaRXc
+https://www.youtube.com/watch?v=I-wTMXMeFu4
 
 This plugin automatically copies images, videos, documents, and any other media added through WordPress' media uploader to [Amazon S3](http://aws.amazon.com/s3/), [DigitalOcean Spaces](https://www.digitalocean.com/products/spaces/) or [Google Cloud Storage](https://cloud.google.com/storage/). It then automatically replaces the URL to each media file with their respective Amazon S3, DigitalOcean Spaces or Google Cloud Storage URL or, if you have configured [Amazon CloudFront](http://aws.amazon.com/cloudfront/) or another CDN with or without a custom domain, that URL instead. Image thumbnails are also copied to the bucket and delivered through the correct remote URL.
 
@@ -80,6 +80,11 @@ This is a major change, which ensures S3 URLs are no longer saved in post conten
 This version requires PHP 5.3.3+ and the Amazon Web Services plugin
 
 == Changelog ==
+
+= WP Offload Media Lite 2.5.5 - 2021-07-19 =
+* Bug fix: Signed GCS URLs broken when updating a post
+* Bug fix: Incorrect mime type set on scaled image's bucket object when thumbnail format differs from original file's format
+* Tested: WordPress 5.8
 
 = WP Offload Media Lite 2.5.3 - 2021-03-03 =
 * New: Added DigitalOcean region San Francisco 3

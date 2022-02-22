@@ -1,8 +1,8 @@
 <?php
 /*
-	Plugin Name: GoCache - CDN
+	Plugin Name: GoCache
 	Plugin URI:
-	Version: 1.1.7
+	Version: 1.3.0
 	Author: GoCache
 	Author URI: http://www.gocache.com.br/
 	Text Domain: gocache
@@ -12,7 +12,7 @@
 */
 
 if ( version_compare( phpversion(), '5.6' ) < 0  ) {
-	wp_die( 'O plugin <strong>GoCache - CDN</strong> é incompatível com sua versão do PHP. <p>A versão do PHP deve ser no mínimo <strong>5.6</strong></p>',
+	wp_die( 'O plugin <strong>GoCache</strong> é incompatível com sua versão do PHP. <p>A versão do PHP deve ser no mínimo <strong>5.6</strong></p>',
 		'GoCache - Error',
 		array( 'back_link' => true )
 	);

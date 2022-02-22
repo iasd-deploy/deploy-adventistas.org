@@ -55,11 +55,11 @@ class Utils
 		$post_id = null;
 
 		if ( isset( $_GET['post'] ) ) :
-			$post_id = intval( $_GET['post'] );
+			$post_id = intval( sanitize_text_field( $_GET['post'] ) );
 		endif;
 
 		if ( isset( $_POST['post_ID'] ) ) :
-			$post_id = intval( $_POST['post_ID'] );
+			$post_id = intval( sanitize_text_field( $_POST['post_ID'] ) );
 		endif;
 
 		return $post_id;
@@ -138,9 +138,9 @@ class Utils
 			return $default;
 
 		if ( is_array( $_GET[ $key ] ) )
-			return $_GET[ $key ];
+			return sanitize_text_field( $_GET[ $key ] );
 
-		return self::sanitize_type( $_GET[ $key ], $sanitize );
+		return self::sanitize_type( sanitize_text_field( $_GET[ $key ] ), $sanitize );
 	}
 
 	public static function request( $key, $default = '', $sanitize = 'esc_html' )
@@ -156,10 +156,10 @@ class Utils
 		if ( ! isset( $_POST[ $key ] ) OR empty( $_POST[ $key ] ) )
 			return $default;
 
-		if ( is_array( $_POST[ $key ] ) )
-			return $_POST[ $key ];
+		if ( is_array( $_POST[ $key ] ) ) 
+			return  $_POST[ $key ];
 
-		return self::sanitize_type( $_POST[ $key ], $sanitize );
+		return self::sanitize_type( $_POST[ $key ] , $sanitize );
 	}
 
 	public static function sanitize_type( $value, $name_function )
@@ -168,7 +168,7 @@ class Utils
 			return $value;
 
 		if ( ! is_callable( $name_function ) )
-			return esc_html( $value );
+			return sanitize_text_field( $value );
 
 		return call_user_func( $name_function, $value );
 	}
@@ -184,9 +184,9 @@ class Utils
 		);
 
 		if ( ! $echo )
-			return $response;
+			return _e($response, App::TEXTDOMAIN);;
 
-		echo $response;
+		echo _e($response, App::TEXTDOMAIN);
 	}
 
 	public static function success_server_json( $code, $message = 'Generic Message Success', $text = '', $echo = true )
@@ -201,9 +201,9 @@ class Utils
 		);
 
 		if ( ! $echo )
-			return $response;
+			return _e($response, App::TEXTDOMAIN);;
 
-		echo $response;
+		echo _e($response, App::TEXTDOMAIN);
 	}
 
 	public static function format_array_on_string( $elements = array() )
@@ -226,9 +226,9 @@ class Utils
 		$response = json_encode( $args );
 
 		if ( ! $echo )
-			return $response;
+			return _e($response, App::TEXTDOMAIN);;
 
-		echo $response;
+		echo _e($response, App::TEXTDOMAIN);
 	}
 
 	public static function limit_text( $text, $limit, $more = '...' )
@@ -276,7 +276,7 @@ class Utils
 
 	public static function get_domain()
 	{
-		$site_url = get_site_url( '/' );
+		$site_url = get_bloginfo( 'url' );
 		return parse_url( $site_url, PHP_URL_HOST );
 	}
 

@@ -15,7 +15,9 @@
 }
 
 #gocache-admin .gocache-logo img {
-  width: 250px;
+  margin-top: 20px;
+  width: 200px;
+  margin-bottom: 20px;
 }
 #gocache-admin .form-header {
   position: relative;

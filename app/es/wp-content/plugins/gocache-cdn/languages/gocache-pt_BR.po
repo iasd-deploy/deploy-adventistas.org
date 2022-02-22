@@ -346,7 +346,7 @@ msgid "Search automatically or insert your site's sitemap pages (One URL per lin
 msgstr "Busque automaticamente ou insira as páginas de sitemap do seu site (Uma URL por linha)."
 
 #. Plugin Name of the plugin/theme
-msgid "GoCache - CDN"
+msgid "GoCache"
 msgstr ""
 
 #. Description of the plugin/theme

@@ -2,8 +2,8 @@
 Contributors: WebFactory
 Tags: sidebar, widget, custom sidebar, dynamic widgets, manage sidebars, flexible layout, replace widgets, custom widget area, footer
 Requires at least: 4.6
-Tested up to: 5.6
-Stable tag: 3.31
+Tested up to: 5.9
+Stable tag: 3.35
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,13 +16,15 @@ Flexible sidebars for custom widget configurations on any page or post. Create c
 
 Make custom sidebar configurations and be able to choose what widgets display on each page or post of your site.
 
+> Need to make a **widget sticky** or fixed? Try our free <a href="https://wordpress.org/plugins/sticky-menu-or-anything-on-scroll/">WP Sticky Anything</a> plugin.
+
+Custom Sidebars works ONLY with the classic widgets screen that was used in WordPress before version 5.8. If you want to use it with version 5.8 (and above) you have to install the official <a href="https://wordpress.org/plugins/classic-widgets/">Classic Widgets</a> plugin, or enable the classic widgets interface yourself. Once the classic widgets screen is activated the plugin will work the same as before.
+
+> Having problems setting up SSL or generating an SSL certificate? Install the free <a href="https://wordpress.org/plugins/wp-force-ssl/">WP Force SSL</a> plugin.
+
 = Display Different Sidebars on Pages and Posts =
 
 Custom Sidebars allows you to dynamically display custom widget configurations on any page, post, category, post type, or archive page.
-
-[youtube https://www.youtube.com/watch?v=7kgqwceGynA]
-
-Custom Sidebars allows you to display custom widget configurations on any page, post, category, post type, or archive page.
 
 ★★★★★
 > "Custom Sidebars will go on my "essential plugins" list from now on. I am pleased by how easy it was to figure out and by how many options are available in the free version." - [monkeyhateclean](https://profiles.wordpress.org/monkeyhateclean)
@@ -97,6 +99,14 @@ Any user that can switch themes, can create sidebars. Switch_themes is the capab
 Custom Sidebars has the same license as WordPress, so you can use it wherever you want for free. Yay!
 
 == Changelog ==
+
+= 3.35 =
+* 2022-01-11
+* Improved the classic widgets screen detection - "Classic Widgets" plugin is no longer necessary if you add appropriate filters via some other plugin or theme
+
+= 3.32 =
+* 2021-07-18
+* Added notice for WP 5.8
 
 = 3.31 =
 * 2021-01-30

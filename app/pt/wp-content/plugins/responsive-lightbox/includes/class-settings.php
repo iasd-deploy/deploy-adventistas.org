@@ -459,19 +459,6 @@ class Responsive_Lightbox_Settings {
 						'type' => 'boolean',
 						'label' => __( 'Select to remove subfolders when parent folder is deleted.', 'responsive-lightbox' )
 					),
-					/*
-					'jstree_style' => array(
-						'title' => __( 'Tree style', 'responsive-lightbox' ),
-						'section' => 'responsive_lightbox_folders',
-						'type' => 'select',
-						'description' => __( 'Select the folder\'s tree style.', 'responsive-lightbox' ),
-						'options' => array(
-							'default'		=> __( 'Default', 'responsive-lightbox' ),
-							'default-dark'	=> __( 'Dark', 'responsive-lightbox' ),
-							'gray'			=> __( 'Gray', 'responsive-lightbox' ),
-							'modern'		=> __( 'Modern', 'responsive-lightbox' )
-						)
-					),*/
 					'jstree_wholerow' => array(
 						'title' => __( 'Whole row', 'responsive-lightbox' ),
 						'section' => 'responsive_lightbox_folders',

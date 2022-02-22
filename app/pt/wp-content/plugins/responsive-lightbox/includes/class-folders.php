@@ -916,7 +916,6 @@ class Responsive_Lightbox_Folders {
 			// include styles
 			wp_enqueue_style( 'responsive-lightbox-folders-admin-css', RESPONSIVE_LIGHTBOX_URL . '/css/admin-folders.css' );
 			wp_enqueue_style( 'responsive-lightbox-folders-perfect-scrollbar', RESPONSIVE_LIGHTBOX_URL . '/assets/perfect-scrollbar/perfect-scrollbar' . ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.min' : '' ) . '.css' );
-			// wp_enqueue_style( 'responsive-lightbox-folders-jstree', RESPONSIVE_LIGHTBOX_URL . '/assets/jstree/themes/' . $rl->options['folders']['jstree_style'] . '/style' . ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.min' : '' ) . '.css' );
 			wp_enqueue_style( 'responsive-lightbox-folders-jstree', RESPONSIVE_LIGHTBOX_URL . '/assets/jstree/themes/default/style' . ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.min' : '' ) . '.css' );
 
 			// get color scheme global
@@ -1131,7 +1130,6 @@ class Responsive_Lightbox_Folders {
 				array(
 					'remove_children'	=> (int) $rl->options['folders']['folders_removal'],
 					'wholerow'			=> (int) $rl->options['folders']['jstree_wholerow'],
-					// 'theme'				=> $rl->options['folders']['jstree_style'],
 					'theme'				=> 'default',
 					'counters'			=> $counters,
 					'no_media_items'	=> $no_items,

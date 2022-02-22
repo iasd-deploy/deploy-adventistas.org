@@ -140,11 +140,27 @@ class CustomSidebarsCheckupNotification extends CustomSidebars {
 	private function show_box_wf_ads() {
 ?>
 <div class="custom-sidebars-box custom-sidebars-checkup">
-	<div class="cs-inner">
+<?php
+if (!defined('WPFSSL_OPTIONS_KEY')) {
+?>
+  <div class="cs-inner cs-wpfssl">
+		<h4 class="textcenter">Having problems with SSL?<br>Generate a free certificate &amp; properly redirect to HTTPS with a few clicks</h4>
+		<div class="wpfssl-logo"><a target="_blank" href="<?php echo admin_url('plugin-install.php?s=webfactory%20force%20ssl&tab=search&type=term'); ?>"><img src="<?php echo CSB_IMG_URL; ?>wp-force-ssl.png" alt="WP Force SSL" title="WP Force SSL"></a></div>
+		<div class="textcenter"><a target="_blank" href="<?php echo admin_url('plugin-install.php?s=webfactory%20force%20ssl&tab=search&type=term'); ?>" class="button">Install the <b>free WP Force SSL plugin</b></a></div>
+	</div>
+<?php
+}
+
+if (!function_exists('sticky_anything_activate')) {
+?>
+  <div class="cs-inner">
 		<h4 class="textcenter">Need to make any element on your site sticky?<br>Header menu, a widget, or an image?</h4>
-		<div class="sticky-logo"><a target="_blank" href="<?php echo admin_url('plugin-install.php?s=webfactory%20sticky&tab=search&type=term'); ?>"><img src="<?php echo CSB_IMG_URL; ?>/wp-sticky.png" alt="WP Sticky Anything" title="WP Sticky Anything"></a></div>
+		<div class="sticky-logo"><a target="_blank" href="<?php echo admin_url('plugin-install.php?s=webfactory%20sticky&tab=search&type=term'); ?>"><img src="<?php echo CSB_IMG_URL; ?>wp-sticky.png" alt="WP Sticky Anything" title="WP Sticky Anything"></a></div>
 		<div class="textcenter"><a target="_blank" href="<?php echo admin_url('plugin-install.php?s=webfactory%20sticky&tab=search&type=term'); ?>" class="button-primary">Install the free WP Sticky plugin</a></div>
 	</div>
+<?php
+}
+?>
 </div>
 <?php
 	}

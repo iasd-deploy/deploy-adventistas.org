@@ -13,13 +13,13 @@ class Cache_Controller
 		$this->setting = new Setting();
 
 		if ( $this->setting->auto_clear_cache == 'yes' ) {
-			add_action( 'init', array( $this, 'handle_actions' ) );
+			add_action( 'init', [ $this, 'handle_actions' ] );
 		}
 
-		add_action( 'wp_ajax_jt3WHdVr42nM9HfT', array( $this, 'ajax_settings' ) );
-		add_action( 'wp_ajax_Tk5FhDBt68mW8GlP', array( $this, 'ajax_settings' ) );
-		add_action( 'wp_ajax_VwtDUTW92c2B8Yjf', array( $this, 'delete_by_url' ) );
-		add_action( 'wp_ajax_mbuceP3nRNUqXzR5', array( $this, 'delete_all' ) );
+		add_action( 'wp_ajax_jt3WHdVr42nM9HfT', [ $this, 'ajax_settings' ] );
+		add_action( 'wp_ajax_Tk5FhDBt68mW8GlP', [ $this, 'ajax_settings' ] );
+		add_action( 'wp_ajax_VwtDUTW92c2B8Yjf', [ $this, 'delete_by_url' ] );
+		add_action( 'wp_ajax_mbuceP3nRNUqXzR5', [ $this, 'delete_all' ] );
 	}
 
 	public function delete_all()
@@ -60,6 +60,12 @@ class Cache_Controller
 		$request = new Request();
 		$result  = $request->delete_cache( $list, true );
 
+		if ( ! $result ) {
+			Utils::error_server_json( 'invalid_urls', __( 'Não foi possível fazer a limpeza, verifique sua conexão!', App::TEXTDOMAIN ) );
+			http_response_code( 411 );
+			exit(0);
+		}
+
 		if ( ! isset( $result->response->urls_accepted ) ) {
 			Utils::error_server_json( 'invalid_urls', __( 'Invalid URL.', App::TEXTDOMAIN ) );
 			http_response_code( 411 );
@@ -88,18 +94,22 @@ class Cache_Controller
 		}
 
 		foreach ( $actions as $action ) {
-			add_action( $action, array( $this, 'purge_post' ), 5, 1 );
+			add_action( $action, [ $this, 'purge_post' ], 5, 1 );
 		}
 
 		//Comments
-		add_action( 'wp_insert_comment', array( $this, 'purge_on_insert_comment' ), 99, 2 );
-		add_action( 'transition_comment_status', array( $this, 'purge_on_change_comment_status' ), 99, 3 );
+		add_action( 'wp_insert_comment', [ $this, 'purge_on_insert_comment' ], 99, 2 );
+		add_action( 'transition_comment_status', [ $this, 'purge_on_change_comment_status' ], 99, 3 );
+
+		//after delete post or attachment
+		add_action( 'after_delete_post', [ $this, 'purge_post' ], 5, 1 );
+		add_action( 'delete_attachment', [ $this, 'purge_attachment_after_delete' ], 5, 1 );
 	}
 
 	public function purge_post( $post )
 	{
 		$post_id           = ( is_object( $post ) ) ? $post->ID : intval( $post );
-		$valid_post_status = array( 'publish', 'trash', 'future' );
+		$valid_post_status = [ 'publish', 'trash', 'future' ];
 		$post_status       = get_post_status( $post_id );
 		$post_type         = get_post_type( $post_id );
 
@@ -107,7 +117,7 @@ class Cache_Controller
 			return;
 		}
 
-		$urls_list = array();
+		$urls_list = [];
 
 		$this->get_main_domain_url( $urls_list );
 		$this->get_post_link( $urls_list, $post_id );
@@ -134,7 +144,6 @@ class Cache_Controller
 		$urls    = $this->prepare_urls( $urls_list );
 		$urls    = $request->append_custom_strings( $urls );
 		$list    = array_chunk( $urls, 50, true );
-
 		foreach( $list as $items ) {
 			$request->delete_cache( $items );
 		}
@@ -160,10 +169,22 @@ class Cache_Controller
 		}
 	}
 
+	public function purge_attachment_after_delete( $post ) 
+	{
+		$post_id = ( is_object( $post ) ) ? $post->ID : intval( $post );
+		$attachment_info = get_post($post_id);
+
+		$attachment_guid = $attachment_info->guid;
+
+		$request = new Request();
+		$request->delete_cache( $attachment_guid );
+
+	}
+
 	private function prepare_urls( $urls )
 	{
 		if ( ! $urls ) {
-			return array();
+			return [];
 		}
 
 		$data   = array_merge( $urls, $this->get_without_slashes_items( $urls ) );
@@ -237,8 +258,8 @@ class Cache_Controller
 		$domain    = Utils::get_domain();
 		$protocol  = Utils::get_protocol();
 	
-		$post_url  = get_permalink($post_id);
-		$site_url  = $protocol . $domain . '/';
+		$post_url      = get_permalink($post_id);
+		$site_url      = $protocol . $domain . '/';
 
 		$post_date = get_the_date( 'Y/m/d', $post_id );
 
@@ -251,7 +272,7 @@ class Cache_Controller
 
 
 		$post_type_archive = $this->get_post_type_achives( $post_type );
-		$post_archives      = $this->get_archives_post( $post_url );
+		$post_archives     = $this->get_archives_post( $post_url );
 
 		if ( $post_type_archive ) array_push( $urls_list, $post_type_archive );
 
@@ -267,7 +288,37 @@ class Cache_Controller
 			array_push( $urls_list, $page );
 		}
 
+		$post_archive_date = $this->get_post_archive_date( $site_url, $post_id, $post_date  );
+		array_push( $urls_list, $post_archive_date);
+
 		array_merge ( $urls_list, $archive_pages );
+
+	}
+
+	private function get_post_archive_date( $url, $post_id, $post_date ) {
+
+		$post = get_post( $post_id ); 
+		$post_name = $post->post_name;
+
+		$split_date = explode( '/', $post_date );
+
+		$year  = $split_date[0];
+		$month = $split_date[1];
+		$day   = $split_date[2];
+
+		if ( get_option('permalink_structure') ) {
+
+			$params  = $year . '/' . $month . '/' . $day . '/' .$post_name;
+			$post_archive =  $url . $params;
+
+		} else {
+
+			$params  = '?year=' . $year . '&month=' . $month .'&day=' . $day . '&p=' .  $post_name;
+			$post_archive =  $url . $params;
+
+		}
+
+		return $post_archive;
 
 	}
 
@@ -411,12 +462,12 @@ class Cache_Controller
 
 	private function get_attachment_links( &$urls_list, $post_id )
 	{
-		$args = array(
+		$args = [
 			'post_parent'    => $post_id,
 			'post_type'      => 'attachment',
 			'numberposts'    => -1,
 			'post_status'    => 'any'
-		);
+		];
 
 		$attachment = get_posts($args);
 		if( $attachment ){

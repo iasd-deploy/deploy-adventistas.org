@@ -43,6 +43,10 @@ class Setting
 		'clear_cache_strings' => [
 			'sanitize' => ''
 		],
+
+		'clear_cache_urls' => [
+			'sanitize' => ''
+		],
 		
 		'override_url_domain' => [
 			'sanitize' => ''

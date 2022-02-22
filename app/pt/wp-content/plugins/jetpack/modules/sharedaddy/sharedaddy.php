@@ -4,8 +4,8 @@ Plugin Name: Sharedaddy
 Description: The most super duper sharing tool on the interwebs.
 Version: 0.3.1
 Author: Automattic, Inc.
-Author URI: http://automattic.com/
-Plugin URI: http://en.blog.wordpress.com/2010/08/24/more-ways-to-share/
+Author URI: https://automattic.com/
+Plugin URI: https://en.blog.wordpress.com/2010/08/24/more-ways-to-share/
 */
 
 require_once plugin_dir_path( __FILE__ ).'sharing.php';
@@ -33,7 +33,7 @@ function sharing_email_send_post( $data ) {
 			']/';
 
 		$needs_encoding =
-			// If it contains any blacklisted chars,
+			// If it contains any blocked chars.
 			preg_match( $name_needs_encoding_regex, $s_name ) ||
 			// Or if we can't use `mb_convert_encoding`
 			! function_exists( 'mb_convert_encoding' ) ||
@@ -143,7 +143,7 @@ function sharing_add_meta_box() {
 	$title = apply_filters( 'sharing_meta_box_title', __( 'Sharing', 'jetpack' ) );
 	if ( $post->ID !== get_option( 'page_for_posts' ) ) {
 		foreach( $post_types as $post_type ) {
-			add_meta_box( 'sharing_meta', $title, 'sharing_meta_box_content', $post_type, 'side', 'default' );
+			add_meta_box( 'sharing_meta', $title, 'sharing_meta_box_content', $post_type, 'side', 'default', array( '__back_compat_meta_box' => true ) );
 		}
 	}
 }
@@ -204,14 +204,14 @@ function sharing_meta_box_save( $post_id ) {
   	return $post_id;
 }
 
-function sharing_meta_box_protected( $protected, $meta_key, $meta_type ) {
+function sharing_meta_box_protected( $protected, $meta_key ) {
 	if ( 'sharing_disabled' == $meta_key )
 		$protected = true;
 
 	return $protected;
 }
 
-add_filter( 'is_protected_meta', 'sharing_meta_box_protected', 10, 3 );
+add_filter( 'is_protected_meta', 'sharing_meta_box_protected', 10, 2 );
 
 function sharing_plugin_settings( $links ) {
 	$settings_link = '<a href="options-general.php?page=sharing.php">'.__( 'Settings', 'jetpack' ).'</a>';
@@ -222,7 +222,7 @@ function sharing_plugin_settings( $links ) {
 function sharing_add_plugin_settings($links, $file) {
 	if ( $file == basename( dirname( __FILE__ ) ).'/'.basename( __FILE__ ) ) {
 		$links[] = '<a href="options-general.php?page=sharing.php">' . __( 'Settings', 'jetpack' ) . '</a>';
-		$links[] = '<a href="http://support.wordpress.com/sharing/" rel="noopener noreferrer" target="_blank">' . __( 'Support', 'jetpack' ) . '</a>';
+		$links[] = '<a href="https://support.wordpress.com/sharing/" rel="noopener noreferrer" target="_blank">' . __( 'Support', 'jetpack' ) . '</a>';
 	}
 
 	return $links;
@@ -241,31 +241,76 @@ function sharing_disable_js() {
 
 function sharing_global_resources() {
 	$disable = get_option( 'sharedaddy_disable_resources' );
-?>
+	?>
 <tr valign="top">
-	<th scope="row"><label for="disable_css"><?php _e( 'Disable CSS and JS', 'jetpack' ); ?></label></th>
+	<th scope="row"><label for="disable_css"><?php esc_html_e( 'Disable CSS and JS', 'jetpack' ); ?></label></th>
 	<td>
-		<input id="disable_css" type="checkbox" name="disable_resources" <?php if ( $disable == 1 ) echo ' checked="checked"'; ?>/>  <small><em><?php _e( 'Advanced.  If this option is checked, you must include these files in your theme manually for the sharing links to work.', 'jetpack' ); ?></em></small>
+		<?php
+		printf(
+			'<input id="disable_css" type="checkbox" name="disable_resources"%1$s />  <small><em>%2$s</em></small>',
+			( 1 == $disable ) ? ' checked="checked"' : '', // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			esc_html__( 'Advanced. If this option is checked, you must include these files in your theme manually for the sharing links to work.', 'jetpack' )
+		);
+		?>
 	</td>
 </tr>
-<?php
+	<?php
 }
 
 function sharing_global_resources_save() {
 	update_option( 'sharedaddy_disable_resources', isset( $_POST['disable_resources'] ) ? 1 : 0 );
 }
 
+/**
+ * Returns the Recaptcha site/public key.
+ *
+ * Supports legacy RECAPTCHA_PUBLIC_KEY or RECAPTCHA_SITE_KEY.
+ *
+ * @return string
+ */
+function sharing_recaptcha_site_key() {
+	if ( ! defined( 'RECAPTCHA_PUBLIC_KEY' ) && ! defined( 'RECAPTCHA_SITE_KEY' ) ) {
+		return '';
+	}
+
+	if ( defined( 'RECAPTCHA_PUBLIC_KEY' ) && ! defined( 'RECAPTCHA_SITE_KEY' ) ) {
+		define( 'RECAPTCHA_SITE_KEY', RECAPTCHA_PUBLIC_KEY );
+	}
+
+	return RECAPTCHA_SITE_KEY;
+}
+
+/**
+ * Returns the Recaptcha private/secret key.
+ *
+ * Supports legacy RECAPTCHA_PRIVATE_KEY or RECAPTCHA_SECRET_KEY.
+ *
+ * @return string
+ */
+function sharing_recaptcha_secret_key() {
+	if ( ! defined( 'RECAPTCHA_PRIVATE_KEY' ) && ! defined( 'RECAPTCHA_SECRET_KEY' ) ) {
+		return '';
+	}
+
+	if ( defined( 'RECAPTCHA_PRIVATE_KEY' ) && ! defined( 'RECAPTCHA_SECRET_KEY' ) ) {
+		define( 'RECAPTCHA_SECRET_KEY', RECAPTCHA_PRIVATE_KEY );
+	}
+
+	return RECAPTCHA_SECRET_KEY;
+
+}
+
 function sharing_email_dialog() {
 	require_once plugin_dir_path( __FILE__ ) . 'recaptcha.php';
 
-	$recaptcha = new Jetpack_ReCaptcha( RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY );
+	$recaptcha = new Jetpack_ReCaptcha( sharing_recaptcha_site_key(), sharing_recaptcha_secret_key(), array( 'script_lazy' => true ) );
 	echo $recaptcha->get_recaptcha_html(); // xss ok
 }
 
 function sharing_email_check( $true, $post, $data ) {
 	require_once plugin_dir_path( __FILE__ ) . 'recaptcha.php';
 
-	$recaptcha = new Jetpack_ReCaptcha( RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY );
+	$recaptcha = new Jetpack_ReCaptcha( sharing_recaptcha_site_key(), sharing_recaptcha_secret_key(), array( 'script_lazy' => true ) );
 	$response  = ! empty( $_POST['g-recaptcha-response'] ) ? $_POST['g-recaptcha-response'] : '';
 	$result    = $recaptcha->verify( $response, $_SERVER['REMOTE_ADDR'] );
 
@@ -275,6 +320,7 @@ function sharing_email_check( $true, $post, $data ) {
 add_action( 'init', 'sharing_init' );
 add_action( 'add_meta_boxes', 'sharing_add_meta_box' );
 add_action( 'save_post', 'sharing_meta_box_save' );
+add_action( 'edit_attachment', 'sharing_meta_box_save' );
 add_action( 'sharing_email_send_post', 'sharing_email_send_post' );
 add_filter( 'sharing_email_can_send', 'sharing_email_check_for_spam_via_akismet' );
 add_action( 'sharing_global_options', 'sharing_global_resources', 30 );
@@ -282,7 +328,7 @@ add_action( 'sharing_admin_update', 'sharing_global_resources_save' );
 add_action( 'plugin_action_links_'.basename( dirname( __FILE__ ) ).'/'.basename( __FILE__ ), 'sharing_plugin_settings', 10, 4 );
 add_filter( 'plugin_row_meta', 'sharing_add_plugin_settings', 10, 2 );
 
-if ( defined( 'RECAPTCHA_PUBLIC_KEY' ) && defined( 'RECAPTCHA_PRIVATE_KEY' ) ) {
+if ( sharing_recaptcha_site_key() && sharing_recaptcha_secret_key() ) {
 	add_action( 'sharing_email_dialog', 'sharing_email_dialog' );
 	add_filter( 'sharing_email_check', 'sharing_email_check', 10, 3 );
 }

@@ -6,8 +6,11 @@ MONKEY.ComponentWrapper( 'Clear', function(Clear) {
 		var noAutoClear = document.querySelector('#gocache_clear_cache_no');
 
 		if ( noAutoClear.checked ){
-			var sitemapsSection = document.querySelector('#sitemapsSection')
-			sitemapsSection.style = 'display:none;'
+			var optionsSection = document.querySelectorAll('.optionsSection');
+			optionsSection.forEach(element => {
+				element.style = 'display:none;'
+				
+			});
 		}
 	};
 
@@ -22,13 +25,18 @@ MONKEY.ComponentWrapper( 'Clear', function(Clear) {
 	};
 
 	Clear.fn._onClickAutoClearYes = function(event) {
-		var sitemapsSection = document.querySelector('#sitemapsSection')
-		sitemapsSection.style = 'display:table-row;'
+		var optionsSection = document.querySelectorAll('.optionsSection');
+		optionsSection.forEach(element => {
+			element.style = 'display:table-row;'
+		});
 	};
 
 	Clear.fn._onClickAutoClearNo = function(event) {
-		var sitemapsSection = document.querySelector('#sitemapsSection')
-		sitemapsSection.style = 'display:none;'
+		var optionsSection = document.querySelectorAll('.optionsSection');
+		optionsSection.forEach(element => {
+			element.style = 'display:none;'
+			
+		});
 	};
 
 	Clear.fn._onClickAll = function(event) {

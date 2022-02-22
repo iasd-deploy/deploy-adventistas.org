@@ -349,7 +349,7 @@ msgid "Search automatically or insert your site's sitemap pages (One URL per lin
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "GoCache - CDN"
+msgid "GoCache"
 msgstr ""
 
 #. Description of the plugin/theme

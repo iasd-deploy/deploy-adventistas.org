@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 class Responsive_Lightbox_Remote_Library {
 
-	public $providers = array();
+	public $providers = [];
 
 	/**
 	 * Constructor.
@@ -58,7 +58,7 @@ class Responsive_Lightbox_Remote_Library {
 
 					foreach ( $provider['response_args'] as $arg ) {
 						if ( array_key_exists( $arg, $response ) ) {
-							$html .= '<input id="rl_' . $args['tab_id'] . '_' . $args['menu_item'] . '_' . $args['field'] . '_' . $provider['slug'] . '_' . $arg . '" type="hidden" value="' . base64_encode( json_encode( $response[$arg] ) ) . '" name="rl_gallery[' . $args['tab_id'] . '][' . $args['menu_item'] . '][' . $args['field'] . '][' . $provider['slug'] . '][' . $arg . ']" data-previous="" data-subarg="2" />';
+							$html .= '<span id="' . esc_attr( 'rl_' . $args['tab_id'] . '_' . $args['menu_item'] . '_' . $args['field'] . '_' . $provider['slug'] . '_' . $arg ) . '" class="rl-response-data" data-value="' . esc_attr( base64_encode( json_encode( $response[$arg] ) ) ) . '" data-name="' . esc_attr( $arg ) . '" data-provider="' . esc_attr( $provider['slug'] ) . '"></span>';
 						}
 					}
 				}
@@ -79,7 +79,7 @@ class Responsive_Lightbox_Remote_Library {
 	 * @param string $url The image source URL
 	 * @param string|array $size Size of image
 	 * @param string $alt The image alternative text.
-	 * @return string Updated image HTML
+	 * @return string
 	 */
 	function send_image_to_editor( $html, $id, $caption, $title, $align, $url, $size, $alt ) {
 		if ( $id === Responsive_Lightbox()->galleries->maybe_generate_thumbnail() && isset( $_POST['attachment'] ) ) {
@@ -113,12 +113,11 @@ class Responsive_Lightbox_Remote_Library {
 	 */
 	public function get_active_providers() {
 		$providers = $this->get_providers();
-		$active_providers = array();
+		$active_providers = [];
 
 		foreach ( $providers as $provider => $data ) {
-			if ( Responsive_Lightbox()->options['remote_library'][$provider]['active'] ) {
+			if ( Responsive_Lightbox()->options['remote_library'][$provider]['active'] )
 				$active_providers[] = $provider;
-			}
 		}
 
 		return apply_filters( 'rl_get_active_providers', $active_providers );
@@ -143,10 +142,11 @@ class Responsive_Lightbox_Remote_Library {
 	 * @return void
 	 */
 	public function remote_library_scripts() {
+		global $wp_version;
 		global $pagenow;
 
 		// display only for post edit pages
-		if ( ! ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) )
+		if ( ! ( ( $pagenow === 'post.php' || $pagenow === 'post-new.php' ) || ( version_compare( $wp_version, '5.8', '>=' ) && ( $pagenow === 'widgets.php' || $pagenow === 'customize.php' ) ) ) )
 			return;
 
 		// get main instance
@@ -166,7 +166,7 @@ class Responsive_Lightbox_Remote_Library {
 				'uploadAndInsert'		=> __( 'Upload and Insert', 'responsive-lightbox' ),
 				'uploadAndSelect'		=> __( 'Upload and Select', 'responsive-lightbox' ),
 				'filterByremoteLibrary'	=> __( 'Filter by remote library', 'responsive-lightbox' ),
-				'getUploadNonce'			=> wp_create_nonce( 'rl-remote-library-upload-image' )
+				'getUploadNonce'		=> wp_create_nonce( 'rl-remote-library-upload-image' )
 			)
 		);
 
@@ -182,9 +182,9 @@ class Responsive_Lightbox_Remote_Library {
 	public function ajax_query_media() {
 		$data = stripslashes_deep( $_POST );
 		$results = array(
-			'last' => false,
-			'images' => array(),
-			'data' => array()
+			'last'		=> false,
+			'images'	=> [],
+			'data'		=> []
 		);
 
 		if ( isset( $data['media_provider'], $data['media_search'], $data['media_page'] ) && ( $data['media_provider'] === 'all' || $this->is_active_provider( $data['media_provider'] ) ) ) {
@@ -254,7 +254,7 @@ class Responsive_Lightbox_Remote_Library {
 	 */
 	public function ajax_upload_image() {
 		$data = stripslashes_deep( $_POST );
-		$new_data = array();
+		$new_data = [];
 
 		// verified upload?
 		if ( current_user_can( 'upload_files' ) && isset( $data['rlnonce'], $data['image'], $data['post_id'] ) && wp_verify_nonce( $data['rlnonce'], 'rl-remote-library-upload-image' ) ) {
@@ -285,16 +285,16 @@ class Responsive_Lightbox_Remote_Library {
 
 					if ( isset( $loaded['error'] ) && $loaded['error'] ) {
 						$results = array(
-							'error'		 => true,
-							'message'	 => $loaded['error']
+							'error'		=> true,
+							'message'	=> $loaded['error']
 						);
 					} else {
 						// simulate upload
 						$_FILES['rl-remote-image'] = array(
-							'error'		 => 0,
-							'name'		 => $file_name,
-							'tmp_name'	 => $loaded['file'],
-							'size'		 => filesize( $loaded['file'] )
+							'error'		=> 0,
+							'name'		=> $file_name,
+							'tmp_name'	=> $loaded['file'],
+							'size'		=> filesize( $loaded['file'] )
 						);
 
 						// get post ID
@@ -305,12 +305,12 @@ class Responsive_Lightbox_Remote_Library {
 							'rl-remote-image',
 							$post_id,
 							array(
-								'post_title'	 => $data['image']['title'],
-								'post_content'	 => $data['image']['description'],
-								'post_excerpt'	 => $data['image']['caption']
+								'post_title'	=> $data['image']['title'],
+								'post_content'	=> $data['image']['description'],
+								'post_excerpt'	=> $data['image']['caption']
 							), array(
-								'action'	 => 'rl_remote_library_handle_upload',
-								'test_form'	 => false
+								'action'	=> 'rl_remote_library_handle_upload',
+								'test_form'	=> false
 							)
 						);
 
@@ -465,14 +465,14 @@ class Responsive_Lightbox_Remote_Library {
 		$providers = $this->get_active_providers();
 
 		// prepare valid providers
-		$valid_providers = array();
+		$valid_providers = [];
 
 		if ( $args['media_provider'] === 'all' )
 			$valid_providers = $providers;
 		elseif ( in_array( $args['media_provider'], $providers, true ) )
 			$valid_providers[] = $args['media_provider'];
 
-		$results = array();
+		$results = [];
 
 		// any valid providers?
 		if ( ! empty( $valid_providers ) ) {

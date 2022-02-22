@@ -1,15 +1,27 @@
-# Translation of Plugins - Custom Sidebars &#8211; Dynamic Widget Area Manager - Stable (latest release) in Spanish (Spain)
-# This file is distributed under the same license as the Plugins - Custom Sidebars &#8211; Dynamic Widget Area Manager - Stable (latest release) package.
+# Translation of Plugins - Custom Sidebars &#8211; Dynamic Sidebar Widget Area Manager - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Custom Sidebars &#8211; Dynamic Sidebar Widget Area Manager - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-07 13:12:19+0000\n"
+"PO-Revision-Date: 2021-01-30 13:38:21+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: GlotPress/3.0.0-alpha.2\n"
 "Language: es\n"
-"Project-Id-Version: Plugins - Custom Sidebars &#8211; Dynamic Widget Area Manager - Stable (latest release)\n"
+"Project-Id-Version: Plugins - Custom Sidebars &#8211; Dynamic Sidebar Widget Area Manager - Stable (latest release)\n"
+
+#: inc/class-custom-sidebars.php:1114
+msgid "Configure Custom Sidebars"
+msgstr "Configurar barras laterales personalizadas"
+
+#. Author URI of the plugin
+msgid "https://www.webfactoryltd.com/"
+msgstr "https://www.webfactoryltd.com/"
+
+#. Author of the plugin
+msgid "WebFactory Ltd"
+msgstr "WebFactory Ltd"
 
 #: inc/class-custom-sidebars.php:162
 msgid "Notice dismissed for user %d"
@@ -23,31 +35,27 @@ msgstr "No autorizado"
 msgid "%1$sCustom Sidebars Notice %2$sStarting from version 5.7, WordPress will be using Gutenberg's block-based Widget Screen. Custom Sidebars is not compatible due to the fact that once Full Site Editing is in place, such plugins will not be required anymore. Therefore Custom Sidebars has been discontinued. If you have existing sidebars that you need to modify, you can switch back to a legacy Widgets screen by adding %3$s in your theme's functions.php file. You can read more about this %4$shere%5$s."
 msgstr "%1$sAviso de Custom Sidebars %2$sA partir de la versión 5.7, WordPress usará la pantalla de widgets de Gutenberg basada en bloques. Custom Sidebars no es compatible debido al hecho de que, una vez que la edición completa del sitio esté en funcionamiento, ya no serán necesarios plugins como este. Por tanto, Custom Sidebars no va a continuar. Si tienes barras laterales existentes que necesitas modificar, puedes volver a la pantalla heredada de widgets añadiendo %3$s en el archivo «functions.php» de tu tema. Puedes leer más sobre esto %4$saquí%5$s."
 
-#: inc/class-custom-sidebars.php:1151
+#: inc/class-custom-sidebars.php:1157
 msgid "Show"
 msgstr "Mostrar"
 
-#: inc/class-custom-sidebars.php:1150
+#: inc/class-custom-sidebars.php:1156
 msgid "Hide"
 msgstr "Ocultar"
 
-#: inc/class-custom-sidebars.php:1145
+#: inc/class-custom-sidebars.php:1151
 msgid "min"
 msgstr "min"
 
-#: inc/class-custom-sidebars.php:1144
+#: inc/class-custom-sidebars.php:1150
 msgid "max"
 msgstr "máx"
 
-#: inc/class-custom-sidebars.php:1137
+#: inc/class-custom-sidebars.php:1143
 msgid "Create a custom sidebar to get started."
 msgstr "Crea una barra lateral personalizada para empezar."
 
-#: inc/class-custom-sidebars.php:1119
-msgid "Support"
-msgstr "Ayuda"
-
-#: inc/class-custom-sidebars.php:284
+#: inc/class-custom-sidebars.php:287
 msgid ""
 "<strong>Accessibility mode is not supported by the\n"
 "\t\t\t\t\t\t%1$s plugin.</strong><br /><a href=\"%2$s\">Click here</a>\n"
@@ -57,7 +65,7 @@ msgstr ""
 "\t\t\t\t\t\t%1$s plugin.</strong><br />¡<a href=\"%2$s\">Haz clic aquí</a>\n"
 "\t\t\t\t\t\tpara desactivar el modo de accesibilidad para utilizar el plugin %1$s!"
 
-#: inc/class-custom-sidebars.php:265
+#: inc/class-custom-sidebars.php:268
 msgid "Now you can create and edit custom sidebars in your <a href=\"%1$s\">Widgets screen</a>!"
 msgstr "¡Ahora puedes crear y editar barras laterales personalizadas en tu <a href=\"%1$s\">pantalla de Widgets</a>!"
 
@@ -294,9 +302,9 @@ msgstr "WP Multilang"
 msgid "WPML"
 msgstr "WPML"
 
-#: inc/integrations/class-custom-sidebars-integration-wpml.php:50
 #: inc/integrations/class-custom-sidebars-integration-polylang.php:67
 #: inc/integrations/class-custom-sidebars-integration-wml.php:53
+#: inc/integrations/class-custom-sidebars-integration-wpml.php:50
 msgid "Language"
 msgstr "Idioma"
 
@@ -304,33 +312,13 @@ msgstr "Idioma"
 msgid "Polylang"
 msgstr "Polylang"
 
-#: inc/class-custom-sidebars-checkup-notification.php:214
+#: inc/class-custom-sidebars-checkup-notification.php:181
 msgid "get Upfront free"
 msgstr "obtén Upfront gratis"
 
-#: inc/class-custom-sidebars-checkup-notification.php:213
+#: inc/class-custom-sidebars-checkup-notification.php:180
 msgid "Don’t just replace sidebars. Add new sidebars and footers anywhere with Upfront."
 msgstr "No te limites a reemplazar las varillas. Añade nuevas barras laterales y pies de página en cualquier lugar con Upfront."
-
-#: inc/class-custom-sidebars-checkup-notification.php:191
-msgid "Go"
-msgstr "Ir"
-
-#: inc/class-custom-sidebars-checkup-notification.php:188
-msgid "Free performance, security and SEO report"
-msgstr "Informe gratuito de rendimiento, seguridad y SEO"
-
-#: inc/class-custom-sidebars-checkup-notification.php:187
-msgid "Run site health check"
-msgstr "Ejecutar la comprobación del estado del sitio"
-
-#: inc/class-custom-sidebars-checkup-notification.php:118
-msgid "Scan"
-msgstr "Explorar"
-
-#: inc/class-custom-sidebars-checkup-notification.php:114
-msgid "<b>Warning:</b> Some of your plugins may be slowing down your site. Run a free security and performance scan with WP Checkup."
-msgstr "<b>Advertencia:</b> Algunos de tus plugins pueden estar ralentizando tu sitio. Ejecuta un análisis gratuito de seguridad y rendimiento con WP Checkup."
 
 #: inc/class-custom-sidebars-editor.php:1407
 msgid "After turn on any Custom Taxonomy you need to reload this screen to be able choose it in Sidebar Location."
@@ -557,7 +545,7 @@ msgstr "¡La barra lateral existente será reemplazada!"
 msgid "New sidebar will be created"
 msgstr "Se creará una nueva barra lateral"
 
-#: inc/class-custom-sidebars.php:1111 views/import.php:146
+#: views/import.php:146
 msgid "Widgets"
 msgstr "Widgets"
 
@@ -601,7 +589,7 @@ msgstr "Exportado el"
 msgid "Filename"
 msgstr "Nombre de archivo"
 
-#: views/widgets.php:42 views/widgets-location.php:285
+#: views/widgets-location.php:285 views/widgets.php:42
 msgid "Save Changes"
 msgstr "Guardar los cambios"
 
@@ -644,7 +632,7 @@ msgstr "Estos ajustes no cargan las barras laterals no cargadas, sólo ocultan o
 msgid "For Screen Sizes"
 msgstr "Para tamaños de pantalla"
 
-#: views/widgets-location.php:189 views/import.php:370
+#: views/import.php:370 views/widgets-location.php:189
 msgid "Author Archives"
 msgstr "Archivos de autor"
 
@@ -652,8 +640,8 @@ msgstr "Archivos de autor"
 msgid "Authors"
 msgstr "Autores"
 
-#: views/widgets-location.php:157 views/widgets-location.php:178
-#: views/import.php:347
+#: views/import.php:347 views/widgets-location.php:157
+#: views/widgets-location.php:178
 msgid "Category Archives"
 msgstr "Archivos de categorías"
 
@@ -710,7 +698,7 @@ msgstr "Como <strong>%1$s</strong> por la seleccionada %2$s"
 msgid "Replaced by another sidebar:"
 msgstr "Sustituido por otra barra lateral:"
 
-#: views/widgets.php:43 views/widgets-editor.php:64
+#: views/widgets-editor.php:64 views/widgets.php:43
 msgid "Create Sidebar"
 msgstr "Crear una barra"
 
@@ -746,7 +734,7 @@ msgstr "Precaución:"
 msgid "Sidebar description here..."
 msgstr "Descripción de la barra lateral aquí&hellip;"
 
-#: views/widgets-editor.php:20 views/import.php:144
+#: views/import.php:144 views/widgets-editor.php:20
 msgid "Description"
 msgstr "Descripción"
 
@@ -758,7 +746,7 @@ msgstr "El nombre debería ser único."
 msgid "Sidebar name here..."
 msgstr "El nombre de la barra lateral aquí&hellip;"
 
-#: views/widgets-editor.php:15 views/import.php:143
+#: views/import.php:143 views/widgets-editor.php:15
 msgid "Name"
 msgstr "Nombre"
 
@@ -766,8 +754,8 @@ msgstr "Nombre"
 msgid "Yes, delete it"
 msgstr "Sí, borrar"
 
-#: views/widgets-editor.php:63 views/widgets-location.php:284
-#: views/widgets-delete.php:16
+#: views/widgets-delete.php:16 views/widgets-editor.php:63
+#: views/widgets-location.php:284
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -839,7 +827,7 @@ msgstr "Vista previa"
 msgid "Select a file to import"
 msgstr "Selecciona un archivo que importar"
 
-#: views/widgets-export.php:34 views/import.php:68
+#: views/import.php:68 views/widgets-export.php:34
 msgid "Import"
 msgstr "Importar"
 
@@ -859,14 +847,6 @@ msgstr "Exportar"
 msgid "&mdash; No Change &mdash;"
 msgstr "&mdash; Sin cambios &mdash;"
 
-#. Author URI of the plugin
-msgid "http://premium.wpmudev.org/"
-msgstr "http://premium.wpmudev.org/"
-
-#. Author of the plugin
-msgid "WPMU DEV"
-msgstr "WPMU DEV"
-
 #. Description of the plugin
 msgid "Allows you to create widgetized areas and custom sidebars. Replace whole sidebars or single widgets for specific posts and pages."
 msgstr "Te permite crear áreas widgetizadas y barras laterales personalizadas. Reemplace barras laterales enteras o widgets individuales para publicaciones y páginas específicas."
@@ -876,6 +856,6 @@ msgid "https://wordpress.org/plugins/custom-sidebars/"
 msgstr "https://es.wordpress.org/plugins/custom-sidebars/"
 
 #. Plugin Name of the plugin
-#: views/widgets.php:47 views/bulk-edit.php:23 views/import.php:129
+#: views/bulk-edit.php:23 views/import.php:129 views/widgets.php:47
 msgid "Custom Sidebars"
 msgstr "Custom Sidebars"

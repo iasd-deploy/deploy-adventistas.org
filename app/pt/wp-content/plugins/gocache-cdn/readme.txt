@@ -1,9 +1,9 @@
-=== GoCache CDN ===
-Contributors: apiki, daniloalvess, lucasbg0, aguiart0
+=== GoCache ===
+Contributors: apiki, gocachecdn, aguiart0, lucasbg0, daniloalvess
 Tags: CDN, cache, optimization, performance, speed
 Requires at least: 5.3
-Tested up to: 5.7
-Stable tag: 1.1.7
+Tested up to: 5.8
+Stable tag: 1.3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,57 @@ infraestrutura web e oferece uma melhor experiência para os visitantes.
 3. Limpeza de cache
 
 == Changelog ==
+
+= 1.3.0 - 02/02/2022 =
+
+* Atualizando mídias e nome do plugin
+
+= 1.2.8 - 15/12/2021 =
+
+* Criação de constante para ocultar o plugin do painel administrativo
+
+= 1.2.6 - 09/12/2021 =
+
+* Adicionando opção de purge de urls personalizadas por post
+* Adicionando opção de purge de urls personalizadas nas configurações gerais
+* Resolvendo problema de chave de cache em urls sem barras no final
+* Alterando imagens do plugin
+
+= 1.2.5 - 13/08/2021 =
+
+* Resolvendo erros na autenticação
+* Resolvendo erros nao sobrescrever domínios
+* Resolvendo purge de post archives
+
+= 1.2.4 - 04/08/2021 =
+
+* Tratando erros durante as requisições com WP Request
+
+= 1.2.3 - 28/07/2021 =
+
+* Alterando formato de requests para funções nativas do Wordpress
+* Melhorando a higienização e validação de variáveis 
+* Removendo short tags do PHP
+
+= 1.2.2 - 26/07/2021 =
+
+* Compatibilidade com a nova versão do Wordpress - 5.8
+
+= 1.2.1 - 23/07/2021 =
+
+* Melhorando purge automático após remoção de posts ou mídias
+
+= 1.1.9 - 28/06/2021 =
+
+* Atualizando imagens do repositório
+* Adicionando purge automático após remoção de posts ou mídias
+* Atualizando de pacotes e dependências
+* Tradução de campos nas configurações de cache
+
+= 1.1.8 - 14/06/2021 =
+
+* Suporte para multisites
+* Tradução de campos nas configurações de cache
 
 = 1.1.7 - 31/05/2021 =
 

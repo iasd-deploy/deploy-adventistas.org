@@ -34,14 +34,16 @@ class Settings_Controller
 
 	public function add_menus()
 	{
-		add_menu_page(
-			'GoCache',
-			'GoCache',
-			'manage_options',
-			App::PLUGIN_SLUG . '-settings',
-			array( 'GoCache\Settings_View', 'render_start_page' ),
-			App::plugins_url( 'assets/images/icon-gocache.png' )
-		);
+		if ( ! defined( 'GOCACHE_HIDE_MENU' ) || constant( 'GOCACHE_HIDE_MENU') == false ) {
+			add_menu_page(
+				'GoCache',
+				'GoCache',
+				'manage_options',
+				App::PLUGIN_SLUG . '-settings',
+				array( 'GoCache\Settings_View', 'render_start_page' ),
+				App::plugins_url( 'assets/images/icon-gocache.png' )
+			);
+		}
 
 		add_submenu_page(
 			App::PLUGIN_SLUG . '-settings',
@@ -61,7 +63,8 @@ class Settings_Controller
 			array( 'GoCache\Settings_View', 'render_authenticate_page' )
 		);
 
-		if ( ! $this->model->status ) {
+		$status = get_option( 'gocache_option-status' );
+		if ( $status != 1  ) {
 			return;
 		}
 
@@ -103,6 +106,12 @@ class Settings_Controller
 	{
 		if ( empty( $value ) ) {
 			return $value;
+		}
+
+		if ( $name == $this->model->get_option_name( 'clear_cache_urls' ) ) {
+			$list = preg_split( "/\\r\\n|\\r|\\n/", $value );
+			
+			$value = implode( PHP_EOL, $list );
 		}
 
 		if ( $name == $this->model->get_option_name( 'clear_cache_strings' ) ) {

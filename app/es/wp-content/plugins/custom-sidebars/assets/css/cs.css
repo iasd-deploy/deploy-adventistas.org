@@ -270,13 +270,24 @@
   text-transform: uppercase;
 }
 .widgets-php .sidebars-column-1 .inner .custom-sidebars-checkup {
-  background-color: #fff;
+  background-color: #e4e4e4;
 }
 .widgets-php .sidebars-column-1 .inner .custom-sidebars-checkup .cs-inner {
   font-size: 1.2em;
   padding: 20px 20px 20px 20px;
   background: #ffde66;
 }
+.widgets-php .sidebars-column-1 .inner .custom-sidebars-checkup .cs-inner.cs-wpfssl {
+  background: #fff;
+  border: 3px solid #42982e;
+  margin-bottom: 25px;
+}
+
+.widgets-php .sidebars-column-1 .inner .custom-sidebars-checkup .cs-inner.cs-wpfssl img {
+  max-width: 90%;
+  margin: 25px 0;
+}
+
 .widgets-php .sidebars-column-1 .inner .custom-sidebars-checkup .cs-inner h4 {
   color: #222;
   font-size: 1.2em;

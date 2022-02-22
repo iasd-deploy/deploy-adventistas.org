@@ -19,6 +19,7 @@ App::uses( 'view', 'View' );
 App::uses( 'settings', 'Controller' );
 App::uses( 'requests', 'Controller' );
 App::uses( 'cache', 'Controller' );
+App::uses( 'authentication', 'Controller' );
 
 class Core
 {
@@ -58,6 +59,7 @@ class Core
 			[
 				'Settings',
 				'Requests',
+				'Authentication',
 				'Cache'
 			]
 		);
