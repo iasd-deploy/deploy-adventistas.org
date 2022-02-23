@@ -1,7 +1,7 @@
 /** Wonderplugin Lightbox Plugin Trial Version
  * Copyright 2019 Magic Hills Pty Ltd All Rights Reserved
  * Website: http://www.wonderplugin.com
- * Version 9.2 
+ * Version 9.4 
  */
 (function($){$(document).ready(function(){$(".wonderplugin-select-mediaimage").click(function(){var textId=$(this).data("textid");var media_uploader=wp.media.frames.file_frame=wp.media({title:"Select Image",library:{type:"image"},button:{text:"Select Image"},multiple:false});media_uploader.on("select",function(event){var selection=media_uploader.state().get("selection");var attachment=selection.first().toJSON();if(attachment.type=="image")$("#"+textId).val(attachment.url)});media_uploader.open()});
 var applyShownavigation=function(){if($("#shownavigation").is(":checked"))$(".shownavigation-options").removeClass("wonderplugin-disabled");else $(".shownavigation-options").addClass("wonderplugin-disabled")};$("#shownavigation").click(function(){applyShownavigation()});var applyNavarrowspos=function(){if($("#navarrowspos").val()=="inside")$(".navarrowspos-options").removeClass("wonderplugin-disabled");else $(".navarrowspos-options").addClass("wonderplugin-disabled")};$("#navarrowspos").change(function(){applyNavarrowspos()});

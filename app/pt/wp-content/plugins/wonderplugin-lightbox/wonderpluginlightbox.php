@@ -3,7 +3,7 @@
 Plugin Name: Wonder Lightbox Trial
 Plugin URI: http://www.wonderplugin.com
 Description: WordPress Lightbox Plugin
-Version: 9.2
+Version: 9.4
 Author: Magic Hills Pty Ltd
 Author URI: http://www.wonderplugin.com
 License: Copyright 2019 Magic Hills Pty Ltd, All Rights Reserved
@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) )
 if ( defined( 'WONDERPLUGIN_LIGHTBOX_VERSION' ) )
 	return;
 
-define('WONDERPLUGIN_LIGHTBOX_VERSION', '9.2');
+define('WONDERPLUGIN_LIGHTBOX_VERSION', '9.4');
 define('WONDERPLUGIN_LIGHTBOX_URL', plugin_dir_url( __FILE__ ));
 define('WONDERPLUGIN_LIGHTBOX_PATH', plugin_dir_path( __FILE__ ));
 define('WONDERPLUGIN_LIGHTBOX_PLUGIN', basename(dirname(__FILE__)) . '/' . basename(__FILE__));
-define('WONDERPLUGIN_LIGHTBOX_PLUGIN_VERSION', '9.2');
+define('WONDERPLUGIN_LIGHTBOX_PLUGIN_VERSION', '9.4');
 
 require_once 'app/class-wonderplugin-lightbox-controller.php';
 
@@ -38,6 +38,7 @@ class WonderPlugin_Lightbox_Plugin {
 		add_action( 'admin_menu', array($this, 'register_menu') );
 		
 		add_shortcode( 'wonderplugin_lightbox_options', array($this, 'shortcode_handler') );
+		add_shortcode( 'wonderplugin_lightbox_init', array($this, 'shortcode_handler_init') );
 		
 		add_action( 'wp_footer', array($this, 'print_lightbox_options') );
 		add_action( 'init', array($this, 'register_script') );
@@ -187,6 +188,11 @@ class WonderPlugin_Lightbox_Plugin {
 	function shortcode_handler() {
 
 		return $this->wonderplugin_lightbox_controller->print_lightbox_options();
+	}
+
+	function shortcode_handler_init() {
+
+		return '<script>(function($){if($.fn.wonderpluginlightbox)wonderpluginLightbox=$(".wplightbox").wonderpluginlightbox();})(jQuery);</script>';
 	}
 
 	function show_tools() {
