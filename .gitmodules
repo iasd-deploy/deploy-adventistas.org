@@ -1,0 +1,6 @@
+[submodule "app/pt/wp-content/themes/pa-theme-sedes"]
+	path = app/pt/wp-content/themes/pa-theme-sedes
+	url = git@github.com:igrejaadventista/pa-theme-sedes.git
+[submodule "app/pt/wp-content/themes/pa-theme-sedes-child"]
+	path = app/pt/wp-content/themes/pa-theme-sedes-child
+	url = git@github.com:igrejaadventista/pa-theme-sedes-child.git
