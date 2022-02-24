@@ -6,8 +6,6 @@ RUN docker-php-ext-install opcache
 
 COPY --chown=www-data:www-data --from=internetdsa/pa-theme-sedes /var/www/build /var/www/html/pt/wp-content/themes/pa-theme-sedes
 COPY --chown=www-data:www-data --from=internetdsa/pa-theme-sedes /var/www/build /var/www/html/es/wp-content/themes/pa-theme-sedes
-COPY --chown=www-data:www-data --from=internetdsa/pa-theme-sedes-child /var/www/build /var/www/html/pt/wp-content/themes/pa-theme-child
-COPY --chown=www-data:www-data --from=internetdsa/pa-theme-sedes-child /var/www/build /var/www/html/es/wp-content/themes/pa-theme-child
 COPY --chown=www-data:www-data --from=internetdsa/pa-theme-sedes-child /var/www/build /var/www/html/pt/wp-content/themes/pa-theme-sedes-child
 COPY --chown=www-data:www-data --from=internetdsa/pa-theme-sedes-child /var/www/build /var/www/html/es/wp-content/themes/pa-theme-sedes-child
 
