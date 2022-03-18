@@ -89,7 +89,7 @@ Redirect 302	/primeirodeus	https://www.adventistas.org/pt/mordomiacrista/projeto
 Redirect 302	/primerodios	https://www.adventistas.org/es/mayordomiacristiana/proyectos/primero-dios/
 Redirect 302	/feirasaude	https://www.adventistas.org/pt/saude/cadastro-feira-de-saude/
 Redirect 302	/pesquisa	https://www.adventistas.org/pt/pesquisa/
-Redirect 302	/encuesta	https://www.adventistas.org/pt/ecuesta/
+Redirect 302	/encuesta	https://www.adventistas.org/es/encuesta/
 Redirect 302	/pt/missaocalebe	https://www.adventistas.org/pt/jovens/projeto/missao-calebe/
 Redirect 302	/es/misioncaleb	https://www.adventistas.org/es/jovenes/proyecto/mision-caleb/
 Redirect 302	/10días	https://www.adventistas.org/es/10dias/
