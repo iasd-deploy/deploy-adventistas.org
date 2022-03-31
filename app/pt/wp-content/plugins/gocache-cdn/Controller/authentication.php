@@ -26,15 +26,15 @@ class Authentication_Controller
         if ( $result->status_code == 1 ) {
             $message = 'Autenticação realizada com sucesso!';
         }
-        $this->update_gocahe_options( $result, $result->status_code );
+        $this->update_gocache_options( $result, $result->status_code );
 
-        return [ 
+        return [
             'status' => $result->status_code,
-            'message' => $message 
+            'message' => $message
         ];
     }
 
-    private function update_gocahe_options( $response, $status ) {
+    private function update_gocache_options( $response, $status ) {
 
         if ( $status == 1 ) {
             update_option( 'gocache_option-external_configs', $response );

@@ -1,7 +1,7 @@
 <?php if(is_admin()): ?>
 	<img class="img-preview" src="<?php echo e(get_template_directory_uri()); ?>/Blocks/PATwitter/preview.png" alt="<?php echo e(__('Illustrative image of the front end of the block.', 'iasd')); ?>" />
 <?php else: ?>
-	<div class="pa-widget pa-w-twitter col col-md-4 mt-5">
+	<div class="pa-widget pa-w-twitter col-12 col-md-4 mb-5">
 		<?php if (! empty($title)) : ?>
 			<h2><?php echo $title; ?></h2>
 		<?php endif; ?>

@@ -39,11 +39,11 @@ class Settings_View extends View
 	}
 	public static function render_authenticate_page()
 	{
-		$setting  = new Setting();		
+		$setting = new Setting();
 
 		$authentication = new Authentication_Controller();
 		$response       = $authentication->authentication();
-		
+
 		$connected = ( $response && $response['status'] == 1 ) ? true : false;
 
 		self::_render_notice( $connected, $response['message'] );
@@ -331,14 +331,14 @@ class Settings_View extends View
 								<th scope="row"> <?php _e( 'Purge Sitemap: ', App::TEXTDOMAIN ) ?></label></th>
 								<td>
 								<?php $checked = get_option( 'gocache_option-auto_clear_sitemap_url' ); ?>
-									<input  type="checkbox" 
-											name="sitemap_checkbox" 
+									<input  type="checkbox"
+											name="sitemap_checkbox"
 											id="gocache_sitemap_checkbox"
 											data-action="sitemap-auto-clear"
 											data-element="sitemap"
-											<?php _e( $checked == 'yes' ? 'checked' : '', App::TEXTDOMAIN); ?> /> 
+											<?php _e( $checked == 'yes' ? 'checked' : '', App::TEXTDOMAIN); ?> />
 									<label for="gocache_sitemap_checkbox"><?php _e( 'Limpar automaticamente cache do sitemap quando um post for alterado.', App::TEXTDOMAIN ); ?></label>
-									
+
 								</td>
 							</tr>
 
@@ -346,17 +346,17 @@ class Settings_View extends View
 								<th scope="row"> <?php _e( 'Purge AMP Post: ', App::TEXTDOMAIN ) ?></label></th>
 								<td>
 								<?php $checked = get_option( 'gocache_option-auto_clear_amp_url' ); ?>
-									<input  type="checkbox" 
-											name="amp_checkbox" 
+									<input  type="checkbox"
+											name="amp_checkbox"
 											id="gocache_amp_checkbox"
 											data-action="amp-auto-clear"
 											data-element="amp"
-											<?php _e( $checked == 'yes' ? 'checked' : '', App::TEXTDOMAIN); ?> /> 
+											<?php _e( $checked == 'yes' ? 'checked' : '', App::TEXTDOMAIN); ?> />
 									<label for="gocache_amp_checkbox"><?php _e( 'Limpar automaticamente cache de URLs AMPs quando um post for alterado.', App::TEXTDOMAIN ); ?></label>
-									
+
 								</td>
 							</tr>
-							
+
 						</div>
 
 						<tr valign="top">
@@ -440,26 +440,22 @@ class Settings_View extends View
 		<?php
 	}
 
-	private static function _render_notice( $connected, $response )
+	private static function _render_notice( $connected, $message )
 	{
-		if ( ! $response  || ! isset( $_REQUEST['settings-updated'] ) ) {
+		if ( ! $message  || ! isset( $_REQUEST['settings-updated'] ) ) {
 			return;
 		}
 
+		$notice_type = 'notice-error';
+
 		if ( $connected ) {
-			$type    = 'notice-success';
+			$notice_type    = 'notice-success';
 			$message = 'Conexão realizada com sucesso.';
-		} else {
-			$type    = 'notice-error';
-			$message = isset( $response->msg ) ? ucfirst( $response->msg ) : '';
 		}
 
 		?>
-		<div id="message" class="notice <?php _e( $type, App::TEXTDOMAIN ); ?> is-dismissible">
-			<p><?php _e( $message, App::TEXTDOMAIN ); ?></p>
-			<button type="button" class="notice-dismiss">
-			<span class="screen-reader-text"><?php _e( 'Dispensar este aviso.', App::TEXTDOMAIN ); ?></span>
-			</button>
+		<div id="message" class="notice <?php _e( $notice_type, App::TEXTDOMAIN ); ?> is-dismissible">
+			<p><?php _e( ucfirst( $message ), App::TEXTDOMAIN ); ?></p>
 		</div>
 		<?php
 	}

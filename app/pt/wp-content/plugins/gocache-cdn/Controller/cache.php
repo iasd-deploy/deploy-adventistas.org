@@ -211,7 +211,7 @@ class Cache_Controller
 		$protocol  = Utils::get_protocol();
 
 		foreach ( $url_list as $url ) {
-			array_push( $urls, preg_replace( '(https?://)', $protocol , $url ) );
+			array_push( $urls, str_replace( $protocol, "http*://", $url) );
 		}
 
 		return $urls;

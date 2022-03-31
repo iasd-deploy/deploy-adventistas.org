@@ -2,7 +2,7 @@
 /*
 	Plugin Name: GoCache
 	Plugin URI:
-	Version: 1.3.0
+	Version: 1.3.2
 	Author: GoCache
 	Author URI: http://www.gocache.com.br/
 	Text Domain: gocache

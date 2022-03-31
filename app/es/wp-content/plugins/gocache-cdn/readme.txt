@@ -2,8 +2,8 @@
 Contributors: apiki, gocachecdn, aguiart0, lucasbg0, daniloalvess
 Tags: CDN, cache, optimization, performance, speed
 Requires at least: 5.3
-Tested up to: 5.8
-Stable tag: 1.3.0
+Tested up to: 5.9
+Stable tag: 1.3.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,15 @@ infraestrutura web e oferece uma melhor experiência para os visitantes.
 3. Limpeza de cache
 
 == Changelog ==
+
+= 1.3.2 - 18/03/2022 =
+
+* Adicionando suporte a protocolos http e https
+
+= 1.3.1 - 25/02/2022 =
+
+* Compatibilidade com a nova versão do Wordpress - 5.9
+* Resolvendo aviso no wp-admin não fechando quando se clica no botão de fechar
 
 = 1.3.0 - 02/02/2022 =
 
@@ -59,7 +68,7 @@ infraestrutura web e oferece uma melhor experiência para os visitantes.
 = 1.2.3 - 28/07/2021 =
 
 * Alterando formato de requests para funções nativas do Wordpress
-* Melhorando a higienização e validação de variáveis 
+* Melhorando a higienização e validação de variáveis
 * Removendo short tags do PHP
 
 = 1.2.2 - 26/07/2021 =
@@ -84,7 +93,7 @@ infraestrutura web e oferece uma melhor experiência para os visitantes.
 
 = 1.1.7 - 31/05/2021 =
 
-* Adicionando novos modelos de URLs AMP 
+* Adicionando novos modelos de URLs AMP
 
 = 1.1.6 - 10/04/2021 =
 
@@ -139,7 +148,7 @@ infraestrutura web e oferece uma melhor experiência para os visitantes.
 
 * Adicionando mais variações de urls para limpeza de cache.
 * Compatibilidade com a versão 4.9.1 do WordPress.
-* 
+*
 = 1.0.6 - 14/02/2017 =
 
 * Melhorias de UX.
@@ -194,7 +203,7 @@ infraestrutura web e oferece uma melhor experiência para os visitantes.
 * Melhorias de UX.
 * Alterando ícone do plugin na administração.
 * Inclusão de botões de ajuda.
-* 
+*
 = 1.0.5 - 23/12/2016 =
 
 * Verificando compatibilidade com a versão 4.7 do WordPress.

@@ -102,7 +102,7 @@ class Request
 		$urls = $this->override_urls_domain($urls);
 
 		foreach ( $urls as $key => $url ) {
-			$data['urls'][] = esc_url( trim( $url ) );
+			$data['urls'][] = trim( $url );
 		}
 
 		$data['urls'] = $this->append_custom_urls( $data['urls'] );
@@ -112,6 +112,7 @@ class Request
 		}
 
 		$domain = $this->domain;
+		
 		$url = "https://api.gocache.com.br/v1/cache/{$domain}";
 		$args = [
 			'headers' => $this->header,
