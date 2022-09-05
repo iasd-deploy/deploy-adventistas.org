@@ -103,7 +103,7 @@ Redirect 302	/cultospresenciais	https://www.adventistas.org/pt/institucional/org
 Redirect 302	/cultospresenciales https://www.adventistas.org/es/institucional/organizacion/declaraciones-y-documentos-oficiales/orientaciones-de-la-iglesia-adventista-del-septimo-dia-sobre-el-regrsso-a-los-cultos-presenciales-y-enfasis-de-accion/
 Redirect 302	/umavozdeesperanca	https://www.adventistas.org/pt/institucional/organizacao/declaracoes-e-documentos-oficiais/uma-voz-de-esperanca/
 Redirect 302	/unavozdeesperanza	https://www.adventistas.org/es/institucional/organizacion/declaraciones-y-documentos-oficiales/una-voz-de-esperanza/
-Redirect 302	/acrerondonia 	https://www.adventistas.org/pt/os-adventistas-e-a-politica/
+Redirect 302	/politica 	https://www.adventistas.org/pt/os-adventistas-e-a-politica/
 
 
 # RewriteEngine On
