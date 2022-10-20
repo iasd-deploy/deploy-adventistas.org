@@ -47,7 +47,6 @@ define('BLOG_ID_CURRENT_SITE', 1);
 
 define('WP_POST_REVISIONS', 10);
 
-
 /**#@+
  * Authentication Unique Keys and Salts.
  *

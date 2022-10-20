@@ -347,10 +347,10 @@ class Vc_Base {
 	 *
 	 */
 	public function addPageCustomCss( $id = null ) {
-		if ( is_front_page() || is_home() ) {
-			$id = get_queried_object_id();
-		} elseif ( is_singular() ) {
-			if ( ! $id ) {
+		if ( ! $id ) {
+			if ( is_front_page() || is_home() ) {
+				$id = get_queried_object_id();
+			} elseif ( is_singular() ) {
 				$id = get_the_ID();
 			}
 		}
@@ -389,6 +389,10 @@ class Vc_Base {
 	public function addShortcodesCustomCss( $id = null ) {
 		if ( ! $id && is_singular() ) {
 			$id = get_the_ID();
+		}
+		// if is woocommerce shop page
+		if ( ! $id && function_exists( 'is_shop' ) && is_shop() ) {
+			$id = get_option( 'woocommerce_shop_page_id' );
 		}
 
 		if ( $id ) {
@@ -667,6 +671,10 @@ class Vc_Base {
 			);
 			$content = preg_replace( $s, $r, $content );
 
+			// if content contains [vc_row then wrap with '<div>'
+			if ( preg_match( '/vc_row/', $content ) ) {
+				$content = '<section class="wpb-content-wrapper">' . $content . '</section>';
+			}
 			return $content;
 		}
 
