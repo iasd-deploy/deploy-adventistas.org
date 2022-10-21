@@ -6,3 +6,4 @@
 revisions.sh
 user.sh
 wp-content/uploads/*
+db_data/*
