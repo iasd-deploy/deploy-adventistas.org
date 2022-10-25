@@ -98,17 +98,16 @@ class WonderPlugin_Lightbox_View {
 		<div id="icon-wonderplugin-lightbox" class="icon32"><br /></div>
 		
 		<?php $this->controller->print_lightbox_options(); ?>
-		<h2><?php echo __( 'Wonder Lightbox', 'wonderplugin_lightbox' ) . ( (WONDERPLUGIN_LIGHTBOX_VERSION_TYPE == "C") ? " Pro" : ( (WONDERPLUGIN_LIGHTBOX_VERSION_TYPE == "L") ? " Lite" : " Trial") ) . " Version " . WONDERPLUGIN_LIGHTBOX_VERSION; ?> </h2>
+		<h1><?php echo __( 'Wonder Lightbox', 'wonderplugin_lightbox' ) . ( (WONDERPLUGIN_LIGHTBOX_VERSION_TYPE == "C") ? " Pro" : ( (WONDERPLUGIN_LIGHTBOX_VERSION_TYPE == "L") ? " Lite" : " Trial") ) . " Version " . WONDERPLUGIN_LIGHTBOX_VERSION; ?> </h1>
 		 
-		<div id="welcome-panel" class="welcome-panel">
-			<div class="welcome-panel-content">
-				<h3>WordPress Image and Video Lightbox Plugin</h3>
-				<div class="welcome-panel-column-container">
-					<div class="welcome-panel-column">
+		<div id="welcome-panel">
+			<div>
+				<div style="display:flex;">
+					<div style="padding:18px;">
 						<h4>Get Started</h4>
 						<a class="button button-primary button-hero" href="<?php echo admin_url('admin.php?page=wonderplugin_lightbox_show_quick_start'); ?>">Quick Start Guide</a>
 					</div>
-					<div class="welcome-panel-column welcome-panel-last">
+					<div style="padding:18px;">
 						<h4>More Actions</h4>
 						<ul>
 							<li><a href="<?php echo admin_url('admin.php?page=wonderplugin_lightbox_show_options'); ?>" class="welcome-icon welcome-widgets-menus">Lightbox Options</a></li>
@@ -224,6 +223,21 @@ class WonderPlugin_Lightbox_View {
 				<td><label for="enabletouchswipe"><input name="enabletouchswipe" type="checkbox" id="enabletouchswipe" value="1" <?php echo $lightbox_options['enabletouchswipe'] ? "checked": ""; ?> /> Enable touch swipe</label></td>
 			</tr>	
 			
+			<tr valign="top">
+				<th scope="row">Google Analytics 4 Measurement ID</th>
+				<td><input name="ga4account" type="text" id="ga4account" value="<?php echo esc_html($lightbox_options['ga4account']); ?>" class="regular-text" /></td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row">Google Universal Analytics ID</th>
+				<td><input name="googleanalyticsaccount" type="text" id="googleanalyticsaccount" value="<?php echo esc_html($lightbox_options['googleanalyticsaccount']); ?>" class="regular-text" /></td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row">AJAX Dynamic Content</th>
+				<td><label for="supportdynamiccontent"><input name="supportdynamiccontent" type="checkbox" id="supportdynamiccontent" value="1" <?php echo $lightbox_options['supportdynamiccontent'] ? "checked": ""; ?> /> Support AJAX loaded dynamic content</label></td>
+			</tr>	
+
         	</table>
         	
         	</li>

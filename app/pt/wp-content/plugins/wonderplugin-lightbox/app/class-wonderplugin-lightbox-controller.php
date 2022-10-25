@@ -100,6 +100,11 @@ class WonderPlugin_Lightbox_Controller {
 		return $this->model->print_lightbox_options();
 	}
 	
+	function get_page_code($id, $autop) {
+		
+		return $this->model->get_page_code($id, $autop);
+	}
+	
 	function show_tools() {
 
 		$this->view->show_tools();

@@ -61,6 +61,7 @@ class WonderPlugin_Lightbox_Model {
 		$options['showtitle'] = isset($options['showtitle']) ? true : false;
 		$options['defaultvideovolume'] = floatval(trim($options['defaultvideovolume']));
 		$options['enabletouchswipe'] = isset($options['enabletouchswipe']) ? true : false;
+		$options['supportdynamiccontent'] = isset($options['supportdynamiccontent']) ? true : false;
 		
 		$options['fullscreenmode'] = isset($options['fullscreenmode']) ? true : false;
 		$options['fullscreentextoutside'] = isset($options['fullscreentextoutside']) ? true : false;
@@ -123,6 +124,9 @@ class WonderPlugin_Lightbox_Model {
 		$options['showtwitter'] = isset($options['showtwitter']) ? true : false;
 		$options['showpinterest'] = isset($options['showpinterest']) ? true : false;
 		
+		$options['ga4account'] = trim($options['ga4account']);
+		$options['googleanalyticsaccount'] = trim($options['googleanalyticsaccount']);
+
 		update_option( "wonderplugin-lightbox-options", json_encode($options) );
 	}
 	
@@ -155,6 +159,7 @@ class WonderPlugin_Lightbox_Model {
 			'titlestyle'	=> 'bottom',
 			'imagepercentage' => 75,
 			'enabletouchswipe'	=> true,
+			'supportdynamiccontent' => false,
 			'autoplay' => true,
 			'html5player' => true,
 			'overlaybgcolor' => '#000',
@@ -201,7 +206,9 @@ class WonderPlugin_Lightbox_Model {
 			'shownavcontrol' => true,
 			'hidenavdefault' => false,
 			'hidenavigationonmobile' => false,
-			'hidenavigationonipad' => false
+			'hidenavigationonipad' => false,
+			'ga4account' => '',
+			'googleanalyticsaccount' => ''
 		);
 
 		return $default;
@@ -289,6 +296,11 @@ class WonderPlugin_Lightbox_Model {
 		if (isset($options['customjavascript']) && strlen($options['customjavascript']) > 0)
 		{
 			$optionsdiv .= '<script>' . str_replace(array("\r", "\n"), array(" ", " "), $options['customjavascript']) . '</script>';
+		}
+
+		if (isset($options['supportdynamiccontent']) && $options['supportdynamiccontent'] == true)
+		{
+			$optionsdiv .= '<script>(function($){$(document).ready(function(){$("body").on("click", "a.wplightbox,area.wplightbox,.wplightbox a,.wplightbox area", function(e) {if (typeof wonderpluginLightbox !== undefined){wonderpluginLightbox.processLightbox(this);}return false;});});})(jQuery);</script>';
 		}
 
 		echo $optionsdiv;
@@ -405,6 +417,24 @@ class WonderPlugin_Lightbox_Model {
 		);
 	}
 
+	function get_page_code( $id, $autop ) {
+		
+		if (!is_numeric($id))
+			return 'Please specify a valid page id!';
+		
+		$publish_status = get_post_status ( $id );
+		if ( $publish_status !== 'publish' && $publish_status !== 'private' )
+			return 'The specified page id does not exist or the page is not published!';
+		
+		$page = get_post( $id );
+		
+		$content = $autop ? wpautop($page->post_content) : $page->post_content;
+
+		$content = do_shortcode($content);
+		
+		return $content;
+	}
+	
 	function export_xml() {
 
 		if ( !check_admin_referer('wonderplugin-lightbox', 'wonderplugin-lightbox-export') )
