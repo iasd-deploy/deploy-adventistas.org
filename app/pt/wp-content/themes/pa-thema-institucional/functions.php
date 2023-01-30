@@ -4,7 +4,8 @@ define('TEMPLATEURI', get_stylesheet_directory_uri());
 
 define('IS_INSTITUTIONAL', true);
 
-add_filter('user_can_richedit' , create_function('' , 'return false;') , 50);
+//add_filter('user_can_richedit' , create_function('' , 'return false;') , 50);
+add_filter( ‘user_can_richedit’ , ‘__return_false’, 50 );
 
 require_once ('classes/ThemeController.class.php');
 require_once ('classes/MenuDescription.class.php');
