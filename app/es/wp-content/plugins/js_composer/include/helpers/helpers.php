@@ -41,8 +41,7 @@ function wpb_getImageBySize( $params = array() ) {
 	$post_id = $params['post_id'];
 
 	$attach_id = $post_id ? get_post_thumbnail_id( $post_id ) : $params['attach_id'];
-	$attach_id = apply_filters( 'vc_object_id', $attach_id );
-	$attach_id = apply_filters( 'wpml_object_id', $attach_id );
+	$attach_id = apply_filters( 'wpml_object_id', $attach_id, 'attachment', true );
 	$thumb_size = $params['thumb_size'];
 	$thumb_class = ( isset( $params['class'] ) && '' !== $params['class'] ) ? $params['class'] . ' ' : '';
 
@@ -1181,18 +1180,6 @@ function vc_extract_youtube_id( $url ) {
 /**
  * @return string[]|\WP_Taxonomy[]
  */
-/**
- * @return string[]|\WP_Taxonomy[]
- */
-/**
- * @return string[]|\WP_Taxonomy[]
- */
-/**
- * @return string[]|\WP_Taxonomy[]
- */
-/**
- * @return string[]|\WP_Taxonomy[]
- */
 function vc_taxonomies_types( $post_type = null ) {
 	global $vc_taxonomies_types;
 	if ( is_null( $vc_taxonomies_types ) || $post_type ) {
@@ -1288,18 +1275,6 @@ function vc_stringify_attributes( $attributes ) {
 	return implode( ' ', $atts );
 }
 
-/**
- * @return bool
- */
-/**
- * @return bool
- */
-/**
- * @return bool
- */
-/**
- * @return bool
- */
 /**
  * @return bool
  */
@@ -1423,7 +1398,8 @@ function wpb_widget_title( $params = array( 'title' => '' ) ) {
  * @since 6.3.0
  */
 function wpb_remove_custom_html( $content ) {
-	if ( ! vc_user_access()->part( 'unfiltered_html' )->checkStateAny( true, null )->get() ) {
+	$is_rest_request = ( defined( 'REST_REQUEST' ) && REST_REQUEST );
+	if ( ! empty( $content ) && ! $is_rest_request && ! vc_user_access()->part( 'unfiltered_html' )->checkStateAny( true, null )->get() ) {
 		// html encoded shortcodes
 		$regex = vc_get_shortcode_regex( implode( '|', apply_filters( 'wpb_custom_html_elements', array(
 			'vc_raw_html',
@@ -1446,4 +1422,17 @@ function wpb_remove_custom_onclick( $match ) {
 	}
 
 	return $match[0];
+}
+
+/**
+ * We use it only to check is current environment is wordpress.com
+ *
+ * @return bool
+ * @since 6.2
+ */
+function wpb_check_wordpress_com_env() {
+	return defined( 'IS_ATOMIC' ) &&
+		IS_ATOMIC &&
+		defined( 'ATOMIC_CLIENT_ID' ) &&
+		'2' === ATOMIC_CLIENT_ID;
 }

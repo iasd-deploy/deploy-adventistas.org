@@ -458,7 +458,7 @@ function vc_gitem_template_attribute_post_excerpt( $value, $data ) {
 		'data' => '',
 	), $data ) );
 
-	return apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $value ) );
+	return apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $value, get_post( $post ) ) );
 }
 
 /**
@@ -479,8 +479,7 @@ function vc_gitem_template_attribute_post_title( $value, $data ) {
 	), $data ) );
 	$id = 0;
 	if ( isset( $data['post'] ) ) {
-		$id = apply_filters( 'vc_object_id', $data['post']->ID );
-		$id = apply_filters( 'wpml_object_id', $id );
+		$id = apply_filters( 'wpml_object_id', $id, 'post', true );
 	}
 
 	return get_the_title( $id );
