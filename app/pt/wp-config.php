@@ -33,6 +33,10 @@ $_SERVER['HTTPS']='on';
 /** Ajustes adventistas.org */
 define( 'DISALLOW_FILE_EDIT', true );
 define( 'WP_AUTO_UPDATE_CORE', false );
+define( 'DISALLOW_FILE_EDIT', true );
+define( 'DISALLOW_FILE_MODS', true);
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
+
 define( 'SITE', 'institucional' );
 define( 'PA_LANG', true);
 
