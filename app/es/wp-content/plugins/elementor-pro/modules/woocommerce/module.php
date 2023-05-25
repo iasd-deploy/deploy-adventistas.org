@@ -718,7 +718,12 @@ class Module extends Module_Base {
 		$ajax->register_ajax_action( 'pro_woocommerce_mock_notices', [ $this, 'woocommerce_mock_notices' ] );
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function woocommerce_mock_notices( $data ) {
+		$document = ProUtils::_unstable_get_document_for_edit( $data['editor_post_id'] );
+
 		if ( in_array( 'wc_error', $data['notice_elements'], true ) ) {
 			$notice_message = sprintf(
 				'%1$s <a href="#" class="wc-backward">%2$s</a>',

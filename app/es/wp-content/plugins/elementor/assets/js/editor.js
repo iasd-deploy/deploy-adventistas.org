@@ -1,4 +1,4 @@
-/*! elementor - v3.13.0 - 08-05-2023 */
+/*! elementor - v3.13.3 - 22-05-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -37258,11 +37258,9 @@ var ColorPicker = /*#__PURE__*/function (_elementorModules$Mod) {
   }, {
     key: "onPickerShow",
     value: function onPickerShow() {
-      var _this5 = this;
       var resultInput = this.picker.getRoot().interaction.result;
       setTimeout(function () {
         resultInput.select();
-        _this5.picker._recalc = true;
       }, 100);
       var onShow = this.getSettings('onShow');
       if (onShow) {

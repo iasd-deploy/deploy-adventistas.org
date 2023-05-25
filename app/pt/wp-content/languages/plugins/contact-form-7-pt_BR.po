@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Contact Form 7 - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-04-17 14:50:00+0000\n"
+"PO-Revision-Date: 2023-05-10 18:14:39+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -716,7 +716,7 @@ msgstr "Este formulário de contato está disponível apenas para usuários cone
 
 #: includes/config-validator.php:192
 msgid "Deprecated settings are used."
-msgstr "Configurações depreciadas estão sendo usadas."
+msgstr "Configurações obsoletas estão sendo usadas."
 
 #. translators: %s: link labeled 'Really Simple CAPTCHA'
 #: modules/really-simple-captcha.php:36

@@ -1,5 +1,14 @@
 # Elementor Pro - by Elementor.com
 
+#### 3.13.2 - 2023-05-22
+
+* Fix: Hover settings not working as expected on Touch-Enabled devices in Menu widget ([#22258](https://github.com/elementor/elementor/issues/22258))
+
+#### 3.13.1 - 2023-05-11
+
+* Security Fix: Addressed security weaknesses in access management related functions
+* Fix: Excerpt content pulled from post content is showing with HTML tags in Loop Grid widget ([#22367](https://github.com/elementor/elementor/issues/22367))
+
 #### 3.13.0 - 2023-05-08
 
 * Tweak: Provided an option to assign excerpt automatically from post content in Post Excerpt dynamic tag ([#20256](https://github.com/elementor/elementor/issues/20256), [#21715](https://github.com/elementor/elementor/issues/21715))
