@@ -770,19 +770,22 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Active_Filters' ) ) {
 				return $this->is_editor() ? __( 'Please select a provider', 'jet-smart-filters' ) : false;
 			}
 
-			$base_class = 'jet-smart-filters-' . $this->get_name();
-			$provider   = $settings['content_provider'];
-			$query_id   = ! empty( $settings['query_id'] ) ? $settings['query_id'] : 'default';
+			$base_class           = 'jet-smart-filters-' . $this->get_name();
+			$provider             = $settings['content_provider'];
+			$query_id             = ! empty( $settings['query_id'] ) ? $settings['query_id'] : 'default';
+			$additional_providers = jet_smart_filters()->utils->get_additional_providers( $settings );
 
 			ob_start();
 
 			printf(
-				'<div class="%1$s jet-active-filters jet-filter" data-label="%5$s" data-content-provider="%2$s" data-apply-type="%3$s" data-query-id="%4$s">',
+				'<div class="%1$s jet-active-filters jet-filter" data-is-block="jet-smart-filters/%2$s" data-label="%3$s" data-content-provider="%4$s" data-apply-type="%5$s" data-query-id="%6$s">',
 				$base_class,
+				$this->get_name(),
+				$settings['filters_label'],
 				$provider,
 				$settings['apply_type'],
 				$query_id,
-				$settings['filters_label']
+				$additional_providers,
 			);
 
 			if ( $this->is_editor() ) {

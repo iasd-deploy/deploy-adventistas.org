@@ -146,6 +146,22 @@ if ( ! class_exists( 'Jet_Smart_Filters_Provider_EPro_Posts' ) ) {
 		}
 
 		/**
+		 * Get provider wrapper selector
+		 */
+		public function get_list_selector() {
+
+			return '.elementor-posts';
+		}
+
+		/**
+		 * Get provider list item selector
+		 */
+		public function get_item_selector() {
+
+			return '.elementor-post';
+		}
+
+		/**
 		 * Action for wrapper selector - 'insert' into it or 'replace'
 		 */
 		public function get_wrapper_action() {
@@ -190,6 +206,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Provider_EPro_Posts' ) ) {
 				'classic_show_title',
 				'classic_title_tag',
 				'classic_excerpt_length',
+				'classic_apply_to_custom_excerpt',
 				'classic_meta_data',
 				'classic_show_read_more',
 				'classic_open_new_tab',
@@ -207,6 +224,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Provider_EPro_Posts' ) ) {
 				'cards_title_tag',
 				'cards_show_excerpt',
 				'cards_excerpt_length',
+				'cards_apply_to_custom_excerpt',
 				'cards_meta_data',
 				'cards_show_read_more',
 				'cards_open_new_tab',
@@ -307,6 +325,9 @@ if ( ! class_exists( 'Jet_Smart_Filters_Provider_EPro_Posts' ) ) {
 				throw new \Exception( 'Widget not found.' );
 			}
 
+			// remove 'excerpt_length' filter in wp/wp-includes/blocks/post-excerpt.php with a condition ( is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) )
+			remove_all_filters('excerpt_length',PHP_INT_MAX);
+
 			ob_start();
 			$widget->render_content();
 			$content = ob_get_clean();
@@ -348,10 +369,20 @@ if ( ! class_exists( 'Jet_Smart_Filters_Provider_EPro_Posts' ) ) {
 			} else {
 				$query_id = 'default';
 			}
-
 			$wp_query->set( 'jet_smart_filters', $this->get_id() . '/' . $query_id );
 
-			foreach ( jet_smart_filters()->query->get_query_args() as $query_var => $value ) {
+			$query_args = jet_smart_filters()->query->get_query_args();
+
+			// adding args from widget settings to main query in request
+			if ( ! jet_smart_filters()->query->is_ajax_filter() ) {
+				$default_queries = jet_smart_filters()->query->get_default_queries();
+				
+				if ( isset( $default_queries[$this->get_id()][$query_id] ) ) {
+					$query_args = jet_smart_filters()->utils->merge_query_args( $default_queries[$this->get_id()][$query_id], $query_args );
+				}
+			}
+
+			foreach ( $query_args as $query_var => $value ) {
 				$wp_query->set( $query_var, $value );
 			}
 		}

@@ -69,5 +69,35 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Base' ) ) {
 
 			return $custom_query_var;
 		}
+
+		/**
+		 * Get filter accessibility label
+		 */
+		public function get_accessibility_label( $filter_id ) {
+
+			$label = get_post_meta( $filter_id, '_filter_label', true );
+
+			if ( !$label ) {
+				$label = get_the_title( $filter_id );
+			}
+
+			return $label;
+		}
+
+		/**
+		 * Get default filter value
+		 */
+		public function get_predefined_value( $filter_id ) {
+
+			if ( ! filter_var( get_post_meta( $filter_id, '_is_default_filter_value', true ), FILTER_VALIDATE_BOOLEAN ) ) {
+				return false;
+			}
+
+			$predefined_value = get_post_meta( $filter_id, '_default_filter_value', true );
+
+			return $predefined_value == ''
+				? false
+				: $predefined_value;
+		}
 	}
 }

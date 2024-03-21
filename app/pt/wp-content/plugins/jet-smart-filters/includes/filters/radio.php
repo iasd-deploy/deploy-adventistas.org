@@ -79,6 +79,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Radio_Filter' ) ) {
 			$query_type              = false;
 			$query_var               = false;
 			$current_value           = false;
+			$predefined_value        = $this->get_predefined_value( $filter_id );
 
 			switch ( $source ) {
 				case 'taxonomies':
@@ -206,6 +207,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Radio_Filter' ) ) {
 				'scroll_height'        => $scroll_height,
 				'dropdown_enabled'     => $dropdown_enabled,
 				'dropdown_placeholder' => $dropdown_placeholder,
+				'accessibility_label'  => $this->get_accessibility_label( $filter_id )
 			);
 
 			if ( $can_deselect ) {
@@ -214,6 +216,14 @@ if ( ! class_exists( 'Jet_Smart_Filters_Radio_Filter' ) ) {
 
 			if ( $current_value ) {
 				$result['current_value'] = $current_value;
+			}
+
+			if ( $by_parents ) {
+				$result['collapsible'] = filter_var( get_post_meta( $filter_id, '_group_collapsible', true ), FILTER_VALIDATE_BOOLEAN );
+			}
+
+			if ( $predefined_value !== false ) {
+				$result['predefined_value'] = $predefined_value;
 			}
 
 			return $result;

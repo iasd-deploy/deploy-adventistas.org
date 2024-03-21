@@ -81,7 +81,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 			}
 
 			if ( ! empty( $this->indexing_data[$provider_key] ) ) {
-				$query_args   = jet_smart_filters()->utils->merge_query_args(
+				$query_args = jet_smart_filters()->utils->merge_query_args(
 					jet_smart_filters()->query->get_default_queries(),
 					jet_smart_filters()->query->get_query_args()
 				);
@@ -156,6 +156,10 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 									? "item_key IN ('" . str_replace( [",",' '], ["','". ''], $meta_key ) . "')"
 									: "item_key = '$meta_key'";
 								if ( $meta_data ) {
+									foreach ( $meta_data as &$value ) {
+										$value = addslashes( $value );
+									}
+
 									$sql_and .= "(item_query = '$query_type' AND $item_key_condition AND item_value IN ('" . implode( "','", $meta_data ) . "'))";
 								}
 							}
@@ -233,6 +237,15 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 							}
 						}
 					}
+
+					$indexed_data[ $query_type ] = apply_filters(
+						'jet-smart-filters/filters/indexed-data/query-type-data',
+						$indexed_data[ $query_type ],
+						$query_type,
+						$key,
+						$data,
+						$this
+					);
 				}
 			}
 
@@ -247,7 +260,8 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 			$data        = array();
 			$query_type  = '';
 			$query_var   = '';
-			$source      = get_post_meta( $filter_id );
+			// filter source for getting indexed data
+			$source      = apply_filters( 'jet-smart-filters/indexer/filter-source', get_post_meta( $filter_id ) );
 			$data_source = ! empty( $source['_data_source'] ) ? $source['_data_source'][0] : false;
 
 			if ( $source['_filter_type'][0] === 'check-range' ) {
@@ -295,15 +309,18 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 						$query_type = 'tax_query';
 						$tax        = ! empty( $source['_source_taxonomy'] ) ? $source['_source_taxonomy'][0] : false;
 
-						$exclude_include = isset( $source['_use_exclude_include'] ) && isset( $source['_use_exclude_include'][0] ) ? $source['_use_exclude_include'][0] : '';
+						$exclude_include      = isset( $source['_use_exclude_include'] ) && isset( $source['_use_exclude_include'][0] ) ? $source['_use_exclude_include'][0] : '';
+						$data_exclude_include = ! empty( $source['_data_exclude_include'][0] ) ? unserialize( $source['_data_exclude_include'][0] ) : false;
 
 						if ( $exclude_include === 'include' ) {
-							$data[$tax] = unserialize( $source['_data_exclude_include'][0] );
+							$data[$tax] = is_array( $data_exclude_include ) && ! empty( $data_exclude_include )
+								? $data_exclude_include
+								: $this->get_terms_by_tax( $tax );
 						} else {
 							$data[$tax] = $this->get_terms_by_tax( $tax );
 
-							if ( $exclude_include === 'exclude' ) {
-								$data[$tax] = array_diff( $data[$tax], unserialize( $source['_data_exclude_include'][0] ) );
+							if ( $exclude_include === 'exclude' && is_array( $data_exclude_include ) && ! empty( $data_exclude_include ) ) {
+								$data[$tax] = array_diff( $data[$tax], $data_exclude_include );
 							}
 						}
 
@@ -441,9 +458,14 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 
 			unset( $args['jet_smart_filters'] );
 			unset( $args['paged'] );
+			unset( $args['nopaging'] );
 
 			switch ( $type ) {
 				case 'posts':
+				case 'current-wp-query':
+					// arguments that are better to remove to optimize the query
+					unset( $args['wc_query'] );
+
 					$post_main_args = [
 						'post_status'    => 'publish',
 						'posts_per_page' => -1,

@@ -4,7 +4,10 @@
  */
 namespace Jet_Smart_Filters\Bricks_Views;
 
-// If this file is called directly, abort.
+use Bricks\Api;
+use Bricks\Database;
+use Bricks\Helpers;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -42,42 +45,6 @@ class Manager {
 		require jet_smart_filters()->plugin_path( 'includes/bricks/filters/manager.php' );
 		new Filters\Manager();
 
-	}
-
-	public function register_bricks_dynamic_data_on_ajax() {
-
-		if ( ! function_exists( 'jet_engine' ) ) {
-			// Backup if JetEngine is not installed
-			global $wp_filter;
-			if ( isset( $wp_filter['wp'][8] ) ) {
-				foreach( $wp_filter['wp'][8] as $callback ) {
-					if ( is_array( $callback['function'] ) && is_object( $callback['function'][0] ) ) {
-						if ( 'Bricks\Integrations\Dynamic_Data\Providers' === get_class( $callback['function'][0] ) ) {
-							call_user_func( $callback['function'] );
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public function enqueue_styles_for_builder() {
-
-		if ( bricks_is_builder() ) {
-
-			jet_smart_filters()->set_filters_used();
-
-			// Add JetSmartFilters icons font
-			wp_enqueue_style(
-				'jet-smart-filters-icons-font',
-				jet_smart_filters()->plugin_url( 'assets/css/lib/jet-smart-filters-icons/jet-smart-filters-icons.css' ),
-				array(),
-				jet_smart_filters()->get_version()
-			);
-
-			jet_smart_filters()->filter_types->filter_styles();
-		}
 	}
 
 	public function component_path( $relative_path = '' ) {
@@ -129,20 +96,64 @@ class Manager {
 
 	}
 
-	public static function get_allowed_providers() {
+	public function enqueue_styles_for_builder() {
 
-		$provider_allowed = [
-			'jet-engine'          => true,
-			'jet-engine-calendar' => true,
-			'jet-engine-maps'     => true,
-			'bricks-query-loop'   => true,
-		];
+		if ( bricks_is_builder() ) {
 
-		return apply_filters( 'jet-smart-filters/bricks/allowed-providers', $provider_allowed );
+			jet_smart_filters()->set_filters_used();
+
+			// Add JetSmartFilters icons font
+			wp_enqueue_style(
+				'jet-smart-filters-icons-font',
+				jet_smart_filters()->plugin_url( 'assets/css/lib/jet-smart-filters-icons/jet-smart-filters-icons.css' ),
+				array(),
+				jet_smart_filters()->get_version()
+			);
+
+			jet_smart_filters()->filter_types->filter_styles();
+		}
+	}
+
+	public function register_bricks_dynamic_data_on_ajax() {
+
+		if ( ! function_exists( 'jet_engine' ) ) {
+			// Backup if JetEngine is not installed
+			global $wp_filter;
+			if ( isset( $wp_filter['wp'][8] ) ) {
+				foreach( $wp_filter['wp'][8] as $callback ) {
+					if ( is_array( $callback['function'] ) && is_object( $callback['function'][0] ) ) {
+						if ( 'Bricks\Integrations\Dynamic_Data\Providers' === get_class( $callback['function'][0] ) ) {
+							call_user_func( $callback['function'] );
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public function has_bricks() {
 		return defined( 'BRICKS_VERSION' );
+	}
+
+	public static function get_allowed_providers() {
+
+		$provider_allowed = [
+			'bricks-query-loop'   => true,
+		];
+
+		if ( function_exists( 'jet_engine' ) ) {
+			$provider_allowed = array_merge(
+				$provider_allowed,
+				[
+					'jet-engine'          => true,
+					'jet-engine-maps'     => jet_engine()->modules->is_module_active('maps-listings'),
+					'jet-engine-calendar' => jet_engine()->modules->is_module_active('calendar'),
+				]
+			);
+		}
+
+		return apply_filters( 'jet-smart-filters/bricks/allowed-providers', $provider_allowed );
 	}
 
 }

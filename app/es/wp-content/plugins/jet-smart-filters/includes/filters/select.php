@@ -91,6 +91,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Select_Filter' ) ) {
 			$query_type              = false;
 			$query_var               = '';
 			$current_value           = false;
+			$predefined_value        = $this->get_predefined_value( $filter_id );
 
 			if ( $is_hierarchical ) {
 				$source = false;
@@ -209,10 +210,15 @@ if ( ! class_exists( 'Jet_Smart_Filters_Select_Filter' ) ) {
 				'filter_id'            => $filter_id,
 				'is_hierarchical'      => $is_hierarchical,
 				'query_id'             => ! empty( $args['query_id'] ) ? $args['query_id'] : false,
+				'accessibility_label'  => $this->get_accessibility_label( $filter_id )
 			);
 
 			if ( $current_value ) {
 				$result['current_value'] = $current_value;
+			}
+
+			if ( $predefined_value !== false ) {
+				$result['predefined_value'] = $predefined_value;
 			}
 
 			return $result;

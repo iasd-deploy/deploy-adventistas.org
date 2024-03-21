@@ -209,16 +209,18 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Apply_Button' ) ) {
 				return $this->is_editor() ? __( 'Please select a provider', 'jet-smart-filters' ) : false;
 			}
 
-			$base_class   = 'jet-smart-filters-' . $this->get_name();
-			$data_atts    = '';
-			$redirect     = ! empty( $settings['apply_redirect'] ) ? $settings['apply_redirect'] : false;
-			$redirectPath = ! empty( $settings['redirect_path'] ) ? $settings['redirect_path'] : false;
-			$query_id     = ! empty( $settings['query_id'] ) ? $settings['query_id'] : 'default';
-			$atts         = array(
-				'data-content-provider' => $settings['content_provider'],
-				'data-apply-type'       => $settings['apply_type'],
-				'data-query-id'         => $query_id,
-				'data-redirect'         => $redirect
+			$base_class           = 'jet-smart-filters-' . $this->get_name();
+			$data_atts            = '';
+			$redirect             = ! empty( $settings['apply_redirect'] ) ? $settings['apply_redirect'] : false;
+			$redirectPath         = ! empty( $settings['redirect_path'] ) ? $settings['redirect_path'] : false;
+			$query_id             = ! empty( $settings['query_id'] ) ? $settings['query_id'] : 'default';
+			$additional_providers = jet_smart_filters()->utils->get_additional_providers( $settings );
+			$atts                 = array(
+				'data-content-provider'     => $settings['content_provider'],
+				'data-apply-type'           => $settings['apply_type'],
+				'data-query-id'             => $query_id,
+				'data-additional-providers' => $additional_providers,
+				'data-redirect'             => $redirect
 			);
 
 			if ( $redirect && $redirectPath ) {
@@ -233,7 +235,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Apply_Button' ) ) {
 
 			ob_start();
 
-			echo '<div class="' . $base_class . ' jet-filter">';
+			echo '<div class="' . $base_class . ' jet-filter" data-is-block="jet-smart-filters/' . $this->get_name() . '">';
 			include jet_smart_filters()->get_template( 'common/apply-filters.php' );
 			echo '</div>';
 

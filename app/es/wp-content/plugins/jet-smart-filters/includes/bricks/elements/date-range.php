@@ -2,7 +2,9 @@
 
 namespace Jet_Smart_Filters\Bricks_Views\Elements;
 
+use Bricks\Database;
 use Bricks\Element;
+use Bricks\Helpers;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -483,7 +485,8 @@ class Jet_Smart_Filters_Bricks_Date_Range extends Jet_Smart_Filters_Bricks_Base 
 			);
 		}
 
-		$provider = ! empty( $settings['content_provider'] ) ? $settings['content_provider'] : '';
+		$provider  = ! empty( $settings['content_provider'] ) ? $settings['content_provider'] : '';
+		$filter_id = apply_filters( 'jet-smart-filters/render_filter_template/filter_id', $filter_id );
 
 		// STEP: Content provider is empty: Show placeholder text
 		if ( empty( $provider ) ) {

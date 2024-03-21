@@ -59,11 +59,12 @@ if ( ! class_exists( 'Jet_Smart_Filters_Alphabet_Filter' ) ) {
 				return false;
 			}
 
-			$query_type   = 'alphabet';
-			$query_var    = '';
-			$behavior     = get_post_meta( $filter_id, '_alphabet_behavior', true );
-			$can_deselect = filter_var( get_post_meta( $filter_id, '_alphabet_radio_deselect', true ), FILTER_VALIDATE_BOOLEAN );
-			$options      = array_map( 'trim', explode( ',', get_post_meta( $filter_id, '_alphabet_options', true ) ) );
+			$query_type       = 'alphabet';
+			$query_var        = '';
+			$behavior         = get_post_meta( $filter_id, '_alphabet_behavior', true );
+			$can_deselect     = filter_var( get_post_meta( $filter_id, '_alphabet_radio_deselect', true ), FILTER_VALIDATE_BOOLEAN );
+			$options          = array_map( 'trim', explode( ',', get_post_meta( $filter_id, '_alphabet_options', true ) ) );
+			$predefined_value = $this->get_predefined_value( $filter_id );
 
 			$result = array(
 				'options'              => $options,
@@ -75,10 +76,15 @@ if ( ! class_exists( 'Jet_Smart_Filters_Alphabet_Filter' ) ) {
 				'apply_type'           => $apply_type,
 				'filter_id'            => $filter_id,
 				'behavior'             => $behavior,
+				'accessibility_label'  => $this->get_accessibility_label( $filter_id )
 			);
 
 			if ( $can_deselect ) {
 				$result['can_deselect'] = $can_deselect;
+			}
+
+			if ( $predefined_value !== false ) {
+				$result['predefined_value'] = $predefined_value;
 			}
 
 			return $result;

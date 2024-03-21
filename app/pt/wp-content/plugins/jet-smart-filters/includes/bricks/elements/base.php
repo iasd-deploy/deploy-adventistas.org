@@ -3,6 +3,8 @@
 namespace Jet_Smart_Filters\Bricks_Views\Elements;
 
 use Jet_Engine\Bricks_Views\Helpers\Options_Converter;
+use Bricks\Database;
+use Bricks\Helpers;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -68,6 +70,23 @@ class Jet_Smart_Filters_Bricks_Base extends \Jet_Engine\Bricks_Views\Elements\Ba
 	public function register_general_controls() {
 
 		$this->start_jet_control_group( 'section_general' );
+
+		$this->register_jet_control(
+			'notice_cache_query_loop',
+			[
+				'tab'         => 'content',
+				'type'        => 'info',
+				'content'     => esc_html__( 'You have enabled the "Cache query loop" option.', 'jet-smart-filters' ),
+				'description' => sprintf(
+					esc_html__( 'This option will break the filters functionality. You can disable this option or use "JetEngine Query Builder" query type. Go to: %s > Cache query loop', 'jet-smart-filters' ),
+					'<a href="' . Helpers::settings_url( '#tab-performance' ) . '" target="_blank">Bricks > ' . esc_html__( 'Settings', 'jet-smart-filters' ) . ' > Performance</a>'
+				),
+				'required'    => [
+					[ 'content_provider', '=', 'bricks-query-loop' ],
+					[ 'cacheQueryLoops', '=', true, 'globalSettings' ],
+				],
+			]
+		);
 
 		if ( $this->name !== 'jet-smart-filters-sorting' ) {
 			$this->register_jet_control(
@@ -648,6 +667,10 @@ class Jet_Smart_Filters_Bricks_Base extends \Jet_Engine\Bricks_Views\Elements\Ba
 		// dropdown
 		$dropdown_enabled     = ! empty( $settings['dropdown_enabled'] ) ? $settings['dropdown_enabled'] : false;
 		$dropdown_placeholder = ! empty( $settings['dropdown_placeholder'] ) ? $settings['dropdown_placeholder'] : false;
+		// dropdown n selected
+		$dropdown_n_selected_enabled = ! empty( $settings['dropdown_n_selected_enabled'] ) ? filter_var( $settings['dropdown_n_selected_enabled'], FILTER_VALIDATE_BOOLEAN ) : false;
+		$dropdown_n_selected_number  = isset( $settings['dropdown_n_selected_number'] ) && $settings['dropdown_n_selected_number'] >= 0 ? $settings['dropdown_n_selected_number'] : 3;
+		$dropdown_n_selected_text    = isset( $settings['dropdown_n_selected_text'] ) ? $settings['dropdown_n_selected_text'] : __( 'and {number} others', 'jet-smart-filters' );
 		// scroll
 		$scroll_height = ! empty( $settings['scroll_enabled'] ) && ! empty( $settings['scroll_height'] ) ? (int) $settings['scroll_height'] : false;
 
@@ -735,6 +758,12 @@ class Jet_Smart_Filters_Bricks_Base extends \Jet_Engine\Bricks_Views\Elements\Ba
 			}
 			if ( $dropdown_placeholder ) {
 				$filter_template_args['dropdown_placeholder'] = $dropdown_placeholder;
+			}
+			//dropdown n selected
+			if ( $dropdown_n_selected_enabled ) {
+				$filter_template_args['dropdown_n_selected_enabled'] = $dropdown_n_selected_enabled;
+				$filter_template_args['dropdown_n_selected_number'] = $dropdown_n_selected_number;
+				$filter_template_args['dropdown_n_selected_text'] = $dropdown_n_selected_text;
 			}
 			// scroll
 			if ( $scroll_height ) {

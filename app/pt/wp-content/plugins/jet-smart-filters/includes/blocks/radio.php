@@ -145,10 +145,8 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Radio' ) ) {
 				'type'      => 'range',
 				'label'     => esc_html__( 'Space Between', 'jet-smart-filters' ),
 				'css_selector' => [
-					'{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['row'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['row'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+					'{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} ' . $this->css_scheme['row'] . ':not(:last-child)'         => 'margin-bottom: {{SIZE}}{{UNIT}};'
 				],
 				'attributes' => [
 					'default' => [
@@ -893,6 +891,9 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Radio' ) ) {
 			]);
 
 			$this->controls_manager->end_section();
+
+			// Include Collapse Icon Settings Style
+			include jet_smart_filters()->plugin_path( 'includes/blocks/common-controls/collapse-icon-style.php' );
 
 			// Include Additional Filter Settings Style
 			include jet_smart_filters()->plugin_path( 'includes/blocks/common-controls/additional-filter-style.php' );

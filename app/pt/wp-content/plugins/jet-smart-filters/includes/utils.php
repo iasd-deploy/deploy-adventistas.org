@@ -52,6 +52,16 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 		}
 
 		/**
+		 * Returns parsed template
+		 */
+		public function template_replace_with_value( $template, $value ) {
+
+			$html_template = $this->get_template_html( $template );
+
+			return preg_replace('/\/\s*%\s*\$value\s*%\s*\//', $value, $html_template );
+		}
+
+		/**
 		 * Returns image size array in slug => name format
 		 */
 		public function get_image_sizes() {
@@ -117,12 +127,19 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 		 */
 		public function merge_query_args( $current_query_args, $new_query_args ) {
 
+			$merged_keys = array( 'tax_query', 'meta_query', 'post__not_in' );
+			$merged_keys = apply_filters( 'jet-smart-filter/utils/merge-query-args/merged-keys', $merged_keys );
+
 			foreach ( $new_query_args as $key => $value ) {
-				if ( in_array( $key, array( 'tax_query', 'meta_query' ) ) && ! empty( $current_query_args[$key] ) ) {
+				if ( in_array( $key, $merged_keys ) && ! empty( $current_query_args[$key] ) ) {
 					$value = array_merge( $current_query_args[$key], $value );
+
+					if ( 'post__not_in' === $key ) {
+						$value = array_unique( $value );
+					}
 				}
 
-				if ( in_array( $key, array( 'post__in', 'post__not_in' ) ) && ! empty( $current_query_args[ $key ] ) ) {
+				if ( 'post__in' === $key && ! empty( $current_query_args[ $key ] ) ) {
 					$value = array_intersect( $current_query_args[ $key ], $value );
 
 					if ( empty( $value ) ) {
@@ -389,6 +406,17 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 			$current_url = wp_parse_url( add_query_arg( array() ) );
 			
 			return strpos( $current_url['path'] ?? '/', $rest_url['path'], 0 ) === 0;
+		}
+
+		/**
+		 * Recursive stripslashes
+		 */
+		public function stripslashes( $value ) {
+			$value = is_array($value) ?
+						array_map( array( $this, 'stripslashes' ), $value ) :
+						stripslashes($value);
+
+			return $value;
 		}
 	}
 }
