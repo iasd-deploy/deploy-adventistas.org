@@ -4,8 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1493dc76583ca593897e2cddd8086f9f
+class ComposerStaticInit1d02a77fb62a24f70f4a47673a1e8ca4
 {
+    public static $files = array (
+        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
+        '3919eeb97e98d4648304477f8ef734ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
@@ -35,10 +40,6 @@ class ComposerStaticInit1493dc76583ca593897e2cddd8086f9f
             'Intervention\\HttpAuth\\' => 22,
             'ImageMimeTypeSniffer\\' => 21,
             'ImageMimeTypeGuesser\\' => 21,
-        ),
-        'H' => 
-        array (
-            'HtaccessCapabilityTester\\' => 25,
         ),
         'F' => 
         array (
@@ -95,10 +96,6 @@ class ComposerStaticInit1493dc76583ca593897e2cddd8086f9f
         array (
             0 => __DIR__ . '/..' . '/rosell-dk/image-mime-type-guesser/src',
         ),
-        'HtaccessCapabilityTester\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rosell-dk/htaccess-capability-tester/src',
-        ),
         'FileUtil\\' => 
         array (
             0 => __DIR__ . '/..' . '/rosell-dk/file-util/src',
@@ -110,6 +107,13 @@ class ComposerStaticInit1493dc76583ca593897e2cddd8086f9f
     );
 
     public static $prefixesPsr0 = array (
+        'S' => 
+        array (
+            'System' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
+        ),
         'P' => 
         array (
             'Props\\' => 
@@ -121,11 +125,39 @@ class ComposerStaticInit1493dc76583ca593897e2cddd8086f9f
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
             ),
         ),
+        'N' => 
+        array (
+            'Net' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
+        ),
+        'M' => 
+        array (
+            'Math' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
+        ),
         'J' => 
         array (
             'JSMin\\' => 
             array (
                 0 => __DIR__ . '/..' . '/mrclay/jsmin-php/src',
+            ),
+        ),
+        'F' => 
+        array (
+            'File' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
+        ),
+        'C' => 
+        array (
+            'Crypt' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
             ),
         ),
     );
@@ -198,10 +230,10 @@ class ComposerStaticInit1493dc76583ca593897e2cddd8086f9f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1493dc76583ca593897e2cddd8086f9f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1493dc76583ca593897e2cddd8086f9f::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1493dc76583ca593897e2cddd8086f9f::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit1493dc76583ca593897e2cddd8086f9f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1d02a77fb62a24f70f4a47673a1e8ca4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1d02a77fb62a24f70f4a47673a1e8ca4::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1d02a77fb62a24f70f4a47673a1e8ca4::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit1d02a77fb62a24f70f4a47673a1e8ca4::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -13,7 +13,7 @@ class WPBakeryShortCode_Vc_Tta_Tabs extends WPBakeryShortCode_Vc_Tta_Accordion {
 	public $layout = 'tabs';
 
 	public function enqueueTtaScript() {
-		wp_register_script( 'vc_tabs_script', vc_asset_url( 'lib/vc_tabs/vc-tabs.min.js' ), array( 'vc_accordion_script' ), WPB_VC_VERSION, true );
+		wp_register_script( 'vc_tabs_script', vc_asset_url( 'lib/vc/vc_tabs/vc-tabs.min.js' ), array( 'vc_accordion_script' ), WPB_VC_VERSION, true );
 		parent::enqueueTtaScript();
 		wp_enqueue_script( 'vc_tabs_script' );
 	}
@@ -26,16 +26,17 @@ class WPBakeryShortCode_Vc_Tta_Tabs extends WPBakeryShortCode_Vc_Tta_Accordion {
 		$attributes[] = 'class="' . esc_attr( $this->getTtaContainerClasses() ) . '"';
 		$attributes[] = 'data-vc-action="collapse"';
 
-		$autoplay = $this->atts['autoplay'];
-		if ( $autoplay && 'none' !== $autoplay && intval( $autoplay ) > 0 ) {
-			$attributes[] = 'data-vc-tta-autoplay="' . esc_attr( wp_json_encode( array(
-				'delay' => intval( $autoplay ) * 1000,
-			) ) ) . '"';
+		if ( isset( $this->atts['autoplay'] ) ) {
+			$autoplay = $this->atts['autoplay'];
+			if ( $autoplay && 'none' !== $autoplay && intval( $autoplay ) > 0 ) {
+				$attributes[] = 'data-vc-tta-autoplay="' . esc_attr( wp_json_encode( array(
+					'delay' => intval( $autoplay ) * 1000,
+				) ) ) . '"';
+			}
 		}
 		if ( ! empty( $this->atts['el_id'] ) ) {
 			$attributes[] = 'id="' . esc_attr( $this->atts['el_id'] ) . '"';
 		}
-
 		return implode( ' ', $attributes );
 	}
 

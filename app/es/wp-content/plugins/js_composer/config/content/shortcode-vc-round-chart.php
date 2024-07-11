@@ -8,6 +8,7 @@ return array(
 	'base' => 'vc_round_chart',
 	'class' => '',
 	'icon' => 'icon-wpb-vc-round-chart',
+	'element_default_class' => 'wpb_content_element',
 	'category' => esc_html__( 'Content', 'js_composer' ),
 	'description' => esc_html__( 'Pie and Doughnut charts', 'js_composer' ),
 	'params' => array(
@@ -197,7 +198,7 @@ return array(
 			'type' => 'el_id',
 			'heading' => esc_html__( 'Element ID', 'js_composer' ),
 			'param_name' => 'el_id',
-			'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
+			'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %1$sw3c specification%2$s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
 		),
 		array(
 			'type' => 'textfield',
@@ -210,6 +211,9 @@ return array(
 			'heading' => esc_html__( 'CSS box', 'js_composer' ),
 			'param_name' => 'css',
 			'group' => esc_html__( 'Design Options', 'js_composer' ),
+			'value' => array(
+				'margin-bottom' => '35px',
+			),
 		),
 	),
 );

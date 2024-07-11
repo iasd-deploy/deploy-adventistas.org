@@ -75,7 +75,7 @@ class WP_Optimize_Minify_Front_End {
 		}
 
 		if ($this->should_process_html()) {
-			add_action('template_redirect', array('WP_Optimize_Minify_Functions', 'html_compression_start'), PHP_INT_MAX);
+			add_action('template_redirect', array('WP_Optimize_Minify_Functions', 'html_compression_start'), 9);
 		}
 
 		if ($this->should_use_loadCSS()) {
@@ -92,6 +92,20 @@ class WP_Optimize_Minify_Front_End {
 	 */
 	private function is_cache_preload() {
 		return isset($_SERVER['HTTP_X_WP_OPTIMIZE_CACHE_PRELOAD']) && 0 === strcmp($_SERVER['HTTP_X_WP_OPTIMIZE_CACHE_PRELOAD'], 'Yes');
+	}
+
+	/**
+	 * Set initial values for the meta log object
+	 *
+	 * @param string $header - Info on time the log was processed
+	 * @return array
+	 */
+	private function meta_log_initialization($header) {
+		return array(
+			'header' => $header,
+			'invalidation_reason' => "",
+			'files_that_changed' => array()
+		);
 	}
 
 	/**
@@ -176,6 +190,11 @@ class WP_Optimize_Minify_Front_End {
 		
 		// return if in any ignore or black list
 		if (count($master_ignore) > 0 && WP_Optimize_Minify_Functions::in_arrayi($href, $master_ignore)) {
+			return $html;
+		}
+
+		// return if already minified
+		if (WP_Optimize_Minify_Functions::is_minified_css_js_filename($href)) {
 			return $html;
 		}
 
@@ -458,6 +477,7 @@ class WP_Optimize_Minify_Front_End {
 		if (!is_object($wp_styles)) return false;
 
 		$cache_path = WP_Optimize_Minify_Cache_Functions::cache_path();
+		$cache_base_dir = $cache_path['cachebasedir'];
 		$cache_dir = $cache_path['cachedir'];
 		$cache_dir_url = $cache_path['cachedirurl'];
 		$exclude_css = $this->get_excluded_css_list();
@@ -666,9 +686,12 @@ class WP_Optimize_Minify_Front_End {
 
 			// If we can't determine file size, then we still need to proceed with normal minify process
 			if (!apply_filters('wp_optimize_skip_inlining', false === $file_size || $file_size > 20480 || !$this->options['inline_css'], $file_size, $href)) continue;
-	
+
+			// check if the current URL points to a minified file.
+			$exclude_minified_css = WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+			$normal_processing = $exclude_minified_css && !$merge_css;
 			// skip ignore list, conditional css, external css, font-awesome merge
-			if (($process_css && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($conditional) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
+			if (($process_css && !$normal_processing && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($conditional) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
 				|| empty($href)
 				|| ($process_css && 'inherit' == $this->options['fawesome_method'] && WP_Optimize_Minify_Functions::is_font_awesome($href))
 				|| ($process_css && 'inherit' == $this->options['gfonts_method'] && WP_Optimize_Minify_Functions::is_google_font($href))
@@ -694,7 +717,6 @@ class WP_Optimize_Minify_Front_End {
 
 				// external and ignored css
 			} else {
-
 				// normal enqueuing
 				array_push($header, array('handle' => $handle));
 			}
@@ -735,7 +757,7 @@ class WP_Optimize_Minify_Front_End {
 
 				// create cache files and urls
 				$file = $cache_dir.'/'.$file_name.'.css';
-
+				$meta_json_file = $cache_base_dir.'/'.'meta.json';
 				$file_url = WP_Optimize_Minify_Functions::get_protocol("$cache_dir_url/$file_name.css");
 				
 				// generate a new cache file
@@ -743,10 +765,12 @@ class WP_Optimize_Minify_Front_End {
 				if (!file_exists($file)) {
 					
 					// code and log initialization
+					$log_header = "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null));
 					$log = array(
-						'header' => "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null)),
+						'header' => $log_header,
 						'files' => array()
 					);
+					$meta_log = $this->meta_log_initialization($log_header);
 					$code = '';
 
 					// minify and write to file
@@ -765,7 +789,8 @@ class WP_Optimize_Minify_Front_End {
 							$json = false;
 							$json = WP_Optimize_Minify_Cache_Functions::get_transient($tkey);
 							if (false === $json) {
-								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $this->options['enable_css_minification'], 'css', $handle, $version);
+								$enable_minification = $this->options['enable_css_minification'] && !WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $enable_minification, 'css', $handle, $version);
 								if ($this->options['debug']) {
 									echo "<!-- wpo_min DEBUG: Uncached file processing now for $handle / $href / $version -->" . "\n";
 								}
@@ -780,6 +805,8 @@ class WP_Optimize_Minify_Front_End {
 							if ($this->should_reset_minify_assets($res, $href, 'css', $handle, $version)) {
 								WP_Optimize_Minify_Cache_Functions::reset();
 								$this->minify_cache_incremented = true;
+								$meta_log['invalidation_reason'] = 'Checksum Mismatch and version changed from ' . $res['request']['version'] . ' to ' . $version;
+								$meta_log['files_that_changed'][$handle] = $res['log'];
 							}
 
 							// response has failed
@@ -808,6 +835,10 @@ class WP_Optimize_Minify_Front_End {
 
 					// generate cache, write log
 					if (!empty($code)) {
+						// Only generate meta.json file if cache is reset
+						if (!empty($meta_log['invalidation_reason'])) {
+							file_put_contents($meta_json_file, json_encode($meta_log));
+						}
 						WP_Optimize_Minify_Print::write_combined_asset($file, $code, $log);
 					}
 				} else {
@@ -876,6 +907,7 @@ class WP_Optimize_Minify_Front_End {
 			return;
 		}
 		$cache_path = WP_Optimize_Minify_Cache_Functions::cache_path();
+		$cache_base_dir = $cache_path['cachebasedir'];
 		$cache_dir = $cache_path['cachedir'];
 		$cache_dir_url = $cache_path['cachedirurl'];
 
@@ -893,6 +925,8 @@ class WP_Optimize_Minify_Front_End {
 
 		// mark as done (as we go)
 		$done = $scripts->done;
+
+		$previous_load_strategy = null;
 
 		// get groups of handles
 		foreach ($scripts->to_do as $handle) :
@@ -930,13 +964,22 @@ class WP_Optimize_Minify_Front_End {
 				continue;
 			}
 
+			// check if the current URL points to a minified file.
+			$exclude_minified_js = WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+			$normal_processing = $exclude_minified_js && !$merge_js;
+
 			// skip ignore list, scripts with conditionals, external scripts
-			if (($process_js && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($wp_scripts->registered[$handle]->extra["conditional"]) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
+			if (($process_js && !$normal_processing && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($wp_scripts->registered[$handle]->extra["conditional"]) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
 				|| empty($href)
 			) {
 					
 				// process
-				if (isset($footer[count($footer)-1]['handle']) || !count($footer) || !$merge_js) {
+				if (isset($footer[count($footer)-1]['handle'])
+					|| !count($footer)
+					|| !$merge_js
+					|| (isset($scripts->registered[$handle]->extra['strategy']) && $previous_load_strategy != $scripts->registered[$handle]->extra['strategy'])
+					|| (!isset($scripts->registered[$handle]->extra['strategy']) && null != $previous_load_strategy)
+				) {
 					array_push($footer, array('handles' => array(), 'versions' => array()));
 				}
 				
@@ -949,7 +992,18 @@ class WP_Optimize_Minify_Front_End {
 				// push it to the array
 				array_push($footer[count($footer)-1]['handles'], $handle);
 				array_push($footer[count($footer)-1]['versions'], $wp_scripts->registered[$handle]->ver);
+
+				// Register strategy if it is used
+				if (isset($scripts->registered[$handle]->extra['strategy'])) $footer[count($footer)-1]['strategy'] = $scripts->registered[$handle]->extra['strategy'];
+
 				// external and ignored scripts
+
+				if (isset($scripts->registered[$handle]->extra['strategy'])) {
+					$previous_load_strategy = $scripts->registered[$handle]->extra['strategy'];
+				} else {
+					$previous_load_strategy = null;
+				}
+					
 			} else {
 				array_push($footer, array('handle' => $handle));
 			}
@@ -971,6 +1025,7 @@ class WP_Optimize_Minify_Front_End {
 				
 				// create cache files and urls
 				$file = $cache_dir.'/'.$file_name.'.js';
+				$meta_json_file = $cache_base_dir.'/'.'meta.json';
 				$file_url = WP_Optimize_Minify_Functions::get_protocol($cache_dir_url.'/'.$file_name.'.js');
 			
 				// generate a new cache file
@@ -978,15 +1033,22 @@ class WP_Optimize_Minify_Front_End {
 				if (!file_exists($file)) {
 					
 					// code and log initialization
+					$log_header = "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null));
 					$log = array(
-						'header' => "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null)),
+						'header' => $log_header,
 						'files' => array()
 					);
+					$meta_log = $this->meta_log_initialization($log_header);
+					$before_code = '';
 					$code = '';
+					$after_code = '';
 				
 					// minify and write to file
 					foreach ($footer[$i]['handles'] as $handle) :
 						if (!empty($wp_scripts->registered[$handle]->src)) {
+							// only add minified scripts once to the bundle
+							if (in_array($handle, $done)) continue;
+							
 							// get href per handle
 							$href = WP_Optimize_Minify_Functions::get_hurl($wp_scripts->registered[$handle]->src);
 							$version = $wp_scripts->registered[$handle]->ver;
@@ -999,7 +1061,8 @@ class WP_Optimize_Minify_Front_End {
 							$json = false;
 							$json = WP_Optimize_Minify_Cache_Functions::get_transient($tkey);
 							if (false === $json) {
-								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $minify_js, 'js', $handle, $version);
+								$enable_minification = $minify_js && !WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $enable_minification, 'js', $handle, $version);
 								if ($this->options['debug']) {
 									echo "<!-- wpo_min DEBUG: Uncached file processing now for $handle / $href / $version -->\n";
 								}
@@ -1014,11 +1077,14 @@ class WP_Optimize_Minify_Front_End {
 							if ($this->should_reset_minify_assets($res, $href, 'js', $handle, $version)) {
 								WP_Optimize_Minify_Cache_Functions::reset();
 								$this->minify_cache_incremented = true;
+								$meta_log['invalidation_reason'] = 'Checksum Mismatch and version changed from ' . $res['request']['version'] . ' to ' . $version;
+								$meta_log['files_that_changed'][$handle] = $res['log'];
 							}
 							
 							// response has failed
 							if (true != $res['status']) {
 								$log['files'][$handle] = $res['log'];
+								$log['files'][$handle]['uses_loading_strategy'] = isset($footer[$i]['strategy']);
 								continue;
 							}
 
@@ -1027,7 +1093,7 @@ class WP_Optimize_Minify_Front_End {
 							if (!empty($wp_scripts->registered[$handle]->extra)) {
 								if (!empty($wp_scripts->registered[$handle]->extra['before']) && is_array($wp_scripts->registered[$handle]->extra['before'])) {
 									if ($merge_inline_extra_css_js) {
-										$code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before'])), $href . ' - BEFORE');
+										$before_code .= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before']));
 									}
 								}
 							}
@@ -1036,20 +1102,24 @@ class WP_Optimize_Minify_Front_End {
 							if (!empty($wp_scripts->registered[$handle]->textdomain)) {
 								$code .= "\n" . $wp_scripts->print_translations($handle, false);
 							}
-
-							// append code to merged file
-							$code .= isset($res['code']) ? WP_Optimize_Minify_Functions::prepare_merged_js($res['code'], $href) : '';
-							$log['files'][$handle] = $res['log'];
 							
 							// Add extra data from wp_add_inline_script after
 							if (!empty($wp_scripts->registered[$handle]->extra)) {
 								if (!empty($wp_scripts->registered[$handle]->extra['after']) && is_array($wp_scripts->registered[$handle]->extra['after'])) {
 									if ($merge_inline_extra_css_js) {
-										$code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after'])), $href. ' - AFTER');
+										$after_code .= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after']));
 									}
 								}
 							}
-					
+							
+							// append code to merged file
+							$code .= $before_code . "\n";
+							$code .= isset($res['code']) ? $res['code'] : '';
+							$code .= "\n" . $after_code . "\n";
+							$code = WP_Optimize_Minify_Functions::prepare_merged_js($code, $href);
+							$log['files'][$handle] = $res['log'];
+							$log['files'][$handle]['uses_loading_strategy'] = isset($footer[$i]['strategy']);
+							
 							// consider dependencies on handles with an empty src
 						} else {
 							wp_dequeue_script($handle);
@@ -1059,6 +1129,10 @@ class WP_Optimize_Minify_Front_End {
 
 					// generate cache, write log
 					if (!empty($code)) {
+						// Only generate meta.json file if cache is reset
+						if (!empty($meta_log['invalidation_reason'])) {
+							file_put_contents($meta_json_file, json_encode($meta_log));
+						}
 						WP_Optimize_Minify_Print::write_combined_asset($file, $code, $log);
 					}
 				} else {
@@ -1098,12 +1172,12 @@ class WP_Optimize_Minify_Front_End {
 					if (!empty($wp_scripts->registered[$handle]->extra)) {
 						if (!empty($wp_scripts->registered[$handle]->extra['before']) && is_array($wp_scripts->registered[$handle]->extra['before'])) {
 							if (!$merge_inline_extra_css_js) {
-								$before_code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before'])), $href.' - BEFORE');
+								$before_code.= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before'])) . "\n";
 							}
 						}
 						if (!empty($wp_scripts->registered[$handle]->extra['after']) && is_array($wp_scripts->registered[$handle]->extra['after'])) {
 							if (!$merge_inline_extra_css_js) {
-								$after_code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after'])), $href.' - AFTER');
+								$after_code.= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after'])) . "\n";
 							}
 						}
 					}
@@ -1120,6 +1194,11 @@ class WP_Optimize_Minify_Front_End {
 					wp_enqueue_script("wpo_min-footer-$i");
 					if (!empty($after_code)) {
 						wp_add_inline_script("wpo_min-footer-$i", $after_code, 'after');
+					}
+
+					if (isset($footer[$i]['strategy'])) {
+						// Backward compatible way of doing this
+						wp_script_add_data( "wpo_min-footer-$i", 'strategy', $footer[$i]['strategy']);
 					}
 				} else {
 					// file could not be generated, output something meaningful
@@ -1148,6 +1227,7 @@ class WP_Optimize_Minify_Front_End {
 		global $wp_scripts;
 		if (!is_object($wp_scripts)) return;
 		$cache_path = WP_Optimize_Minify_Cache_Functions::cache_path();
+		$cache_base_dir = $cache_path['cachebasedir'];
 		$cache_dir = $cache_path['cachedir'];
 		$cache_dir_url = $cache_path['cachedirurl'];
 		$exclude_js = $this->get_excluded_js_list();
@@ -1163,6 +1243,8 @@ class WP_Optimize_Minify_Front_End {
 		// mark as done (as we go)
 		$done = $scripts->done;
 		$excluded_dependencies = array();
+
+		$previous_load_strategy = null;
 
 		// Prepare and separate assets (get groups of handles)
 		foreach ($scripts->to_do as $handle) {
@@ -1194,7 +1276,7 @@ class WP_Optimize_Minify_Front_End {
 					continue;
 				}
 
-				// Skip jQuery from the merged files if defering is ENABLED and defer_jquery is DISABLED
+				// Skip jQuery from the merged files if deferring is ENABLED and defer_jquery is DISABLED
 				if ('all' === $this->options['enable_defer_js']
 					&& !$this->options['defer_jquery']
 					&& (false !== stripos($href, '/jquery.js')
@@ -1204,12 +1286,21 @@ class WP_Optimize_Minify_Front_End {
 					continue;
 				}
 
+				// check if the current URL points to a minified file.
+				$exclude_minified_js = WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+				$normal_processing = $exclude_minified_js && !$merge_js;
+
 				// Group handles - skip ignore list, scripts with conditionals, external scripts
-				if (($process_js && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($wp_scripts->registered[$handle]->extra["conditional"]) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
+				if (($process_js && !$normal_processing && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($wp_scripts->registered[$handle]->extra["conditional"]) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
 					|| empty($href)
 				) {
 					// process
-					if (isset($header[count($header)-1]['handle']) || !count($header) || !$merge_js) {
+					if (isset($header[count($header)-1]['handle'])
+						|| !count($header)
+						|| !$merge_js
+						|| (isset($scripts->registered[$handle]->extra['strategy']) && $previous_load_strategy != $scripts->registered[$handle]->extra['strategy'])
+						|| (!isset($scripts->registered[$handle]->extra['strategy']) && null != $previous_load_strategy)
+					) {
 						array_push($header, array('handles' => array(), 'versions' => array()));
 					}
 
@@ -1245,6 +1336,16 @@ class WP_Optimize_Minify_Front_End {
 					array_push($header[count($header)-1]['handles'], $handle);
 					array_push($header[count($header)-1]['versions'], $scripts->registered[$handle]->ver);
 
+					// Register strategy if it is used
+					if (isset($scripts->registered[$handle]->extra['strategy'])) $header[count($header)-1]['strategy'] = $scripts->registered[$handle]->extra['strategy'];
+
+					if (isset($scripts->registered[$handle]->extra['strategy'])) {
+						$previous_load_strategy = $scripts->registered[$handle]->extra['strategy'];
+					} else {
+						$previous_load_strategy = null;
+					}
+					
+
 					// external and ignored scripts
 				} else {
 					// add the ignored assets
@@ -1271,6 +1372,7 @@ class WP_Optimize_Minify_Front_End {
 				$file_name = 'wpo-minify-header-'.$hash.($minify_js ? '.min' : '');
 				// create cache files and urls
 				$file = $cache_dir.'/'.$file_name.'.js';
+				$meta_json_file = $cache_base_dir.'/'.'meta.json';
 				$file_url = WP_Optimize_Minify_Functions::get_protocol($cache_dir_url.'/'.$file_name.'.js');
 				
 				// generate a new cache file
@@ -1278,15 +1380,21 @@ class WP_Optimize_Minify_Front_End {
 				if (!file_exists($file)) {
 					
 					// code and log initialization
+					$log_header = "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null));
 					$log = array(
-						'header' => "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null)),
+						'header' => $log_header,
 						'files' => array()
 					);
+					$meta_log = $this->meta_log_initialization($log_header);
+					$before_code = '';
 					$code = '';
+					$after_code = '';
 
 					// minify and write to file
 					foreach ($header[$i]['handles'] as $handle) {
 						if (!empty($wp_scripts->registered[$handle]->src)) {
+							// only add minified scripts once to the bundle
+							if (in_array($handle, $done)) continue;
 
 							// get href per handle
 							$href = WP_Optimize_Minify_Functions::get_hurl($wp_scripts->registered[$handle]->src);
@@ -1297,7 +1405,8 @@ class WP_Optimize_Minify_Front_End {
 							$json = false;
 							$json = WP_Optimize_Minify_Cache_Functions::get_transient($tkey);
 							if (false === $json) {
-								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $minify_js, 'js', $handle, $version);
+								$enable_minification = $minify_js && !WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $enable_minification, 'js', $handle, $version);
 								if ($this->options['debug']) {
 									echo "<!-- wpo_min DEBUG: Uncached file processing now for $handle / $href / $version -->" . "\n";
 								}
@@ -1312,11 +1421,14 @@ class WP_Optimize_Minify_Front_End {
 							if ($this->should_reset_minify_assets($res, $href, 'js', $handle, $version)) {
 								WP_Optimize_Minify_Cache_Functions::reset();
 								$this->minify_cache_incremented = true;
+								$meta_log['invalidation_reason'] = 'Checksum Mismatch and version changed from ' . $res['request']['version'] . ' to ' . $version;
+								$meta_log['files_that_changed'][$handle] = $res['log'];
 							}
 
 							// response has failed
 							if (true != $res['status']) {
 								$log['files'][$handle] = $res['log'];
+								$log['files'][$handle]['uses_loading_strategy'] = isset($header[$i]['strategy']);
 								continue;
 							}
 
@@ -1324,7 +1436,7 @@ class WP_Optimize_Minify_Front_End {
 							if (!empty($wp_scripts->registered[$handle]->extra)) {
 								if (!empty($wp_scripts->registered[$handle]->extra['before']) && is_array($wp_scripts->registered[$handle]->extra['before'])) {
 									if ($merge_inline_extra_css_js) {
-										$code .= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before'])), $href.' - BEFORE');
+										$before_code .= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before']));
 									}
 								}
 							}
@@ -1337,19 +1449,23 @@ class WP_Optimize_Minify_Front_End {
 								$code .= "\n" . $wp_scripts->print_translations($handle, false);
 							}
 
-							// append code to merged file
-							$code .= isset($res['code']) ? WP_Optimize_Minify_Functions::prepare_merged_js($res['code'], $href) : '';
-							$log['files'][$handle] = $res['log'];
-							
 							// Add extra data from wp_add_inline_script after
 							if (!empty($wp_scripts->registered[$handle]->extra)) {
 								if (!empty($wp_scripts->registered[$handle]->extra['after']) && is_array($wp_scripts->registered[$handle]->extra['after'])) {
 									if ($merge_inline_extra_css_js) {
-										$code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after'])), $href.' - AFTER');
+										$after_code.= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after']));
 									}
 								}
 							}
-
+							
+							// append code to merged file
+							$code .= $before_code . "\n";
+							$code .= isset($res['code']) ? $res['code'] : '';
+							$code .= "\n" . $after_code . "\n";
+							$code = WP_Optimize_Minify_Functions::prepare_merged_js($code, $href);
+							$log['files'][$handle] = $res['log'];
+							$log['files'][$handle]['uses_loading_strategy'] = isset($header[$i]['strategy']);
+							
 							// consider dependencies on handles with an empty src
 						} else {
 							wp_dequeue_script($handle);
@@ -1359,6 +1475,10 @@ class WP_Optimize_Minify_Front_End {
 
 					// generate cache, write log
 					if (!empty($code)) {
+						// Only generate meta.json file if cache is reset
+						if (!empty($meta_log['invalidation_reason'])) {
+							file_put_contents($meta_json_file, json_encode($meta_log));
+						}
 						WP_Optimize_Minify_Print::write_combined_asset($file, $code, $log);
 					}
 				} else {
@@ -1401,12 +1521,12 @@ class WP_Optimize_Minify_Front_End {
 					if (!empty($wp_scripts->registered[$handle]->extra)) {
 						if (!empty($wp_scripts->registered[$handle]->extra['before']) && is_array($wp_scripts->registered[$handle]->extra['before'])) {
 							if (!$merge_inline_extra_css_js) {
-								$before_code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before'])), $href.' - BEFORE');
+								$before_code.= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['before'])) . "\n";
 							}
 						}
 						if (!empty($wp_scripts->registered[$handle]->extra['after']) && is_array($wp_scripts->registered[$handle]->extra['after'])) {
 							if (!$merge_inline_extra_css_js) {
-								$after_code.= "\n" . WP_Optimize_Minify_Functions::prepare_merged_js(implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after'])), $href.' - AFTER');
+								$after_code.= "\n" . implode("\n", array_filter($wp_scripts->registered[$handle]->extra['after'])) . "\n";
 							}
 						}
 					}
@@ -1423,6 +1543,11 @@ class WP_Optimize_Minify_Front_End {
 					wp_enqueue_script("wpo_min-header-$i");
 					if (!empty($after_code)) {
 						wp_add_inline_script("wpo_min-header-$i", $after_code, 'after');
+					}
+
+					if (isset($header[$i]['strategy'])) {
+						// Backward compatible way of doing this
+						wp_script_add_data( "wpo_min-header-$i", 'strategy', $header[$i]['strategy']);
 					}
 				} else {
 					// file could not be generated, output something meaningful
@@ -1451,6 +1576,7 @@ class WP_Optimize_Minify_Front_End {
 		global $wp_styles;
 		if (!is_object($wp_styles)) return;
 		$cache_path = WP_Optimize_Minify_Cache_Functions::cache_path();
+		$cache_base_dir = $cache_path['cachebasedir'];
 		$cache_dir = $cache_path['cachedir'];
 		$cache_dir_url = $cache_path['cachedirurl'];
 		$exclude_css = $this->get_excluded_css_list();
@@ -1632,8 +1758,11 @@ class WP_Optimize_Minify_Front_End {
 				continue;
 			}
 			
+			// check if the current URL points to a minified file.
+			$exclude_minified_css = WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+			$normal_processing = $exclude_minified_css && !$merge_css;
 			// skip ignore list, conditional css, external css, font-awesome merge
-			if (($process_css && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($conditional) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
+			if (($process_css && !$normal_processing && !WP_Optimize_Minify_Functions::in_arrayi($href, $ignore_list) && !isset($conditional) && WP_Optimize_Minify_Functions::internal_url($href, site_url()))
 				|| empty($href)
 			) {
 					
@@ -1691,6 +1820,7 @@ class WP_Optimize_Minify_Front_End {
 
 				// create cache files and urls
 				$file = $cache_dir.'/'.$file_name.'.css';
+				$meta_json_file = $cache_base_dir.'/'.'meta.json';
 				$file_url = WP_Optimize_Minify_Functions::get_protocol($cache_dir_url.'/'.$file_name.'.css');
 				
 				// generate a new cache file
@@ -1698,10 +1828,12 @@ class WP_Optimize_Minify_Front_End {
 				if (!file_exists($file)) {
 
 					// code and log initialization
+					$log_header = "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null));
 					$log = array(
-						'header' => "PROCESSED on ".date('r')." from ".home_url(add_query_arg(null, null)),
+						'header' => $log_header,
 						'files' => array()
 					);
+					$meta_log = $this->meta_log_initialization($log_header);
 					$code = '';
 
 					// minify and write to file
@@ -1719,7 +1851,8 @@ class WP_Optimize_Minify_Front_End {
 							$json = false;
 							$json = WP_Optimize_Minify_Cache_Functions::get_transient($tkey);
 							if (false === $json) {
-								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $minify_css, 'css', $handle, $version);
+								$enable_minification = $minify_css && !WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+								$json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $enable_minification, 'css', $handle, $version);
 								if ($this->options['debug']) {
 									echo "<!-- wpo_min DEBUG: Uncached file processing now for $handle / $href / $version -->" . "\n";
 								}
@@ -1734,6 +1867,8 @@ class WP_Optimize_Minify_Front_End {
 							if ($this->should_reset_minify_assets($res, $href, 'css', $handle, $version)) {
 								WP_Optimize_Minify_Cache_Functions::reset();
 								$this->minify_cache_incremented = true;
+								$meta_log['invalidation_reason'] = 'Checksum Mismatch and version changed from ' . $res['request']['version'] . ' to ' . $version;
+								$meta_log['files_that_changed'][$handle] = $res['log'];
 							}
 							
 							// response has failed
@@ -1762,6 +1897,10 @@ class WP_Optimize_Minify_Front_End {
 
 					// generate cache, add inline css, write log
 					if (!empty($code)) {
+						// Only generate meta.json file if cache is reset
+						if (!empty($meta_log['invalidation_reason'])) {
+							file_put_contents($meta_json_file, json_encode($meta_log));
+						}
 						WP_Optimize_Minify_Print::write_combined_asset($file, $code, $log);
 					}
 				} else {
@@ -1914,7 +2053,7 @@ class WP_Optimize_Minify_Front_End {
 		// get host with multisite support and query strings
 		$host = htmlentities($_SERVER['SERVER_NAME']);
 		if (empty($host)) {
-			$host = htmlentities($_SERVER['HTTP_HOST']);
+			$host = isset($_SERVER['HTTP_HOST']) ? htmlentities($_SERVER['HTTP_HOST']) : '';
 		}
 		$request_query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 		$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -2042,7 +2181,7 @@ class WP_Optimize_Minify_Front_End {
 		// get host with multisite support and query strings
 		$host = htmlentities($_SERVER['SERVER_NAME']);
 		if (empty($host)) {
-			$host = htmlentities($_SERVER['HTTP_HOST']);
+			$host = isset($_SERVER['HTTP_HOST']) ? htmlentities($_SERVER['HTTP_HOST']) : '';
 		}
 		$request_query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 		$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -2335,7 +2474,8 @@ class WP_Optimize_Minify_Front_End {
 	 */
 	private function should_reset_minify_assets($res, $href, $type, $handle, $version) {
 		if (isset($res['request']['version']) && $res['request']['version'] != $version && !$this->minify_cache_incremented) {
-			$new_json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $this->options['enable_css_minification'], $type, $handle, $version);
+			$enable_minification = $this->options['enable_'.$type.'_minification'] && !WP_Optimize_Minify_Functions::is_minified_css_js_filename($href);
+			$new_json = WP_Optimize_Minify_Functions::download_and_minify($href, null, $enable_minification, $type, $handle, $version);
 			$new_res = json_decode($new_json, true);
 
 			/**

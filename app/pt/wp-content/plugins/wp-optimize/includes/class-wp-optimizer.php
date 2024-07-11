@@ -215,7 +215,7 @@ class WP_Optimizer {
 	 * As with do_optimization, it is somewhat modelled after the template interface
 	 *
 	 * @param  string|object $which_optimization An optimization ID, or a WP_Optimization object.
-	 * @return array                             returns the optimization information
+	 * @return object                             returns the optimization information
 	 */
 	public function get_optimization_info($which_optimization) {
 	
@@ -243,7 +243,7 @@ class WP_Optimizer {
 	}
 	
 	/**
-	 * THis runs the list of optimizations.
+	 * This runs the list of optimizations.
 	 *
 	 * @param  array  $optimization_options Whether to do an optimization depends on what keys are set (legacy - can be changed hopefully).
 	 * @param  string $which_option         Specify which option.

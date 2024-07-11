@@ -12,7 +12,7 @@ if (!class_exists('Updraft_Smush_Task')) :
 abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 
 	/**
-	 * A flag indicating if the operation was succesful
+	 * A flag indicating if the operation was successful
 	 *
 	 * @var bool
 	 */
@@ -83,7 +83,7 @@ abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 		if ($lossy) {
 			$quality = $this->get_option('image_quality');
 		} else {
-			$quality = 100;
+			$quality = 92;
 		}
 		$this->log($this->get_description());
 		$this->log("File: " . basename($file_path) . ", Compression quality: {$quality}");
@@ -101,9 +101,9 @@ abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 			$ext = WPO_Image_Utils::get_extension($file_path);
 			$allowed_extensions = WPO_Image_Utils::get_allowed_extensions();
 			$allowed_extensions = array_diff($allowed_extensions, array('gif'));
-			if (WPO_Image_Utils::can_do_webp_conversion()) {
+			if (WPO_WebP_Utils::can_do_webp_conversion()) {
 				if (WPO_Image_Utils::is_supported_extension($ext, $allowed_extensions)) {
-					WPO_Image_Utils::do_webp_conversion($file_path);
+					WPO_WebP_Utils::do_webp_conversion($file_path);
 				}
 			} else {
 				$webp_tools_available = false;
@@ -171,7 +171,7 @@ abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 	}
 
 	/**
-	 * Processes the response recieved from the remote server
+	 * Processes the response received from the remote server
 	 *
 	 * @param mixed $response - the response object
 	 * @return mixed - the response
@@ -267,7 +267,7 @@ abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 	}
 
 	/**
-	 * Fires if the task succeds, any clean up code and logging goes here
+	 * Fires if the task succeeds, any clean up code and logging goes here
 	 */
 	public function complete() {
 
@@ -290,7 +290,7 @@ abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 			$info = sprintf(__("The file was compressed to %s using WP-Optimize", 'wp-optimize'), WP_Optimize()->format_size(filesize($file_path)));
 		} else {
 			$saved = round((($original_size - filesize($file_path)) / $original_size * 100), 2);
-			$info = sprintf(__("The file was compressed from %s to %s saving %s percent using WP-Optimize", 'wp-optimize'), WP_Optimize()->format_size($original_size), WP_Optimize()->format_size(filesize($file_path)), $saved);
+			$info = sprintf(__("The file was compressed from %s to %s, saving %s percent, using WP-Optimize", 'wp-optimize'), WP_Optimize()->format_size($original_size), WP_Optimize()->format_size(filesize($file_path)), $saved);
 		}
 
 		$stats = array(
@@ -390,7 +390,7 @@ abstract class Updraft_Smush_Task extends Updraft_Task_1_2 {
 		return array(
 			'allowed_file_types' => WPO_Image_Utils::get_allowed_extensions(),
 			'request_timeout' => 15,
-			'image_quality' => 90,
+			'image_quality' => 92,
 			'backup_prefix' => '-updraft-pre-smush-original.'
 		);
 	}

@@ -2,6 +2,8 @@
 	var wp_optimize = window.wp_optimize || {};
 	var send_command = wp_optimize.send_command;
 	var refresh_frequency = wpoptimize.refresh_frequency || 30000;
+	var heartbeat = WP_Optimize_Heartbeat();
+	var heartbeat_agents = [];
 
 	if (!send_command) {
 		console.error('WP-Optimize Minify: wp_optimize.send_command is required.');
@@ -119,10 +121,12 @@
 			// Set value on status change
 			.on('wp-optimize/minify/saved_setting', function() {
 				$('#wp-optimize-nav-tab-wrapper__wpo_minify a[data-tab="' + $(this).data('tabname') + '"] span.disabled').toggleClass('hidden', $(this).is(':checked'));
+				$('#wpo_section_' + $(this).data('tabname')).toggleClass('wpo-disabled-section', $(this).is(':not(:checked)'));
 			})
 			// Set value on page load
 			.each(function() {
 				$('#wp-optimize-nav-tab-wrapper__wpo_minify a[data-tab="' + $(this).data('tabname') + '"] span.disabled').toggleClass('hidden', $(this).is(':checked'));
+				$('#wpo_section_' + $(this).data('tabname')).toggleClass('wpo-disabled-section', $(this).is(':not(:checked)'));
 			});
 
 		// slider enable Debug mode
@@ -196,7 +200,13 @@
 		$('#wpo_min_jsprocessed, #wpo_min_cssprocessed').on('click', '.log', function(e) {
 			e.preventDefault();
 			$(this).nextAll('.wpo_min_log').slideToggle('fast');
-		});
+			var link_text = $(this).text().trim();
+			if (wpoptimize.show_information === link_text) {
+				$(this).text(wpoptimize.hide_information);
+			} else {
+				$(this).text(wpoptimize.show_information);
+			}
+	});
 
 		// Delete log file
 		$('#wpo_min_jsprocessed, #wpo_min_cssprocessed').on('click', '.delete-file', function(e) {
@@ -244,6 +254,24 @@
 			add_excluded_css_file(excluded_file);
 			tab_need_saving('css');
 			highlight_excluded_item(el);
+		});
+
+		// Trigger combined meta.json file download
+		$('.wpo-minify-download-metas-button').on('click', function(e) {
+			e.preventDefault();
+			send_command('get_minify_meta_files', null, function(response) {
+				if (response.hasOwnProperty('error')) {
+					// show error
+					alert(response.error);
+					return;
+				}
+
+				var link = document.body.appendChild(document.createElement('a'));
+				link.setAttribute('download', 'combined_metas.json');
+				link.setAttribute('style', "display:none;");
+				link.setAttribute('href', 'data:text/json' + ';charset=UTF-8,' + encodeURIComponent(JSON.stringify(response.combined_metas)));
+				link.click();
+			})
 		});
 
 		/**
@@ -374,8 +402,7 @@
 		 * Minify Preloader functionality
 		 */
 		var run_minify_preload_btn = $('#wp_optimize_run_minify_preload'),
-			minify_preload_status_el = $('#wp_optimize_preload_minify_status'),
-			check_status_interval = null;
+			minify_preload_status_el = $('#wp_optimize_preload_minify_status');
 
 		run_minify_preload_btn.on('click', function() {
 			var btn = $(this),
@@ -386,8 +413,9 @@
 
 			if (is_running) {
 				btn.data('running', false);
-				clearInterval(check_status_interval);
-				check_status_interval = null;
+
+				heartbeat.cancel_agents(heartbeat_agents);
+				
 				send_command(
 					'cancel_minify_preload',
 					null,
@@ -452,16 +480,18 @@
 		}
 
 		/**
-		 * Create interval action for update preloader status.
+		 * Create heartbeat agent action for update preloader status.
 		 *
 		 * @return void
 		 */
 		function run_update_minify_preload_status() {
-			if (check_status_interval) return;
+			var agent = heartbeat.add_agent({
+				command: 'get_minify_preload_status',
+				callback: update_minify_preload_status,
+				_keep: false
+			});
 
-			check_status_interval = setInterval(function() {
-				update_minify_preload_status();
-			}, 5000);
+			if (null !== agent) heartbeat_agents.push(agent);
 		}
 
 		/**
@@ -469,20 +499,17 @@
 		 *
 		 * @return void
 		 */
-		function update_minify_preload_status() {
-			send_command('get_minify_preload_status', null, function(response) {
-				if (response.done) {
-					run_minify_preload_btn.val(wpoptimize.run_now);
-					run_minify_preload_btn.data('running', false);
-					clearInterval(check_status_interval);
-					check_status_interval = null;
-				} else {
-					run_minify_preload_btn.val(wpoptimize.cancel);
-					run_minify_preload_btn.data('running', true);
-				}
-				minify_preload_status_el.text(response.message);
-				update_minify_size_information(response);
-			});
+		function update_minify_preload_status(response) {
+			if (response.done) {
+				run_minify_preload_btn.val(wpoptimize.run_now);
+				run_minify_preload_btn.data('running', false);
+			} else {
+				run_minify_preload_btn.val(wpoptimize.cancel);
+				run_minify_preload_btn.data('running', true);
+				run_update_minify_preload_status();
+			}
+			minify_preload_status_el.text(response.message);
+			update_minify_size_information(response);
 		}
 
 		/**
@@ -529,7 +556,7 @@
 					$('#wpo_min_jsprocessed ul.processed').append('\
 					<li id="'+this.uid+'">\
 						<span class="filename"><a href="'+this.file_url+'" target="_blank">'+this.filename+'</a> ('+this.fsize+')</span>\
-						<a href="#" class="log">' + wpoptimize.toggle_info + '</a>\
+						<a href="#" class="log">' + wpoptimize.show_information + '</a>\
 						<a href="#" class="delete-file" data-filename="' + this.filename + '">' + wpoptimize.delete_file + '</a>\
 						<div class="hidden save_notice">\
 							<p>' + wpoptimize.added_notice + '</p>\
@@ -552,7 +579,7 @@
 					$('#wpo_min_cssprocessed ul.processed').append('\
 					<li id="'+this.uid+'">\
 						<span class="filename"><a href="'+this.file_url+'" target="_blank">'+this.filename+'</a> ('+this.fsize+')</span>\
-						<a href="#" class="log">' + wpoptimize.toggle_info + '</a>\
+						<a href="#" class="log">' + wpoptimize.show_information + '</a>\
 						<a href="#" class="delete-file" data-filename="' + this.filename + '">' + wpoptimize.delete_file + '</a>\
 						<div class="hidden save_notice">\
 							<p>' + wpoptimize.added_to_list + '</p>\
@@ -587,7 +614,7 @@
 	};
 
 	 /**
-	  * Gather data from the given form
+	  *  Gather data from the given form
 	  *
 	  * @param {HTMLFormElement} form
 	  *

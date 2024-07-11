@@ -23,7 +23,7 @@ if (!defined('WPO_CACHE_EXT_DIR')) define('WPO_CACHE_EXT_DIR', dirname(__FILE__)
 if (!defined('WPO_CACHE_CONFIG_DIR')) define('WPO_CACHE_CONFIG_DIR', WPO_CACHE_DIR.'/config');
 
 /**
- * Directory that stores the cache, including gzipped files and mobile specifc cache
+ * Directory that stores the cache, including gzipped files and mobile specific cache
  */
 if (!defined('WPO_CACHE_FILES_DIR')) define('WPO_CACHE_FILES_DIR', untrailingslashit(WP_CONTENT_DIR).'/cache/wpo-cache');
 
@@ -120,6 +120,8 @@ class WPO_Page_Cache {
 
 		add_action('update_option_gmt_offset', array($this, 'update_gmt_offset_timezone_string_config'), 10, 3);
 		add_action('update_option_timezone_string', array($this, 'update_gmt_offset_timezone_string_config'), 10, 3);
+		add_action('update_option_date_format', array($this, 'update_option_date_format'), 10, 2);
+		add_action('update_option_time_format', array($this, 'update_option_time_format'), 10, 2);
 
 		$this->check_compatibility_issues();
 
@@ -128,12 +130,16 @@ class WPO_Page_Cache {
 	}
 
 	/**
-	 * Activate cron job for deleting expired cache files
+	 * Activate cron job when the cache is enabled for deleting expired cache files
 	 */
 	public function cron_activate() {
 		$page_cache_length = $this->config->get_option('page_cache_length');
-		if (!wp_next_scheduled('wpo_purge_old_cache')) {
-			wp_schedule_event(time() + (false === $page_cache_length ? '86400' : $page_cache_length), 'wpo_purge_old_cache', 'wpo_purge_old_cache');
+		if ($this->is_enabled()) {
+			if (!wp_next_scheduled('wpo_purge_old_cache')) {
+				wp_schedule_event(time() + (false === $page_cache_length ? '86400' : $page_cache_length), 'wpo_purge_old_cache', 'wpo_purge_old_cache');
+			}
+		} else {
+			wp_clear_scheduled_hook('wpo_purge_old_cache');
 		}
 	}
 
@@ -341,6 +347,11 @@ class WPO_Page_Cache {
 			return $already_ran_enable;
 		}
 
+		if (!file_exists($this->config->get_config_file_path())) {
+			$result = $this->update_cache_config();
+			if (is_wp_error($result)) return $result;
+		}
+
 		// if WPO_ADVANCED_CACHE isn't set, or environment doesn't contain the right constant, force regeneration
 		if (!defined('WPO_ADVANCED_CACHE') || !defined('WP_CACHE')) {
 			$force_enable = true;
@@ -358,9 +369,9 @@ class WPO_Page_Cache {
 			$message .= ' '.__('Please check file and directory permissions on the file paths up to this point, and your PHP error log.', 'wp-optimize');
 
 			if (!defined('WP_CLI') || !WP_CLI) {
-				$message .= "\n\n".sprintf(__('1. Please navigate, via FTP, to the folder - %s', 'wp-optimize'), htmlspecialchars(dirname($this->get_advanced_cache_filename())));
-				$message .= "\n".__('2. Edit or create a file with the name advanced-cache.php', 'wp-optimize');
-				$message .= "\n".__('3. Copy and paste the following lines into the file:', 'wp-optimize');
+				$message .= "\n\n1. ".sprintf(__('Please navigate, via FTP, to the folder - %s', 'wp-optimize'), htmlspecialchars(dirname($this->get_advanced_cache_filename())));
+				$message .= "\n2. ".__('Edit or create a file with the name advanced-cache.php', 'wp-optimize');
+				$message .= "\n3. ".__('Copy and paste the following lines into the file:', 'wp-optimize');
 			}
 
 			$already_ran_enable = new WP_Error("write_advanced_cache", $message);
@@ -426,6 +437,9 @@ class WPO_Page_Cache {
 		// Delete cache to avoid stale cache on next activation
 		$this->purge();
 
+		// Unschedule cron job to purge old cache
+		wp_clear_scheduled_hook('wpo_purge_old_cache');
+
 		return $ret;
 	}
 
@@ -441,7 +455,7 @@ class WPO_Page_Cache {
 		 */
 		$this->should_purge = apply_filters('wpo_purge_page_cache_on_activate_deactivate_plugin', true);
 		$purge_actions = array(
-			'deactivate_' . plugin_basename(WPO_PLUGIN_MAIN_PATH . '/wp-optimize.php'),
+			'deactivate_' . plugin_basename(WPO_PLUGIN_MAIN_PATH . 'wp-optimize.php'),
 			'deactivate_plugin',
 			'activated_plugin',
 		);
@@ -572,18 +586,19 @@ class WPO_Page_Cache {
 	 * @return bool - true on success, false otherwise
 	 */
 	public function create_folders() {
+		$permissions_str = __('Please check your file permissions.', 'wp-optimize');
 
 		if (!is_dir(WPO_CACHE_DIR) && !wp_mkdir_p(WPO_CACHE_DIR)) {
-			return new WP_Error('create_folders', sprintf(__('The request to the filesystem failed: unable to create directory %s. Please check your file permissions.'), str_ireplace(ABSPATH, '', WPO_CACHE_DIR)));
+			return new WP_Error('create_folders', sprintf(__('The request to the filesystem failed: unable to create directory %s.', 'wp-optimize'), str_ireplace(ABSPATH, '', WPO_CACHE_DIR)) .' '. $permissions_str);
 		}
 
 		if (!is_dir(WPO_CACHE_CONFIG_DIR) && !wp_mkdir_p(WPO_CACHE_CONFIG_DIR)) {
-			return new WP_Error('create_folders', sprintf(__('The request to the filesystem failed: unable to create directory %s. Please check your file permissions.'), str_ireplace(ABSPATH, '', WPO_CACHE_CONFIG_DIR)));
+			return new WP_Error('create_folders', sprintf(__('The request to the filesystem failed: unable to create directory %s.', 'wp-optimize'), str_ireplace(ABSPATH, '', WPO_CACHE_CONFIG_DIR)) .' '. $permissions_str);
 		}
 		
 		if (!is_dir(WPO_CACHE_FILES_DIR)) {
 			if (!wp_mkdir_p(WPO_CACHE_FILES_DIR)) {
-				return new WP_Error('create_folders', sprintf(__('The request to the filesystem failed: unable to create directory %s. Please check your file permissions.'), str_ireplace(ABSPATH, '', WPO_CACHE_FILES_DIR)));
+				return new WP_Error('create_folders', sprintf(__('The request to the filesystem failed: unable to create directory %s.', 'wp-optimize'), str_ireplace(ABSPATH, '', WPO_CACHE_FILES_DIR)) .' '. $permissions_str);
 			} else {
 				wpo_disable_cache_directories_viewing();
 			}
@@ -616,6 +631,7 @@ class WPO_Page_Cache {
 		$cache_extensions_path = WPO_CACHE_EXT_DIR;
 		$wpo_version = WPO_VERSION;
 		$wpo_home_url = trailingslashit(home_url());
+		$abspath = ABSPATH;
 
 		// CS does not like heredoc
 		// phpcs:disable
@@ -624,7 +640,7 @@ class WPO_Page_Cache {
 
 if (!defined('ABSPATH')) die('No direct access allowed');
 
-// WP-Optimize advanced-cache.php (written by version: $wpo_version) (do not change this line, it is used for correctness checks)
+// WP-Optimize advanced-cache.php (written by version: $wpo_version) (homeurl: $wpo_home_url) (abspath: $abspath) (do not change this line, it is used for correctness checks)
 
 if (!defined('WPO_ADVANCED_CACHE')) define('WPO_ADVANCED_CACHE', true);
 
@@ -736,14 +752,38 @@ EOF;
 		}
 
 		// from 3.0.17 we use more secure way to store cache config files and need update advanced-cache.php
+		// if the site url or folder changed we also update advanced-cache.php
 		$advanced_cache_current_version = $this->get_advanced_cache_version();
-		if ($advanced_cache_current_version && version_compare($advanced_cache_current_version, $this->_minimum_advanced_cache_file_version, '>=')) return;
+		if ($advanced_cache_current_version && version_compare($advanced_cache_current_version, $this->_minimum_advanced_cache_file_version, '>=') && !$this->is_the_site_url_or_folder_changed()) return;
 
 		if (!$this->write_advanced_cache()) {
 			add_action('admin_notices', array($this, 'notice_advanced_cache_autoupdate_error'));
 		} else {
 			$this->update_cache_config();
 		}
+	}
+
+	/**
+	 * Check if the site url or folder doesn't equal to values from advanced-cache.php
+	 *
+	 * @return bool
+	 */
+	private function is_the_site_url_or_folder_changed() {
+		if (!is_file($this->get_advanced_cache_filename())) return false;
+
+		$content = file_get_contents($this->get_advanced_cache_filename());
+		
+		if (false === $content) return false;
+
+		if (preg_match('/WP\-Optimize advanced\-cache\.php \(written by version\: (.+)\) (\(homeurl: (.+)\)) (\(abspath: (.+)\)) \(do not change/Ui', $content, $match)) {
+			$wpo_home_url = trailingslashit(home_url());
+			$abspath = ABSPATH;
+			return ($wpo_home_url != $match[3] || $abspath != $match[5]);
+		} elseif (preg_match('/WP\-Optimize advanced\-cache\.php \(written by version\: (.+)\)/Ui', $content, $match)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -885,7 +925,7 @@ EOF;
 	}
 
 	/**
-	 * Update permalink strucutre in cache config
+	 * Update permalink structure in cache config
 	 *
 	 * @param string $old_value Old value of permalink_structure option
 	 * @param string $value 	New value of permalink_structure option
@@ -901,12 +941,14 @@ EOF;
 
 	/**
 	 * Update cache config. Used to support 3d party plugins.
+	 *
+	 * @return {boolean|WP_Error}
 	 */
 	public function update_cache_config() {
 		// get current cache settings.
 		$current_config = $this->config->get();
 		// and call update to change if need cookies and query variable names.
-		$this->config->update($current_config, true);
+		return $this->config->update($current_config);
 	}
 
 	/**
@@ -938,7 +980,7 @@ EOF;
 	}
 
 	/**
-	 * Fetch directory informations.
+	 * Fetch directory information.
 	 *
 	 * @param string $dir
 	 * @return array
@@ -1087,37 +1129,6 @@ EOF;
 	}
 
 	/**
-	 * Delete sitemap cahche.
-	 */
-	public static function delete_sitemap_cache() {
-		if (!defined('WPO_CACHE_FILES_DIR')) return;
-
-		$homepage_url = get_home_url(get_current_blog_id());
-
-		$path = trailingslashit(WPO_CACHE_FILES_DIR) . trailingslashit(wpo_get_url_path($homepage_url));
-
-		if (!is_dir($path)) return;
-
-		$handle = opendir($path);
-
-		if (false !== $handle) {
-			$file = readdir($handle);
-
-			while (false !== $file) {
-	
-				if ('.' != $file && '..' != $file && is_dir($path . $file) && preg_match('/.*sitemap.*\.xml/i', $file)) {
-					do_action('wpo_delete_cache_by_url', $path . $file, false);
-					wpo_delete_files($path . $file, true);
-				}
-	
-				$file = readdir($handle);
-			}
-		}
-
-		closedir($handle);
-	}
-
-	/**
 	 * Delete feed from cache.
 	 */
 	public static function delete_feed_cache() {
@@ -1185,7 +1196,7 @@ EOF;
 	 * @param string $url
 	 * @return string
 	 */
-	private static function get_full_path_from_url($url) {
+	public static function get_full_path_from_url($url) {
 		return trailingslashit(WPO_CACHE_FILES_DIR) . trailingslashit(wpo_get_url_path($url));
 	}
 
@@ -1237,8 +1248,6 @@ EOF;
 	 * @return null
 	 */
 	public function update_gmt_offset_timezone_string_config($old_value, $new_value, $option) {
-		$option;
-		
 		if ('' == $new_value) return;
 
 		$current_config = $this->config->get();
@@ -1247,12 +1256,42 @@ EOF;
 			$dateTime = new DateTime("now");
 			$gmt_offset = $timeZone->getOffset($dateTime);
 			$current_config['gmt_offset'] = round($gmt_offset/3600, 1);
+			$current_config['timezone_string'] = $new_value;
 		} elseif ('' !== $new_value) {
 			$current_config['gmt_offset'] = $new_value;
+			$current_config['timezone_string'] = '';
 		}
 		$this->config->update($current_config, true);
 	}
-
+	
+	/**
+	 * Update `date_format` cache config value, used with hook `update_option_date_format`.
+	 *
+	 * @param string $old_value Old date format
+	 * @param string $new_value New date format
+	 *
+	 * @return void
+	 */
+	public function update_option_date_format($old_value, $new_value) {
+		$current_config = $this->config->get();
+		$current_config['date_format'] = $new_value;
+		$this->config->update($current_config, true);
+	}
+	
+	/**
+	 * Update `time_format` cache config value, used with hook `update_option_time_format`.
+	 *
+	 * @param string $old_value Old time format
+	 * @param string $new_value New time format
+	 *
+	 * @return void
+	 */
+	public function update_option_time_format($old_value, $new_value) {
+		$current_config = $this->config->get();
+		$current_config['time_format'] = $new_value;
+		$this->config->update($current_config, true);
+	}
+ 
 	/**
 	 * Adds an error to the error store
 	 *
@@ -1427,6 +1466,33 @@ EOF;
 			$config = $this->config->get();
 			$this->config->write($config);
 		}
+	}
+	
+	/**
+	 * Checks if the given cache directory is empty
+	 *
+	 * @param string $path The path to the cache directory.
+	 * @return bool Returns true if the cache directory is empty, false otherwise.
+	 */
+	public static function is_cache_empty($path) {
+		if (!is_dir($path)) return true;
+		
+		if ($handle = opendir($path)) {
+			while (false !== ($entry = readdir($handle))) {
+				if ("." == $entry || ".." == $entry) {
+					continue;
+				}
+				
+				$full_path = $path . '/' . $entry;
+				if (is_file($full_path)) {
+					closedir($handle);
+					return false;
+				}
+			}
+			closedir($handle);
+			return true;
+		}
+		return true;
 	}
 }
 

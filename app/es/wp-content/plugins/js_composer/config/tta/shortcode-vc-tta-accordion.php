@@ -135,6 +135,7 @@ return array(
 			'type' => 'dropdown',
 			'param_name' => 'c_align',
 			'value' => array(
+				esc_html__( 'Default', 'js_composer' ) => 'default',
 				esc_html__( 'Left', 'js_composer' ) => 'left',
 				esc_html__( 'Right', 'js_composer' ) => 'right',
 				esc_html__( 'Center', 'js_composer' ) => 'center',
@@ -187,6 +188,7 @@ return array(
 			'type' => 'dropdown',
 			'param_name' => 'c_position',
 			'value' => array(
+				esc_html__( 'Default', 'js_composer' ) => 'default',
 				esc_html__( 'Left', 'js_composer' ) => 'left',
 				esc_html__( 'Right', 'js_composer' ) => 'right',
 			),
@@ -210,7 +212,7 @@ return array(
 			'type' => 'el_id',
 			'heading' => esc_html__( 'Element ID', 'js_composer' ),
 			'param_name' => 'el_id',
-			'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
+			'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %1$sw3c specification%2$s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
 		),
 		array(
 			'type' => 'textfield',
