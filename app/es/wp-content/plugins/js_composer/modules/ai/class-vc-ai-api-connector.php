@@ -1,4 +1,10 @@
 <?php
+/**
+ * Connector to AI API.
+ *
+ * @since 7.2
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
@@ -16,6 +22,14 @@ class Vc_Ai_Api_Connector {
 	 * @var string
 	 */
 	protected $ai_api_url = 'https://api-ai.wpbakery.com';
+
+	/**
+	 * API response data.
+	 *
+	 * @version 7.8
+	 * @var array | WP_Error
+	 */
+	public $api_response_data;
 
 	/**
 	 * Get AI element type response class and method controller with endpoint dependency.
@@ -138,10 +152,15 @@ class Vc_Ai_Api_Connector {
 			);
 		}
 
-		$data = $this->add_license_key_to_request_data( $data );
-		if ( is_wp_error( $data ) ) {
-			return $data;
+		$key = vc_license()->getLicenseKey();
+		if ( empty( $key ) ) {
+			return new WP_Error(
+				'ai_error_response',
+				esc_html__( 'WPBakery Page Builder license not activated.', 'js_composer' )
+			);
 		}
+
+		$data = $this->add_license_key_to_request_data( $data, $key );
 
 		$ai_element_type = $data[ $ai_element_type_index ]['value'];
 		$route_controller = $this->get_route_controller( $ai_element_type, $data );
@@ -263,27 +282,15 @@ class Vc_Ai_Api_Connector {
 				continue;
 			}
 
-			foreach ( $optionality_value as $modal_form_param_name => $modal_form_param_value ) {
-				$is_value_in_data = array_search( $optionality_name, array_column( $data, 'name' ) );
-
-				if ( false === $is_value_in_data ) {
-					continue;
-				}
-
-				if ( ! isset( $data[ $is_value_in_data ]['value'] ) ) {
-					continue;
-				}
-
-				if ( strval( $modal_form_param_name ) === $data[ $is_value_in_data ]['value'] ) {
-					$resolved = $modal_form_param_value;
-					break;
-				}
+			$endpoint = $this->get_resolved_route_endpoint_optionality( $data, $optionality_name, $optionality_value );
+			if ( false !== $endpoint ) {
+				$resolved = $endpoint;
 			}
 		}
 
 		if ( $resolved ) {
 			return $resolved;
-		} else if ( $default ) {
+		} elseif ( $default ) {
 			return $default;
 		} else {
 			return new WP_Error(
@@ -295,75 +302,118 @@ class Vc_Ai_Api_Connector {
 	}
 
 	/**
+	 * Get resolved endpoint optionality of single route.
+	 *
+	 * @since 7.9
+	 * @param array $data
+	 * @param string $optionality_name
+	 * @param array $optionality_value
+	 * @return bool|string
+	 */
+	public function get_resolved_route_endpoint_optionality( $data, $optionality_name, $optionality_value ) {
+		$endpoint = false;
+
+		foreach ( $optionality_value as $modal_form_param_name => $modal_form_param_value ) {
+			$is_value_in_data = array_search( $optionality_name, array_column( $data, 'name' ) );
+
+			if ( false === $is_value_in_data ) {
+				continue;
+			}
+
+			if ( ! isset( $data[ $is_value_in_data ]['value'] ) ) {
+				continue;
+			}
+
+			if ( strval( $modal_form_param_name ) === $data[ $is_value_in_data ]['value'] ) {
+				$endpoint = $modal_form_param_value;
+				break;
+			}
+		}
+
+		return $endpoint;
+	}
+
+	/**
 	 * Get ai api response.
 	 *
 	 * @since 7.2
 	 * @param array $data
-	 * @param string $url_part
-	 * @param bool $is_messaged_data
+	 * @param string $endpoint
 	 *
-	 * @return array|WP_Error
+	 * @return Vc_Ai_Api_Connector
 	 */
-	public function get_api_response_data( $data, $url_part, $is_messaged_data = false ) {
+	public function set_api_response_data( $data, $endpoint ) {
 		$request_params = [
 			'body' => $data,
 			'timeout' => 3000,
 		];
 
-		$response = wp_remote_post( $this->ai_api_url . '/' . $url_part, $request_params );
-
+		$response = $this->get_api_response( $endpoint, $request_params );
 		if ( is_wp_error( $response ) ) {
-			return $response;
+			$this->api_response_data = $response;
+			return $this;
 		}
 
 		$response_code = wp_remote_retrieve_response_code( $response );
 		if ( ! in_array( $response_code, [ 200, 403 ] ) ) {
-			return new WP_Error(
+			$this->api_response_data =
+			new WP_Error(
 				'ai_error_invalid_response',
-				esc_html__( 'An error occurred when requesting a response from WPBakery AI (Code: 612): invalid response code', 'js_composer' ) . $response_code
+				esc_html__( 'An error occurred when requesting a response from WPBakery AI (Code: 612): invalid response code: ', 'js_composer' ) . $response_code
 			);
+			return $this;
 		}
 
 		$response = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		if ( $this->is_cache_response_in_process( $response ) ) {
-			return $response['data'];
+			$this->api_response_data = $response['data'];
+			return $this;
 		}
 
-		$error = $this->get_response_error( $response, $is_messaged_data );
+		$error = $this->get_response_error( $response );
 		if ( is_wp_error( $error ) ) {
-			return $error;
+			$this->api_response_data = $error;
+			return $this;
 		}
 
-		if ( $is_messaged_data ) {
-			return $this->get_message_from_data( $response['data'] );
-		} else {
-			return $response['data'];
-		}
+		$this->api_response_data = $response['data'];
+		return $this;
+	}
+
+	/**
+	 * Get api response.
+	 *
+	 * @since 7.8
+	 * @param string $endpoint
+	 * @param array $request_params
+	 * @return array|WP_Error
+	 */
+	public function get_api_response( $endpoint, $request_params ) {
+		return wp_remote_post( $this->ai_api_url . '/' . $endpoint, $request_params );
 	}
 
 	/**
 	 * Try to return message from data.
 	 *
 	 * @since 7.2
-	 * @param $response
 	 * @return string|WP_Error
 	 */
-	public function get_message_from_data( $response ) {
-		if ( empty( $response['message'] ) ) {
+	public function get_message_from_data() {
+		if ( empty( $this->api_response_data['message'] ) ) {
 			return new WP_Error(
 				'ai_error_empty_response_message',
 				esc_html__( 'An error occurred when requesting a response from WPBakery AI (Code: 613): empty api response message', 'js_composer' )
 			);
 		}
 
-		return $response['message'];
+		return $this->api_response_data['message'];
 	}
 
 	/**
 	 * Get api response data from server cache.
 	 *
-	 * @param $data
+	 * @param array $data
 	 * @return string | WP_Error
 	 * @since 7.2
 	 */
@@ -375,7 +425,7 @@ class Vc_Ai_Api_Connector {
 			);
 		}
 
-		$response = $this->get_api_response_data( $data, 'cache', true );
+		$response = $this->set_api_response_data( $data, 'cache' )->get_message_from_data();
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -418,7 +468,7 @@ class Vc_Ai_Api_Connector {
 	 * Check is current process in process of caching.
 	 *
 	 * @since 7.2
-	 * @param $response
+	 * @param array $response
 	 * @return bool
 	 */
 	public function is_cache_response_in_process( $response ) {
@@ -434,10 +484,9 @@ class Vc_Ai_Api_Connector {
 	 *
 	 * @since 7.2
 	 * @param array $response
-	 * @param bool $is_messaged_data
 	 * @return false | WP_Error
 	 */
-	public function get_response_error( $response, $is_messaged_data ) {
+	public function get_response_error( $response ) {
 		if ( ! isset( $response['status'] ) ) {
 			return new WP_Error(
 				'ai_error_missing_response_status',
@@ -452,25 +501,23 @@ class Vc_Ai_Api_Connector {
 			);
 		}
 
-		if ( $is_messaged_data ) {
-			if ( ! isset( $response['data']['message'] ) && ! isset( $response['message'] ) ) {
-				return new WP_Error(
-					'ai_error_missing_response_status',
-					esc_html__( 'An error occurred when requesting a response from WPBakery AI (Code: 617): api response message missing', 'js_composer' )
-				);
-			} else {
-				$message = isset( $response['message'] ) ? $response['message'] : $response['data']['message'];
-			}
+		if ( ! isset( $response['data']['message'] ) && ! isset( $response['message'] ) ) {
+			return new WP_Error(
+				'ai_error_missing_response_status',
+				esc_html__( 'An error occurred when requesting a response from WPBakery AI (Code: 617): api response message missing', 'js_composer' )
+			);
+		} else {
+			$message = isset( $response['message'] ) ? $response['message'] : $response['data']['message'];
+		}
 
-			if ( ! $response['status'] ) {
-				return new WP_Error(
-					'ai_error_response',
-					esc_html__(
-						'An error occurred when requesting a response from WPBakery AI (Code: 624): ',
-						'js_composer'
-					) . $message
-				);
-			}
+		if ( ! $response['status'] ) {
+			return new WP_Error(
+				'ai_error_response',
+				esc_html__(
+					'An error occurred when requesting a response from WPBakery AI (Code: 624): ',
+					'js_composer'
+				) . $message
+			);
 		}
 
 		return false;
@@ -481,21 +528,14 @@ class Vc_Ai_Api_Connector {
 	 *
 	 * @since 7.2
 	 * @param array $data
-	 * @return array | WP_Error
+	 * @param array $key
+	 * @return array
 	 */
-	public function add_license_key_to_request_data( $data ) {
-		$key = vc_license()->getLicenseKey();
-		if ( empty( $key ) ) {
-			return new WP_Error(
-				'ai_error_response',
-				esc_html__(
-					'WPBakery Page Builder license not activated.',
-					'js_composer'
-				)
-			);
+	public function add_license_key_to_request_data( $data, $key = false ) {
+		if ( false === $key ) {
+			$key = vc_license()->getLicenseKey();
 		}
-
-		$data['key'] = vc_license()->getLicenseKey();
+		$data['key'] = $key;
 		return $data;
 	}
 

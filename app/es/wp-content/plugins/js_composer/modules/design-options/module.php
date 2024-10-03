@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Module Name: Design Options
  * Description: Add in our setting tab 'Design Options'
  * With fields that helps change colors, sizes etc.
@@ -16,12 +16,14 @@ require_once vc_manager()->path( 'MODULES_DIR', 'design-options/class-vc-design-
 
 /**
  * Module entry point.
+ *
  * @since 7.7
  */
-class Vc_Design_Options_Module
-{
+class Vc_Design_Options_Module {
+
 	/**
 	 * Settings object.
+	 *
 	 * @since 7.7
 	 * @var Vc_Design_Options_Module_Settings
 	 */
@@ -36,7 +38,7 @@ class Vc_Design_Options_Module
 		$this->settings = new Vc_Design_Options_Module_Settings();
 		$this->settings->init();
 
-		add_action( 'vc_base_register_front_css', [$this, 'register_from_custom_css_styles'], 11 );
+		add_action( 'vc_base_register_front_css', [ $this, 'register_from_custom_css_styles' ], 11 );
 	}
 
 	/**

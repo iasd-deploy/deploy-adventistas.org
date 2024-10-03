@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Module Name: Post Custom Layout
  * Description: Add users optionality to change post initial layout.
  *
@@ -12,12 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Module entry point.
+ *
  * @since 7.7
  */
-class Vc_Post_Custom_Layout_Module
-{
+class Vc_Post_Custom_Layout_Module {
 	/**
 	 * Module meta key.
+	 *
 	 * @since 7.7
 	 * @var string
 	 */
@@ -28,9 +29,9 @@ class Vc_Post_Custom_Layout_Module
 	 * @since 7.7
 	 */
 	public function init() {
-		add_filter( 'vc_post_meta_list', [$this, 'add_custom_meta_to_update'] );
+		add_filter( 'vc_post_meta_list', [ $this, 'add_custom_meta_to_update' ] );
 
-		add_filter( 'wpb_set_post_custom_meta', [$this, 'set_post_custom_meta'], 10, 1 );
+		add_filter( 'wpb_set_post_custom_meta', [ $this, 'set_post_custom_meta' ], 10, 1 );
 
 		add_action( 'template_include', [ $this, 'switch_post_custom_layout' ], 11 );
 	}
@@ -63,6 +64,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Change the path of the current template to our custom layout.
+	 *
 	 * @since 7.7
 	 *
 	 * @param string $template The path of the template to include.
@@ -87,6 +89,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Get name of the custom layout.
+	 *
 	 * @note on a plugin core level right now we have only 'blank' layout.
 	 * @since 7.7
 	 *
@@ -111,6 +114,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Check if user switched layout in frontend editor.
+	 *
 	 * @note in such cases we should reload the page
 	 * @since 7.7
 	 *
@@ -125,6 +129,7 @@ class Vc_Post_Custom_Layout_Module
 	/**
 	 * For a frontend editor we keep layout as get param
 	 * when we switching it inside editor and show user new layout inside editor.
+	 *
 	 * @since 7.7
 	 *
 	 * @return false|string
@@ -137,6 +142,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Retrieve get params.
+	 *
 	 * @description  we should obtain params from $_SERVER['HTTP_REFERER']
 	 * if we try to get params inside iframe and from regular $_GET when outside
 	 * @since 7.7
@@ -148,10 +154,10 @@ class Vc_Post_Custom_Layout_Module
 			return false;
 		}
 
-		// inside iframe
+		// inside iframe.
 		if ( vc_is_page_editable() ) {
 			$params = $this->get_params_from_server_referer();
-			// outside iframe
+			// outside iframe.
 		} else {
             // phpcs:ignore
 			$params = $_GET;
@@ -162,6 +168,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Parse $_SERVER['HTTP_REFERER'] and get params from it.
+	 *
 	 * @since 7.7
 	 *
 	 * @return array|false
@@ -177,13 +184,14 @@ class Vc_Post_Custom_Layout_Module
 		}
 
 		$params = [];
-		parse_str( $query,$params );
+		parse_str( $query, $params );
 
 		return $params;
 	}
 
 	/**
 	 * Get previously saved layout from post meta.
+	 *
 	 * @since 7.7
 	 *
 	 * @return mixed
@@ -194,6 +202,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Get path of the custom layout.
+	 *
 	 * @note we keep all plugin layouts in include/templates/pages/layouts/ folder.
 	 * @since 7.7
 	 *
@@ -201,7 +210,7 @@ class Vc_Post_Custom_Layout_Module
 	 * @return string|false
 	 */
 	public function get_custom_layout_path( $layout_name ) {
-		$custom_layout_path = vc_template( '/pages/layouts/' . $layout_name . '.php' );
+		$custom_layout_path = vc_template( '/pages/layouts/' . sanitize_file_name( $layout_name ) . '.php' );
 		if ( ! is_file( $custom_layout_path ) ) {
 			return false;
 		}
@@ -211,6 +220,7 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Get href for the custom layout by layout name.
+	 *
 	 * @since 7.7
 	 *
 	 * @param string $layout_name
@@ -219,7 +229,7 @@ class Vc_Post_Custom_Layout_Module
 	public function get_layout_href_by_layout_name( $layout_name ) {
 		if ( vc_is_page_editable() || vc_is_inline() ) {
 			$frontend_editor = new Vc_Frontend_Editor();
-			$href = $frontend_editor->getInlineUrl( get_the_ID() ) . '&vc_post_custom_layout=' . $layout_name;
+			$href = $frontend_editor->getInlineUrl() . '&vc_post_custom_layout=' . $layout_name;
 		} else {
 			$href = '#';
 		}
@@ -229,16 +239,17 @@ class Vc_Post_Custom_Layout_Module
 
 	/**
 	 * Check if layout active on current location.
+	 *
 	 * @since 7.7
 	 *
 	 * @param string $check_name
-	 * @param string $location settings or welcome
+	 * @param string $location settings or welcome.
 	 * @return bool
 	 */
 	public function check_if_layout_active( $check_name, $location ) {
 		$current_name = $this->get_custom_layout_name();
 
-		if ( $current_name && $current_name == $check_name ) {
+		if ( $current_name && $current_name === $check_name ) {
 			return true;
 		}
 

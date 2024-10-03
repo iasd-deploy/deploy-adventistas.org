@@ -43,6 +43,20 @@ class Call_To_Action extends Base_Widget {
 		return false;
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-call-to-action' ];
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_main_image',
@@ -83,6 +97,10 @@ class Call_To_Action extends Base_Widget {
 					'right' => [
 						'title' => esc_html__( 'Right', 'elementor-pro' ),
 						'icon' => 'eicon-h-align-right',
+					],
+					'below' => [
+						'title' => esc_html__( 'Below', 'elementor-pro' ),
+						'icon' => 'eicon-v-align-bottom',
 					],
 				],
 				'prefix_class' => 'elementor-cta-%s-layout-image-',

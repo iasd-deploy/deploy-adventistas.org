@@ -77,7 +77,7 @@ class Post_Excerpt extends Tag {
 		$post_excerpt = $post->post_excerpt ?? '';
 
 		if ( empty( $post_excerpt ) && ! empty( $post->post_content ) && $this->should_get_excerpt_from_post_content( $settings ) ) {
-			$post_excerpt = apply_filters( 'the_content', get_the_content( null, false, $post ) );
+			$post_excerpt = apply_filters( 'the_excerpt', get_the_excerpt( $post ) );
 		}
 
 		return $post_excerpt;

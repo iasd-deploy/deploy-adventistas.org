@@ -69,8 +69,11 @@ $custom_tag = 'script';
 		<a href="#" class="button vc_restore-button" id="vc_settings-color-restore-default">
 			<?php echo esc_html__( 'Restore Default', 'js_composer' ); ?>
 		</a>
+	<?php elseif ( 'color-picker' === $tab ) : ?>
+	<a href="#" class="button vc_restore-button" id="vc_settings-color-picker-restore-default">
+		<?php echo esc_html__( 'Restore Default', 'js_composer' ); ?>
+	</a>
 	<?php endif ?>
-
 	<?php if ( 'updater' === $tab ) : ?>
 
 		<div class="vc_settings-activation-deactivation">
@@ -124,7 +127,6 @@ $custom_tag = 'script';
 
 	<?php endif ?>
 </form>
-
 
 <?php
 // [modal ai render]

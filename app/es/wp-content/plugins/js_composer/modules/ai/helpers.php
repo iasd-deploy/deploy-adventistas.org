@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Helpers function related to particular module.
  *
  * @note to use you should check if module is enabled
@@ -45,6 +45,7 @@ if ( ! function_exists( 'wpb_get_ai_icon_template' ) ) {
 	 *
 	 * @param string $type
 	 * @param string $field_id
+	 * @param bool $is_include
 	 * @since 7.4
 	 *
 	 * @return mixed

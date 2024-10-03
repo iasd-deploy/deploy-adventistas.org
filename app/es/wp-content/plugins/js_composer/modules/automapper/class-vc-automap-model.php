@@ -1,4 +1,8 @@
 <?php
+/**
+ * Automapper model.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
@@ -14,36 +18,42 @@ if ( ! class_exists( 'Vc_Automap_Model' ) ) {
 	class Vc_Automap_Model {
 		/**
 		 * Option name for storing modules option.
+		 *
 		 * @since 7.7
 		 * @var string
 		 */
 		protected static $option_name = 'vc_automapped_shortcodes';
 		/**
 		 * Option data for storing modules option.
+		 *
 		 * @since 7.7
 		 * @var array
 		 */
 		protected static $option_data;
 		/**
 		 * Shortcode id.
+		 *
 		 * @since 7.7
 		 * @var array|bool
 		 */
 		public $id = false;
 		/**
 		 * Shortcode tag.
+		 *
 		 * @since 7.7
 		 * @var string
 		 */
 		public $tag;
 		/**
 		 * Shortcode data.
+		 *
 		 * @since 7.7
 		 * @var mixed
 		 */
 		protected $data;
 		/**
 		 * Shortcode vars.
+		 *
 		 * @since 7.7
 		 * @var array
 		 */
@@ -54,12 +64,19 @@ if ( ! class_exists( 'Vc_Automap_Model' ) ) {
 			'description',
 			'params',
 		);
+
+		/**
+		 * Shortcode name.
+		 *
+		 * @var string
+		 */
 		public $name;
 
 		/**
 		 * Vc_Automap_Model constructor.
+		 *
+		 * @param array $data
 		 * @since 7.7
-		 * @param $data
 		 */
 		public function __construct( $data ) {
 			$this->loadOptionData();
@@ -74,6 +91,7 @@ if ( ! class_exists( 'Vc_Automap_Model' ) ) {
 
 		/**
 		 * Find all mapped shortcodes.
+		 *
 		 * @since 7.7
 		 * @return array
 		 */
@@ -93,6 +111,7 @@ if ( ! class_exists( 'Vc_Automap_Model' ) ) {
 
 		/**
 		 * Find shortcode by tag.
+		 *
 		 * @since 7.7
 		 * @return array|mixed
 		 */
@@ -109,8 +128,9 @@ if ( ! class_exists( 'Vc_Automap_Model' ) ) {
 
 		/**
 		 * Get shortcode by key.
+		 *
 		 * @since 7.7
-		 * @param $key
+		 * @param string $key
 		 *
 		 * @return mixed
 		 */
@@ -126,8 +146,8 @@ if ( ! class_exists( 'Vc_Automap_Model' ) ) {
 		 * Set shortcode by key.
 		 *
 		 * @since 7.7
-		 * @param $attr
-		 * @param $value
+		 * @param mixed $attr
+		 * @param mixed $value
 		 */
 		public function set( $attr, $value = null ) {
 			if ( is_array( $attr ) ) {

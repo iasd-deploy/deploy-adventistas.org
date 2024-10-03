@@ -39,6 +39,20 @@ class Media_Carousel extends Base {
 		return [ 'media', 'carousel', 'image', 'video', 'lightbox' ];
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'e-swiper', 'widget-carousel' ];
+	}
+
 	protected function render() {
 		$settings = $this->get_active_settings();
 
@@ -188,13 +202,11 @@ class Media_Carousel extends Base {
 				'dynamic' => [
 					'active' => true,
 				],
-				'placeholder' => esc_html__( 'https://your-link.com', 'elementor-pro' ),
 				'show_external' => 'true',
 				'condition' => [
 					'type' => 'image',
 					'image_link_to_type' => 'custom',
 				],
-				'separator' => 'none',
 				'show_label' => false,
 			]
 		);
@@ -301,7 +313,7 @@ class Media_Carousel extends Base {
 			if ( 'custom' === $slide['image_link_to_type'] ) {
 				$this->add_link_attributes( $element_key . '_link', $slide['image_link_to'] );
 			} else {
-				$this->add_render_attribute( $element_key . '_link', 'href', $image_link_to );
+				$this->add_render_attribute( $element_key . '_link', 'href', esc_url( $image_link_to ) );
 
 				$this->add_lightbox_data_attributes( $element_key . '_link', $slide['image']['id'], 'yes', $this->get_id() );
 
@@ -450,6 +462,14 @@ class Media_Carousel extends Base {
 					'px' => [
 						'min' => 20,
 						'max' => 150,
+					],
+					'em' => [
+						'min' => 2,
+						'max' => 15,
+					],
+					'rem' => [
+						'min' => 2,
+						'max' => 15,
 					],
 				],
 				'selectors' => [
@@ -621,6 +641,7 @@ class Media_Carousel extends Base {
 			[
 				'label' => esc_html__( 'Icon Size', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-carousel-image-overlay' => '--e-carousel-image-overlay-icon-size: {{SIZE}}{{UNIT}};',
 				],

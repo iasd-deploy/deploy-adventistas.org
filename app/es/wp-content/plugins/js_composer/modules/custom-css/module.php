@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Module Name: Custom CSS
  * Description: Allow implement custom CSS code to the whole site and individual pages.
  *
@@ -14,10 +14,11 @@ require_once vc_manager()->path( 'MODULES_DIR', 'custom-css/class-vc-custom-css-
 
 /**
  * Module entry point.
+ *
  * @since 7.7
  */
-class Vc_Custom_Css_Module
-{
+class Vc_Custom_Css_Module {
+
 	/**
 	 * Settings object.
 	 *
@@ -27,6 +28,7 @@ class Vc_Custom_Css_Module
 
 	/**
 	 * Module meta key.
+	 *
 	 * @since 7.7
 	 * @var string
 	 */
@@ -42,17 +44,17 @@ class Vc_Custom_Css_Module
 		$this->settings = new Vc_Custom_Css_Module_Settings();
 		$this->settings->init();
 
-		add_action( 'vc_build_page', [$this, 'add_custom_css_to_page'] );
+		add_action( 'vc_build_page', [ $this, 'add_custom_css_to_page' ] );
 
-		add_filter( 'vc_post_meta_list', [$this, 'add_custom_meta_to_update'] );
+		add_filter( 'vc_post_meta_list', [ $this, 'add_custom_meta_to_update' ] );
 
-		add_filter( 'wpb_set_post_custom_meta', [$this, 'set_post_custom_meta'], 10, 2 );
+		add_filter( 'wpb_set_post_custom_meta', [ $this, 'set_post_custom_meta' ], 10, 2 );
 
-		add_action( 'vc_base_register_front_css', [$this, 'register_global_custom_css'] );
+		add_action( 'vc_base_register_front_css', [ $this, 'register_global_custom_css' ] );
 
-		add_action( 'vc_load_iframe_jscss', [$this, 'enqueue_global_custom_css_to_page'] );
+		add_action( 'vc_load_iframe_jscss', [ $this, 'enqueue_global_custom_css_to_page' ] );
 
-		add_action('vc_base_register_front_css', function() {
+		add_action('vc_base_register_front_css', function () {
 			add_action( 'wp_enqueue_scripts', array(
 				$this,
 				'enqueue_global_custom_css_to_page',
@@ -68,15 +70,25 @@ class Vc_Custom_Css_Module
 			$this,
 			'build_custom_css',
 		) );
+
+		add_filter( 'vc_enqueue_backend_editor_js', array(
+			$this,
+			'enqueue_editor_js',
+		));
+
+		add_filter( 'vc_enqueue_frontend_editor_js', array(
+			$this,
+			'enqueue_editor_js',
+		));
 	}
 
 	/**
 	 * Add custom css to page.
 	 *
-	 * since 7.7
+	 * @since 7.7
 	 */
 	public function add_custom_css_to_page() {
-		add_action( 'wp_head', [$this, 'output_custom_css_to_page'] );
+		add_action( 'wp_head', [ $this, 'output_custom_css_to_page' ] );
 	}
 
 	/**
@@ -144,7 +156,7 @@ class Vc_Custom_Css_Module
 	 * Get custom css post meta.
 	 *
 	 * @since 7.7
-	 * @param $id
+	 * @param int $id
 	 * @return mixed
 	 */
 	public function get_custom_css_post_meta( $id ) {
@@ -188,7 +200,12 @@ class Vc_Custom_Css_Module
 		 * */
 		$url = wp_nonce_url( 'admin.php?page=vc-color&build_css=1', 'wpb_js_settings_save_action' );
 		vc_settings()::getFileSystem( $url );
-		/** @var WP_Filesystem_Direct $wp_filesystem */
+
+		/**
+		 * Filesystem API object.
+		 *
+		 * @var WP_Filesystem_Direct $wp_filesystem
+		 */
 		global $wp_filesystem;
 
 		/**
@@ -223,6 +240,19 @@ class Vc_Custom_Css_Module
 		}
 
 		return true;
+	}
 
+	/**
+	 * Load module JS in frontend and backend editor.
+	 *
+	 * @since 7.8
+	 * @param array $dependencies
+	 * @return array
+	 */
+	public function enqueue_editor_js( $dependencies ) {
+		$dependencies[] = 'ace-editor';
+		$dependencies[] = 'wpb-code-editor';
+
+		return $dependencies;
 	}
 }

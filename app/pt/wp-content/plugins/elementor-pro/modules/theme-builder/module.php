@@ -114,15 +114,6 @@ class Module extends Module_Base {
 		return $document;
 	}
 
-	/**
-	 * @deprecated 3.1.0
-	 */
-	public function localize_settings() {
-		Plugin::elementor()->modules_manager->get_modules( 'dev-tools' )->deprecation->deprecated_function( __METHOD__, '3.1.0' );
-
-		return [];
-	}
-
 	public function document_config( $config, $post_id ) {
 		$document = $this->get_document( $post_id );
 
@@ -425,6 +416,20 @@ class Module extends Module_Base {
 		return $result;
 	}
 
+	/**
+	 * Add attributes to the document wrapper element.
+	 *
+	 * @param array $attributes - The document's wrapper element attributes.
+	 * @param Document $document
+	 *
+	 * @return array
+	 */
+	public function add_document_attributes( array $attributes, Document $document ): array {
+		$attributes['data-elementor-post-type'] = $document->get_post()->post_type;
+
+		return $attributes;
+	}
+
 	public function __construct() {
 		parent::__construct();
 
@@ -441,6 +446,7 @@ class Module extends Module_Base {
 		// Editor
 		add_action( 'elementor/editor/init', [ $this, 'on_elementor_editor_init' ] );
 		add_filter( 'elementor/document/config', [ $this, 'document_config' ], 10, 2 );
+		add_filter( 'elementor/document/wrapper_attributes', [ $this, 'add_document_attributes' ], 10, 2 );
 
 		// Admin
 		add_action( 'admin_head', [ $this, 'admin_head' ] );

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Module Name: Automapper
  * Description: Automated shortcode mapping module.
  *
@@ -21,11 +21,14 @@ require_once vc_manager()->path( 'MODULES_DIR', 'automapper/class-vc-automapper-
 
 /**
  * Module entry point.
+ *
  * @since 7.7
  */
-class Vc_Automapper
-{
+class Vc_Automapper {
+
 	/**
+	 * Is automapper disabled.
+	 *
 	 * @depreacted since 7.7
 	 * @var bool
 	 */
@@ -60,7 +63,7 @@ class Vc_Automapper
 
 		is_admin() && ( strpos( (string) vc_request_param( 'action' ), 'vc_automapper' ) !== false ||
 			'vc-automapper' === vc_get_param( 'page' ) ) &&
-		add_action( 'admin_init', [$this, 'automapper_init'] );
+		add_action( 'admin_init', [ $this, 'automapper_init' ] );
 
 		add_action( 'vc_after_mapping', [
 			$this,
@@ -85,6 +88,7 @@ class Vc_Automapper
 
 	/**
 	 * Init automapper module.
+	 *
 	 * @since 7.7
 	 */
 	public function automapper_init() {
@@ -95,6 +99,7 @@ class Vc_Automapper
 
 	/**
 	 * Init ajax module implementation.
+	 *
 	 * @since 7.7
 	 */
 	public function add_ajax_actions() {
@@ -131,7 +136,7 @@ class Vc_Automapper
 		</div>
 		<div class="vc_automapper-toolbar">
 			<a href=javascript:;" class="button button-primary"
-			   id="vc_automapper-add-btn"><?php esc_html_e( 'Map Shortcode', 'js_composer' ); ?></a>
+				id="vc_automapper-add-btn"><?php esc_html_e( 'Map Shortcode', 'js_composer' ); ?></a>
 		</div>
 		<ul class="vc_automapper-list">
 		</ul>
@@ -146,21 +151,21 @@ class Vc_Automapper
 	 * @since 7.7
 	 */
 	public function render_map_form_tpl() {
-		$custom_tag = 'script'; // Maybe use html shadow dom or ajax response for templates
+		$custom_tag = 'script'; // Maybe use html shadow dom or ajax response for templates.
 		?>
 		<<?php echo esc_attr( $custom_tag ); ?> type="text/html" id="vc_automapper-add-form-tpl">
 		<label for="vc_atm-shortcode-string"
-			   class="vc_info"><?php esc_html_e( 'Shortcode string', 'js_composer' ); ?></label>
+				class="vc_info"><?php esc_html_e( 'Shortcode string', 'js_composer' ); ?></label>
 
 		<div class="vc_wrapper">
 			<div class="vc_string">
 				<input id="vc_atm-shortcode-string"
-					   placeholder="<?php esc_attr_e( 'Please enter valid shortcode', 'js_composer' ); ?>"
-					   type="text" class="vc_atm-string">
+						placeholder="<?php esc_attr_e( 'Please enter valid shortcode', 'js_composer' ); ?>"
+						type="text" class="vc_atm-string">
 			</div>
 			<div class="vc_buttons">
 				<a href="#" id="vc_atm-parse-string"
-				   class="button button-primary vc_parse-btn"><?php esc_attr_e( 'Parse Shortcode', 'js_composer' ); ?></a>
+					class="button button-primary vc_parse-btn"><?php esc_attr_e( 'Parse Shortcode', 'js_composer' ); ?></a>
 				<a href="#" class="button vc_atm-cancel"><?php esc_attr_e( 'Cancel', 'js_composer' ); ?></a>
 			</div>
 		</div>
@@ -197,7 +202,8 @@ class Vc_Automapper
 			<div class="vc_field vc_category">
 				<div class="wpb_settings-title">
 					<label for="vc_atm-category"><?php esc_html_e( 'Category:', 'js_composer' ); ?></label>
-					<?php $category_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Comma separated categories names', 'js_composer' )] );
+					<?php
+					$category_info = vc_get_template( 'editors/partials/param-info.tpl.php', [ 'description' => esc_html__( 'Comma separated categories names', 'js_composer' ) ] );
 					// phpcs:ignore
 					if ( is_string( $category_info ) ) { echo $category_info; }
 					?>
@@ -219,13 +225,13 @@ class Vc_Automapper
 		<div class="vc_wrapper">
 			<h4 class="vc_h"><?php esc_html_e( 'Shortcode Parameters', 'js_composer' ); ?></h4>
 			<a href="#" id="vc_atm-add-param"
-			   class="button vc_add-param">+ <?php esc_html_e( 'Add Param', 'js_composer' ); ?></a>
+				class="button vc_add-param">+ <?php esc_html_e( 'Add Param', 'js_composer' ); ?></a>
 
 			<div class="vc_params" id="vc_atm-params-list"></div>
 		</div>
 		<div class="vc_buttons">
 			<a href="#" id="vc_atm-save"
-			   class="button button-primary"><?php esc_html_e( 'Save Changes', 'js_composer' ); ?></a>
+				class="button button-primary"><?php esc_html_e( 'Save Changes', 'js_composer' ); ?></a>
 			<a href="#" class="button vc_atm-cancel"><?php esc_html_e( 'Cancel', 'js_composer' ); ?></a>
 			<a href="#" class="button vc_atm-delete"><?php esc_html_e( 'Delete', 'js_composer' ); ?></a>
 		</div>
@@ -255,28 +261,30 @@ class Vc_Automapper
 										class="vc_param-name"
 										data-system="true">
 								<span class="description"
-									  style="display: none;"><?php esc_html_e( 'Use only letters, numbers and underscore.', 'js_composer' ); ?></span>
+										style="display: none;"><?php esc_html_e( 'Use only letters, numbers and underscore.', 'js_composer' ); ?></span>
 								<# } else { #>
-								<?php $param_name_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Please use only letters, numbers and underscore.', 'js_composer' )] );
+								<?php
+								$param_name_info = vc_get_template( 'editors/partials/param-info.tpl.php', [ 'description' => esc_html__( 'Please use only letters, numbers and underscore.', 'js_composer' ) ] );
 								// phpcs:ignore
 								if ( is_string( $param_name_info ) ) { echo $param_name_info; }
 								?>
 								</div>
 								<input type="text" name="param_name" value="{{ param_name }}"
-									   placeholder="<?php esc_attr_e( 'Required value', 'js_composer' ); ?>"
-									   class="vc_param-name">
+										placeholder="<?php esc_attr_e( 'Required value', 'js_composer' ); ?>"
+										class="vc_param-name">
 								<# } #>
 							</div>
 							<div class="vc_heading vc_param-field">
 								<div class="wpb_settings-title">
 									<label><?php esc_html_e( 'Heading', 'js_composer' ); ?></label>
-									<?php $heading_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Heading for field in shortcode edit form.', 'js_composer' )] );
+									<?php
+									$heading_info = vc_get_template( 'editors/partials/param-info.tpl.php', [ 'description' => esc_html__( 'Heading for field in shortcode edit form.', 'js_composer' ) ] );
 									// phpcs:ignore
 									if ( is_string( $heading_info ) ) { echo $heading_info; }
 									?>
 								</div>
 								<input type="text" name="heading" value="{{ heading }}"
-									   placeholder="<?php esc_attr_e( 'Input heading', 'js_composer' ); ?>"
+										placeholder="<?php esc_attr_e( 'Input heading', 'js_composer' ); ?>"
 								<# if ( 'hidden' === type) { #>
 								disabled="disabled"
 								<# } #>>
@@ -284,7 +292,8 @@ class Vc_Automapper
 							<div class="vc_type vc_param-field">
 								<div class="wpb_settings-title">
 									<label><?php esc_html_e( 'Field type', 'js_composer' ); ?></label>
-									<?php $field_type_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Field type for shortcode edit form.', 'js_composer' )] );
+									<?php
+									$field_type_info = vc_get_template( 'editors/partials/param-info.tpl.php', [ 'description' => esc_html__( 'Field type for shortcode edit form.', 'js_composer' ) ] );
 									// phpcs:ignore
 									if ( is_string( $field_type_info ) ) { echo $field_type_info; }
 									?>
@@ -309,7 +318,8 @@ class Vc_Automapper
 							<div class="vc_value vc_param-field">
 								<div class="wpb_settings-title">
 									<label><?php esc_html_e( 'Default value', 'js_composer' ); ?></label>
-									<?php $default_value_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Default value or list of values for dropdown type (Note: separate by comma).', 'js_composer' )] );
+									<?php
+									$default_value_info = vc_get_template( 'editors/partials/param-info.tpl.php', [ 'description' => esc_html__( 'Default value or list of values for dropdown type (Note: separate by comma).', 'js_composer' ) ] );
 									// phpcs:ignore
 									if ( is_string( $default_value_info ) ) { echo $default_value_info; }
 									?>
@@ -319,7 +329,8 @@ class Vc_Automapper
 							<div class="description vc_param-field">
 								<div class="wpb_settings-title">
 									<label><?php esc_html_e( 'Description', 'js_composer' ); ?></label>
-									<?php $description_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Enter description for parameter.', 'js_composer' )] );
+									<?php
+									$description_info = vc_get_template( 'editors/partials/param-info.tpl.php', [ 'description' => esc_html__( 'Enter description for parameter.', 'js_composer' ) ] );
 									// phpcs:ignore
 									if ( is_string( $description_info ) ) { echo $description_info; }
 									?>
@@ -345,7 +356,7 @@ class Vc_Automapper
 	 * @since 7.7
 	 */
 	public function render_templates() {
-		$custom_tag = 'script'; // Maybe use ajax resonse for template
+		$custom_tag = 'script'; // Maybe use ajax resonse for template.
 		?>
 		<<?php echo esc_attr( $custom_tag ); ?> type="text/html" id="vc_automapper-item-tpl">
 		<label class="vc_automapper-edit-btn">{{ name }}</label>
@@ -360,6 +371,7 @@ class Vc_Automapper
 
 	/**
 	 * CRUD create action
+	 *
 	 * @since 7.7
 	 */
 	public function create() {
@@ -377,6 +389,7 @@ class Vc_Automapper
 
 	/**
 	 * CRUD update action
+	 *
 	 * @since 7.7
 	 */
 	public function update() {
@@ -398,6 +411,7 @@ class Vc_Automapper
 
 	/**
 	 * CRUD delete action
+	 *
 	 * @since 7.7
 	 */
 	public function delete() {
@@ -414,6 +428,7 @@ class Vc_Automapper
 
 	/**
 	 * CRUD read action
+	 *
 	 * @since 7.7
 	 */
 	public function read() {
@@ -429,7 +444,7 @@ class Vc_Automapper
 	 * Ajax result output
 	 *
 	 * @since 7.7
-	 * @param $data
+	 * @param mixed $data
 	 */
 	public function result( $data ) {
 		if ( false !== $data ) {
@@ -451,6 +466,8 @@ class Vc_Automapper
 	}
 
 	/**
+	 * Check automapper is disabled.
+	 *
 	 * @depreacted 7.7
 	 * @return bool
 	 */
@@ -470,9 +487,9 @@ class Vc_Automapper
 			vc_map( array(
 				'name' => $shortcode->name,
 				'base' => self::prepare_shortcode_tags( $shortcode->tag, WPBMap::getShortCodes() ),
-				'category' => (new self)->build_categories_array( $shortcode->category ),
+				'category' => ( new self() )->build_categories_array( $shortcode->category ),
 				'description' => $shortcode->description,
-				'params' => (new self)->build_params_array( $shortcode->params ),
+				'params' => ( new self() )->build_params_array( $shortcode->params ),
 				'show_settings_on_create' => ! empty( $shortcode->params ),
 				'atm' => true,
 				'icon' => 'icon-wpb-atm',
@@ -484,8 +501,8 @@ class Vc_Automapper
 	 * Adding Visual Composer Custom Shortcode prefix for custom shortcodes to prevent conflicts.
 	 *
 	 * @since 7.7
-	 * @param $tag
-	 * @param $shortcodes
+	 * @param string $tag
+	 * @param array $shortcodes
 	 * @return mixed|string
 	 */
 	public static function prepare_shortcode_tags( $tag, $shortcodes ) {
@@ -502,7 +519,7 @@ class Vc_Automapper
 	 * Clear custom shortcode suffixes from content.
 	 *
 	 * @since 7.7
-	 * @param $content
+	 * @param string $content
 	 * @return array|string|string[]|null
 	 */
 	public function clear_shortcode_suffix( $content ) {
@@ -513,7 +530,7 @@ class Vc_Automapper
 	 * Clear shortcode suffix on render.
 	 *
 	 * @since 7.7
-	 * @param $shortcode
+	 * @param array $shortcode
 	 * @return mixed
 	 */
 	public function clear_render_shortcode_suffix( $shortcode ) {
@@ -525,6 +542,7 @@ class Vc_Automapper
 	/**
 	 * Clear render output suffix.
 	 *
+	 * @param string $tag
 	 * @since 7.7
 	 * @return string
 	 */
@@ -536,24 +554,24 @@ class Vc_Automapper
 	 * Build categories array.
 	 *
 	 * @since 7.7
-	 * @param $string
+	 * @param string $init_list
 	 * @return false|string
 	 */
-	public function build_categories_array( $string ) {
-		return explode( ',', preg_replace( '/\,\s+/', ',', trim( $string ) ) );
+	public function build_categories_array( $init_list ) {
+		return explode( ',', preg_replace( '/\,\s+/', ',', trim( $init_list ) ) );
 	}
 
 	/**
 	 * Build params array.
 	 *
 	 * @since 7.7
-	 * @param $array
+	 * @param array $init_params
 	 * @return array
 	 */
-	public function build_params_array( $array ) {
+	public function build_params_array( $init_params ) {
 		$params = array();
-		if ( is_array( $array ) ) {
-			foreach ( $array as $param ) {
+		if ( is_array( $init_params ) ) {
+			foreach ( $init_params as $param ) {
 				if ( 'dropdown' === $param['type'] ) {
 					$param['value'] = explode( ',', preg_replace( '/\,\s+/', ',', trim( $param['value'] ) ) );
 				}

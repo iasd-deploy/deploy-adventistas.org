@@ -1,4 +1,10 @@
 <?php
+/**
+ * Seo settings for individual posts.
+ *
+ * @since 7.4
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
@@ -11,12 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Vc_Post_Seo {
 
 	/**
+	 * Editor instance.
+	 *
 	 * @since 7.4
 	 * @var Vc_Editor
 	 */
 	protected $editor;
 
 	/**
+	 * Class constructor.
+	 *
 	 * @since 7.4
 	 * @param Vc_Editor $editor
 	 */
@@ -25,6 +35,8 @@ class Vc_Post_Seo {
 	}
 
 	/**
+	 * Get editor instance.
+	 *
 	 * @since 7.4
 	 * @return Vc_Editor
 	 */
@@ -34,6 +46,7 @@ class Vc_Post_Seo {
 
 	/**
 	 * Render popup template.
+	 *
 	 * @since 7.4
 	 */
 	public function render_ui_template() {

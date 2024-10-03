@@ -5,16 +5,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** @var bool $is_about_page */
 ?>
-<img class="vc-featured-img" src="<?php echo esc_url( vc_asset_url( 'vc/wpb-7-7-about.png' ) ); ?>"/>
+<img class="vc-featured-img" src="<?php echo esc_url( vc_asset_url( 'vc/wpb-7-9-about.png' ) ); ?>"/>
 
 <div class="vc-feature-text">
-	<h3><?php esc_html_e( 'Module Manager, AI in the Classic Editor & Element Caching', 'js_composer' ); ?></h3>
+	<h3><?php esc_html_e( 'Introducing New Features in 7.9 Release', 'js_composer' ); ?></h3>
 
-	<p><?php esc_html_e( 'Manage which modules (like Custom Code, Skin Builder, Shortcode Mapper, etc.) are loaded and available in the editor. Use WPBakery AI in the Classic Editor to generate, improve, and translate texts, and enjoy improved editor performance with element caching after every edit.', 'js_composer' ); ?></p>
+	<p><?php esc_html_e( 'Enjoy a modern color picker with custom presets, easy AI content copying, and quick access to your favorite elements. Set minimum height for Rows or Sections, and control scroll behavior via the Module Manager.', 'js_composer' ); ?></p>
 	<ul>
-		<li><?php esc_html_e( 'Control modules with Module Manager', 'js_composer' ); ?></li>
-		<li><?php esc_html_e( 'Utilize WPBakery AI in the Classic Editor', 'js_composer' ); ?></li>
-		<li><?php esc_html_e( 'Caching for Element Settings ', 'js_composer' ); ?></li>
+		<li><?php esc_html_e( 'Utilize the advanced color picker with custom presets', 'js_composer' ); ?></li>
+		<li><?php esc_html_e( 'Copy and paste AI-generated content anywhere', 'js_composer' ); ?></li>
+		<li><?php esc_html_e( 'Quickly access your most-used elements', 'js_composer' ); ?></li>
+		<li><?php esc_html_e( 'Set min-height for Rows or Sections', 'js_composer' ); ?></li>
+		<li><?php esc_html_e( 'Control scroll behavior via the Module Manager', 'js_composer' ); ?></li>
 	</ul>
 	<?php
 	$tabs = vc_settings()->getTabs();

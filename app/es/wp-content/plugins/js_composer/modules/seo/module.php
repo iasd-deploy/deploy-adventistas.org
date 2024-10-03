@@ -1,7 +1,8 @@
 <?php
-/*
+/**
  * Module Name: SEO
  * Description: Correspond for SEO plugin functionality.
+ *
  * @since 7.7
  */
 
@@ -11,12 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Module entry point.
+ *
  * @since 7.7
  */
-class Vc_Seo_Module
-{
+class Vc_Seo_Module {
 	/**
 	 * Post plugin settings seo meta.
+	 *
 	 * @since 7.7
 	 * @var array
 	 */
@@ -24,6 +26,7 @@ class Vc_Seo_Module
 
 	/**
 	 * Post plugin settings seo meta key.
+	 *
 	 * @since 7.7
 	 * @var string
 	 */
@@ -33,7 +36,7 @@ class Vc_Seo_Module
 	 * Init module implementation.
 	 */
 	public function init() {
-		add_action( 'wp', function() {
+		add_action( 'wp', function () {
 			if ( vc_mode() !== 'page' || ! is_singular() ) {
 				return;
 			}
@@ -54,21 +57,21 @@ class Vc_Seo_Module
 			wp_send_json_success( $is_key_phrase_in_other_posts );
 		} );
 
-		add_action( 'vc_nav_control_list', [$this, 'add_seo_to_nav_control_list'], 10, 1 );
+		add_action( 'vc_nav_control_list', [ $this, 'add_seo_to_nav_control_list' ], 10, 1 );
 
-		add_action( 'vc_editor_footer', [$this, 'add_setting_popup'], 10, 1 );
+		add_action( 'vc_editor_footer', [ $this, 'add_setting_popup' ], 10, 1 );
 
-		add_filter( 'vc_nav_controls', [$this, 'add_seo_button_to_nav_controls'], 10, 1 );
+		add_filter( 'vc_nav_controls', [ $this, 'add_seo_button_to_nav_controls' ], 10, 1 );
 
-		add_filter( 'vc_nav_front_controls', [$this, 'add_seo_button_to_nav_controls'], 10, 1 );
+		add_filter( 'vc_nav_front_controls', [ $this, 'add_seo_button_to_nav_controls' ], 10, 1 );
 
-		add_filter( 'vc_post_meta_list', [$this, 'add_custom_meta_to_update'] );
+		add_filter( 'vc_post_meta_list', [ $this, 'add_custom_meta_to_update' ] );
 
-		add_filter( 'vc_before_update_post_data', [$this, 'set_post_slug'] );
+		add_filter( 'vc_before_update_post_data', [ $this, 'set_post_slug' ] );
 
 		add_filter( 'wp_insert_post_data', [ $this, 'change_post_fields' ], 10, 2 );
 
-		add_filter( 'wpb_set_post_custom_meta', [$this, 'set_post_custom_meta'], 10, 2 );
+		add_filter( 'wpb_set_post_custom_meta', [ $this, 'set_post_custom_meta' ], 10, 2 );
 	}
 
 	/**
@@ -148,6 +151,7 @@ class Vc_Seo_Module
 
 	/**
 	 * Presents the head in the front-end. Resets wp_query if it's not the main query.
+	 *
 	 * @since 7.7
 	 */
 	public function add_seo_head() {
@@ -167,6 +171,7 @@ class Vc_Seo_Module
 
 	/**
 	 * Output seo tags in the head.
+	 *
 	 * @since 7.7
 	 */
 	public function output_seo_head() {
@@ -178,6 +183,7 @@ class Vc_Seo_Module
 
 	/**
 	 * Output meta description.
+	 *
 	 * @since 7.7
 	 */
 	public function output_meta_description() {
@@ -223,6 +229,7 @@ class Vc_Seo_Module
 
 	/**
 	 * Output meta facebook.
+	 *
 	 * @since 7.7
 	 */
 	public function output_meta_facebook() {
@@ -287,6 +294,7 @@ class Vc_Seo_Module
 
 	/**
 	 * Output meta X (twitter).
+	 *
 	 * @since 7.7
 	 */
 	public function output_meta_twitter() {
@@ -355,6 +363,8 @@ class Vc_Seo_Module
 	/**
 	 * Add seo button to nav controls.
 	 *
+	 * @param array $controls
+	 *
 	 * @since 7.7
 	 * @return array
 	 */
@@ -398,6 +408,12 @@ class Vc_Seo_Module
 			return $post;
 		}
 
+		// in case when we update post permalink through native wp way.
+		$post_seo_meta = $this->get_plugin_seo_post_meta();
+		if ( ! empty( $post_seo_meta['slug'] ) && $post_seo_meta['slug'] === $post_seo['slug'] ) {
+			return $post;
+		}
+
 		if ( is_array( $post ) ) {
 			$slug = wp_unique_post_slug(
 				sanitize_title( $post_seo['slug'] ),
@@ -429,10 +445,9 @@ class Vc_Seo_Module
 	 * @param array $post_fields
 	 * @param array $post_array
 	 * @return array
-	 *
 	 */
 	public function change_post_fields( $post_fields, $post_array ) {
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || vc_is_inline() ) {
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || vc_is_inline() ) {
 			return $post_fields;
 		}
 

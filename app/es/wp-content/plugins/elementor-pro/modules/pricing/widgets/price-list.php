@@ -37,6 +37,20 @@ class Price_List extends Base_Widget {
 		return false;
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-pricing' ];
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_list',
@@ -656,7 +670,7 @@ class Price_List extends Base_Widget {
 						item_open_wrap = '<li class="elementor-price-list-item">',
 						item_close_wrap = '</li>';
 					if ( item.link.url ) {
-						item_open_wrap = '<li><a href="' + _.escape( item.link.url ) + '" class="elementor-price-list-item">';
+						item_open_wrap = '<li><a href="' + elementor.helpers.sanitizeUrl( item.link.url ) + '" class="elementor-price-list-item">';
 						item_close_wrap = '</a></li>';
 					}
 

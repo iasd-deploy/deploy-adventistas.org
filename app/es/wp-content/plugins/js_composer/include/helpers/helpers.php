@@ -414,6 +414,7 @@ function vc_field_attached_images( $images = array() ) {
  * @since 4.2
  */
 function wpb_removeNotExistingImgIDs( $param_value ) { // phpcs:ignore
+	$param_value = is_null( $param_value ) ? '' : $param_value;
 	$tmp = explode( ',', $param_value );
 	$return_ar = array();
 	foreach ( $tmp as $id ) {
@@ -1473,10 +1474,7 @@ function wpb_remove_custom_html( $content ) {
 	$is_rest_request = ( defined( 'REST_REQUEST' ) && REST_REQUEST );
 	if ( ! empty( $content ) && ! $is_rest_request && ! vc_user_access()->part( 'unfiltered_html' )->checkStateAny( true, null )->get() ) {
 		// html encoded shortcodes
-		$regex = vc_get_shortcode_regex( implode( '|', apply_filters( 'wpb_custom_html_elements', array(
-			'vc_raw_html',
-			'vc_raw_js',
-		) ) ) );
+		$regex = vc_get_shortcode_regex( implode( '|', wpb_get_elements_with_custom_html() ) );
 
 		// custom on click
 		$button_regex = vc_get_shortcode_regex( 'vc_btn' );
@@ -1528,3 +1526,77 @@ if ( ! function_exists( 'wpb_get_post_id' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wpb_get_elements_with_custom_html' ) ) {
+	/**
+	 * Get elements list that use custom html in our plugin core.
+	 * @note it's elements lists that can edit only users roles that have unfiltered_html capability.
+	 * @note admin can set access to unfiltered_html cap in our role manager plugin settings for individual roles.
+	 *
+	 * @return array
+	 * @since 7.8
+	 */
+	function wpb_get_elements_with_custom_html() {
+		return apply_filters('wpb_custom_html_elements', [
+			'vc_raw_html',
+			'vc_raw_js',
+			'vc_gmaps',
+		]);
+	}
+}
+
+if ( ! function_exists( 'wpb_is_regex_valid' ) ) {
+	/**
+	 * Check if regex string is valid.
+	 *
+	 * @since  7.8
+	 * @return bool
+	 */
+	function wpb_is_regex_valid( $regex ) {
+        // @phpcs:ignore
+        return false !== @preg_match( $regex, '' );
+	}
+}
+
+if ( ! function_exists( 'wpb_get_editor_status' ) ) {
+	/**
+	 * Get post plugin editor status for post.
+	 *
+	 * @param int $post_id
+	 *
+	 * @since  7.8
+	 * @return bool
+	 */
+	function wpb_get_post_editor_status( $post_id ) {
+		if ( ! is_int( $post_id ) ) {
+			return false;
+		}
+
+		$status = get_post_meta( $post_id, '_wpb_vc_js_status', true );
+
+		if ( 'true' === $status ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+/**
+ * Formats a CSS value by ensuring it has a valid unit.
+ * If no unit is provided, defaults to 'px'.
+ *
+ * @param string $value The CSS value to format, e.g., '20', '15em'.
+ * @return string The formatted value with a unit, e.g., '20px', '15em'.
+ * @since 7.9
+ */
+function wpb_format_with_css_unit( $value ) {
+	if ( $value ) {
+		$value = preg_replace( '/\s+/', '', $value );
+		$pattern = '/^(\d*(?:\.\d+)?)\s*(px|\%|in|cm|mm|em|rem|ex|pt|pc|vw|vh|vmin|vmax)?$/';
+		preg_match( $pattern, $value, $matches );
+		$numeric_value = isset( $matches[1] ) ? (float) $matches[1] : (float) $value;
+		$unit = isset( $matches[2] ) ? $matches[2] : 'px';
+		return $numeric_value . $unit;
+	}
+	return '';
+}

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Autoload lib related to our plugin design options functionality.
+ *
+ * @note we require our autoload files everytime and everywhere after plugin load.
+ * @depreacted 7.7
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
@@ -33,25 +40,29 @@ function vc_custom_css_admin_notice() {
 }
 
 /**
- * @param $submitButtonAttributes
+ * Attributes for colors.
+ *
+ * @param array $submit_button_attributes
  * @return mixed
  * @deprecated 7.7
  */
-function vc_page_settings_tab_color_submit_attributes( $submitButtonAttributes ) {
+function vc_page_settings_tab_color_submit_attributes( $submit_button_attributes ) {
 	_deprecated_function( __FUNCTION__, '7.7', "vc_modules_manager()->get_module('vc-design-options')->page_settings_tab_color_submit_attributes()" );
 	if ( ! vc_modules_manager()->is_module_on( 'vc-design-options' ) ) {
 		vc_modules_manager()->turn_on( 'vc-design-options' );
 	}
-	return vc_modules_manager()->get_module( 'vc-design-options' )->page_settings_tab_color_submit_attributes( $submitButtonAttributes );
+	return vc_modules_manager()->get_module( 'vc-design-options' )->page_settings_tab_color_submit_attributes( $submit_button_attributes );
 }
 
 /**
+ * Load module settings.
+ *
  * @deprecated 7.7
  */
 function vc_page_settings_desing_options_load() {
-	_deprecated_function( __FUNCTION__, '7.7', "vc_modules_manager()->get_module('vc-design-options')->page_settings_design_options_load()" );
+	_deprecated_function( __FUNCTION__, '7.7', "vc_modules_manager()->get_module('vc-design-options')->load_module_settings_assets()" );
 	if ( ! vc_modules_manager()->is_module_on( 'vc-design-options' ) ) {
 		vc_modules_manager()->turn_on( 'vc-design-options' );
 	}
-	vc_modules_manager()->get_module( 'vc-design-options' )->page_settings_design_options_load();
+	vc_modules_manager()->get_module( 'vc-design-options' )->load_module_settings_assets();
 }

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Code generator for AI engine.
+ *
+ * @since 7.2
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
@@ -12,6 +18,7 @@ class Vc_Ai_Code_Generator {
 
 	/**
 	 * AI API connector instance.
+	 *
 	 * @since 7.2
 	 * @var Vc_Ai_Api_Connector
 	 */
@@ -19,6 +26,7 @@ class Vc_Ai_Code_Generator {
 
 	/**
 	 * Part of url api that for a current generator.
+	 *
 	 * @since 7.2
 	 * @var string
 	 */
@@ -26,6 +34,7 @@ class Vc_Ai_Code_Generator {
 
 	/**
 	 * Vc_Ai_Text_Generator constructor.
+	 *
 	 * @since 7.2
 	 */
 	public function __construct() {
@@ -36,6 +45,7 @@ class Vc_Ai_Code_Generator {
 	 * Generate content with AI from initial data.
 	 *
 	 * @since 7.2
+	 * @param array $data
 	 * @return string | WP_Error
 	 */
 	public function generate( $data ) {
@@ -49,8 +59,7 @@ class Vc_Ai_Code_Generator {
 
 		$data = $this->edit_data_before_request( $data );
 
-		$is_messaged_data = true;
-		return $this->api_connector->get_api_response_data( $data, $this->api_url_part, $is_messaged_data );
+		return $this->api_connector->set_api_response_data( $data, $this->api_url_part )->get_message_from_data();
 	}
 
 	/**

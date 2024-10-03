@@ -16,12 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		// phpcs:ignore
 		if ( is_string( $content_type_info ) ) { echo $content_type_info; }
 		?>
-	</div>	
+	</div>
 	<div class="edit_form_line">
 		<select name="contentType" class="wpb_vc_param_value wpb-input wpb-select source dropdown">
 			<?php
 			foreach ( $ai_modal_controller->get_content_generate_variant() as $slug => $value ) {
-                // phpcs:ignore
+				// phpcs:ignore
 				echo '<option value="' . esc_html( $slug ) . '"' .  $ai_modal_controller->output_optionality_data_attr('content_type', $slug) . '>' . esc_html( $value ) . '</option>';
 			}
 			?>
@@ -107,6 +107,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php $output_info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'WPBakery AI generated content will appear here.', 'js_composer' )] );
 		// phpcs:ignore
 		if ( is_string( $output_info ) ) { echo $output_info; }
+		?>
+		<?php
+			$icon = vc_get_template( 'editors/partials/copy-output.tpl.php', [] );
+			echo wp_kses_post( $icon );
 		?>
 	</div>
 	<div class="edit_form_line">
