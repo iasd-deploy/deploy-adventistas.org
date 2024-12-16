@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.24.0 - 01-10-2024 */
+/*! elementor-pro - v3.25.0 - 10-12-2024 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["elements-handlers"],{
 
@@ -67,7 +67,7 @@ const extendDefaultHandlers = defaultHandlers => {
     ...handlers
   };
 };
-elementorProFrontend.on('elementor-pro/modules/init:before', () => {
+elementorProFrontend.on('elementor-pro/modules/init/before', () => {
   elementorFrontend.hooks.addFilter('elementor-pro/frontend/handlers', extendDefaultHandlers);
 });
 
@@ -234,11 +234,15 @@ class ModalKeyboardHandler {
     (0, _defineProperty2.default)(this, "firstFocusableElement", null);
     (0, _defineProperty2.default)(this, "modalTriggerElement", null);
     this.config = elementConfig;
+    this.changeFocusAfterAnimation = false;
   }
   onOpenModal() {
     this.initializeElements();
     this.setTriggerElement();
-    this.changeFocus();
+    this.changeFocusAfterAnimation = 'popup' === this.config.modalType && !!this.config.hasEntranceAnimation;
+    if (!this.changeFocusAfterAnimation) {
+      this.changeFocus();
+    }
     this.bindEvents();
   }
   onCloseModal() {
@@ -249,6 +253,9 @@ class ModalKeyboardHandler {
   }
   bindEvents() {
     elementorFrontend.elements.$window.on('keydown', this.onKeyDownPressed.bind(this));
+    if (this.changeFocusAfterAnimation) {
+      this.config.$modalElements.on('animationend animationcancel', this.changeFocus.bind(this));
+    }
     if ('popup' === this.config.modalType) {
       this.onPopupCloseEvent();
     }
@@ -748,7 +755,7 @@ class BaseFilterFrontendModule extends elementorModules.Module {
     const widgetFilters = this.loopWidgetsStore.getConsolidatedFilters(widgetId),
       helpers = this.getFilterHelperAttributes(filterId);
     const data = {
-      post_id: elementorFrontend.config.post.id || this.getClosestDataElementorId(document.querySelector(`.elementor-element-${widgetId}`)),
+      post_id: this.getClosestDataElementorId(document.querySelector(`.elementor-element-${widgetId}`)) || elementorFrontend.config.post.id,
       widget_filters: widgetFilters,
       widget_id: widgetId,
       pagination_base_url: helpers.baseUrl
@@ -771,8 +778,8 @@ class BaseFilterFrontendModule extends elementorModules.Module {
    * @return {string} elementor id of parent
    */
   getClosestDataElementorId(element) {
-    const closestParent = element.closest('[data-elementor-id]');
-    return closestParent ? closestParent.getAttribute('data-elementor-id') : 0;
+    const closestParent = element?.closest('[data-elementor-id]');
+    return closestParent ? closestParent.getAttribute('data-elementor-id') : null;
   }
 
   /**
@@ -1448,10 +1455,20 @@ class _default extends elementorModules.frontend.Document {
       this.setCloseButtonPosition();
     }
   }
+  getEntranceAnimationDuration() {
+    const settings = this.getDocumentSettings();
+    const entranceAnimation = settings?.entrance_animation;
+    if (!entranceAnimation || '' === entranceAnimation || 'none' === entranceAnimation) {
+      return 0;
+    }
+    const entranceAnimationDuration = settings?.entrance_animation_duration?.size;
+    return !!entranceAnimationDuration ? Number(entranceAnimationDuration) : 0;
+  }
   getKeyboardHandlingConfig() {
     return {
       $modalElements: this.getModal().getElements('widgetContent'),
       $elementWrapper: this.$element,
+      hasEntranceAnimation: 0 !== this.getEntranceAnimationDuration(),
       modalType: 'popup',
       modalId: this.$element.data('elementor-id')
     };
@@ -1481,9 +1498,12 @@ class _default extends elementorModules.Module {
     elementorFrontend.hooks.addAction('elementor/frontend/documents-manager/init-classes', this.addDocumentClass);
     elementorFrontend.elementsHandler.attachHandler('form', () => __webpack_require__.e(/*! import() | popup */ "popup").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/forms-action */ "../modules/popup/assets/js/frontend/handlers/forms-action.js")));
     elementorFrontend.on('components:init', () => this.onFrontendComponentsInit());
-    if (!elementorFrontend.isEditMode() && !elementorFrontend.isWPPreviewMode()) {
+    if (this.shouldSetViewsAndSessions()) {
       this.setViewsAndSessions();
     }
+  }
+  shouldSetViewsAndSessions() {
+    return !elementorFrontend.isEditMode() && !elementorFrontend.isWPPreviewMode() && ElementorProFrontendConfig.popup.hasPopUps;
   }
   addDocumentClass(documentsManager) {
     documentsManager.addDocumentClass('popup', _document.default);
