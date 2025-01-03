@@ -26,6 +26,13 @@ class Lat_Lng {
 	}
 
 	/**
+	 * Set $done to false to be able to run preload_groups() more than once
+	 */
+	public function not_done() {
+		$this->done = false;
+	}
+
+	/**
 	 * Get source instance
 	 *
 	 * @return false|Source\Base
@@ -79,7 +86,7 @@ class Lat_Lng {
 		}
 
 		foreach ( $sources as $source ) {
-			
+
 			// Preload non-Engine fields
 			if ( $source->is_custom() && ! empty( $custom_fields ) ) {
 				$source->preload_hooks( $custom_fields );
@@ -182,6 +189,8 @@ class Lat_Lng {
 			$coord = $this->get( $post, $address, implode( '+', $fields ) );
 
 		}
+
+		do_action( 'jet-engine/maps-listings/preload/after-group-preload', $post_id );
 
 		$this->done = true;
 
@@ -335,8 +344,10 @@ class Lat_Lng {
 			return false;
 		}
 
-		$meta = $source->get_field_coordinates( $post, $location, $field_name );
+		$field_name = apply_filters( 'jet-engine/maps-listing/preload/field-name', $field_name, $post );
 
+		$meta = $source->get_field_coordinates( $post, $location, $field_name );
+		
 		if ( ! empty( $meta ) && $location_hash === $meta['key'] ) {
 			return $this->maybe_add_offset( $meta['coord'] );
 		}
@@ -383,6 +394,8 @@ class Lat_Lng {
 
 	public function update_address_coord_field( $post, $field_name, $location_hash, $coord ) {
 
+		$field_name = apply_filters( 'jet-engine/maps-listing/preload/field-name', $field_name, $post );
+		
 		$value = array(
 			'key'   => $location_hash,
 			'coord' => $coord,

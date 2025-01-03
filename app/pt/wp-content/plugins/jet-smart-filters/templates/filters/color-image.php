@@ -28,8 +28,9 @@ $current = $this->get_current_filter_value( $args );
 	echo '<form class="jet-color-image-list-wrapper">';
 	echo '<fieldset>';
 	echo '<legend style="display:none;">' . $accessibility_label . '</legend>';
-	foreach ( $options as $value => $option ) {
+	foreach ( $options as $optionKey => $optionData ) {
 		$checked = '';
+		extract( jet_smart_filters()->utils->сreate_option_data( $optionKey, $optionData ), EXTR_OVERWRITE );
 
 		if ( $current ) {
 			if ( is_array( $current ) && in_array( $value, $current ) ) {

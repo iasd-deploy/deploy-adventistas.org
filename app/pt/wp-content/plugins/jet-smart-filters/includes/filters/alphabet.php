@@ -54,6 +54,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Alphabet_Filter' ) ) {
 			$content_provider     = isset( $args['content_provider'] ) ? $args['content_provider'] : false;
 			$additional_providers = isset( $args['additional_providers'] ) ? $args['additional_providers'] : false;
 			$apply_type           = isset( $args['apply_type'] ) ? $args['apply_type'] : false;
+			$apply_on             = isset( $args['apply_on'] ) ? $args['apply_on'] : false;
 
 			if ( ! $filter_id ) {
 				return false;
@@ -74,6 +75,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Alphabet_Filter' ) ) {
 				'content_provider'     => $content_provider,
 				'additional_providers' => $additional_providers,
 				'apply_type'           => $apply_type,
+				'apply_on'             => $apply_on,
 				'filter_id'            => $filter_id,
 				'behavior'             => $behavior,
 				'accessibility_label'  => $this->get_accessibility_label( $filter_id )

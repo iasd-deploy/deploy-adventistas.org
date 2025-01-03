@@ -24,7 +24,7 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 		}
 
 		public function default_settings() {
-			return array(
+			return apply_filters( 'jet-engine/calendar/render/default-settings', array(
 				'lisitng_id'               => '',
 				'group_by'                 => 'post_date',
 				'group_by_key'             => '',
@@ -36,6 +36,9 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 				'start_from_year'          => date( 'Y' ),
 				'show_posts_nearby_months' => 'yes',
 				'hide_past_events'         => '',
+				'allow_date_select'        => '',
+				'start_year_select'        => '1970',
+				'end_year_select'          => '2038',
 				'posts_query'              => array(),
 				'meta_query_relation'      => 'AND',
 				'tax_query_relation'       => 'AND',
@@ -46,7 +49,10 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 				'custom_query'             => false,
 				'custom_query_id'          => null,
 				'_element_id'              => '',
-			);
+				'cache_enabled'            => false,
+				'cache_timeout'            => 60,
+				'max_cache'                => 12,
+			));
 		}
 
 		/**
@@ -179,7 +185,7 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 						$meta_key = esc_attr( $settings['group_by_key'] );
 						$multiday = isset( $settings['allow_multiday'] ) ? $settings['allow_multiday'] : '';
 						$end_key  = isset( $settings['end_date_key'] ) ? $settings['end_date_key'] : false;
-						
+
 						if ( ! $end_key ) {
 							$end_key = Jet_Engine_Advanced_Date_Field::instance()->data->end_date_field_name(
 								$meta_key 
@@ -212,7 +218,7 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 							$keys = [ $keys ];
 						}
 
-						if ( $end_dates && ! is_array( $keys ) ) {
+						if ( $end_dates && ! is_array( $end_dates ) ) {
 							$end_dates = [ $end_dates ];
 						}
 
@@ -381,6 +387,62 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 		}
 
 		/**
+		 * Get list of options for month select field.
+		 * @return string   $result   A piece of HTML
+		 */
+		public function get_month_options() {
+			$current_month = $this->get_current_month();
+
+			$current_month_read = ( int ) date( 'n', $current_month );
+
+			$result = '';
+
+			for ( $month = 1; $month <= 12; $month++ ) {
+
+				$month_timestamp = strtotime( "01.{$month}.2000" );
+
+				$month_read = date( 'F', $month_timestamp );
+
+				$option_value = "value=\"{$month_read}\"";
+
+				if ( $month === $current_month_read ) {
+					$option_value .= " selected";
+				}
+
+				$month_label = wp_date( 'F', $month_timestamp );
+
+				$result .= "<option {$option_value}>{$month_label}</option>";
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Get list of options for year select field.
+		 *
+		 * @param  int      $from     Start year
+		 * @param  int      $to       End year
+		 * @return string   $result   A piece of HTML
+		 */
+		public function get_year_options( $from, $to ) {
+			$current_month = $this->get_current_month();
+
+			$current_year_read = ( int ) date( 'Y', $current_month );
+
+			$result = '';
+
+			for ( $year = $from; $year <= $to; $year++ ) {
+				$option_value = "value=\"{$year}\"";
+				if ( $year === $current_year_read ) {
+					$option_value .= " selected";
+				}
+				$result .= "<option {$option_value}>{$year}</option>";
+			}
+
+			return $result;
+		}
+
+		/**
 		 * Render posts template.
 		 * Moved to separate function to be rewritten by other layouts
 		 *
@@ -416,7 +478,7 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 				$pad = 7 - abs( $pad );
 			}
 
-			$data_settings = array(
+			$data_settings = apply_filters( 'jet-engine/calendar/render/widget-settings', array(
 				'lisitng_id'               => isset( $settings['lisitng_id'] ) ? $settings['lisitng_id'] : false,
 				'week_days_format'         => $days_format,
 				'allow_multiday'           => $multiday,
@@ -430,12 +492,26 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 				'caption_layout'           => isset( $settings['caption_layout'] ) ? $settings['caption_layout'] : 'layout-1',
 				'show_posts_nearby_months' => isset( $settings['show_posts_nearby_months'] ) ? $settings['show_posts_nearby_months'] : true,
 				'hide_past_events'         => isset( $settings['hide_past_events'] ) ? $settings['hide_past_events'] : false,
+				'allow_date_select'        => isset( $settings['allow_date_select'] ) ? $settings['allow_date_select'] : false,
+				'start_year_select'        => isset( $settings['start_year_select'] ) ? $settings['start_year_select'] : 1970,
+				'end_year_select'          => isset( $settings['end_year_select'] ) ? $settings['end_year_select'] : 2038,
 				'use_custom_post_types'    => isset( $settings['use_custom_post_types'] ) ? $settings['use_custom_post_types'] : false,
 				'custom_post_types'        => isset( $settings['custom_post_types'] ) ? $settings['custom_post_types'] : array(),
 				'custom_query'             => isset( $settings['custom_query'] ) ? $settings['custom_query'] : false,
 				'custom_query_id'          => isset( $settings['custom_query_id'] ) ? $settings['custom_query_id'] : false,
 				'_element_id'              => isset( $settings['_element_id'] ) ? $settings['_element_id'] : '',
-			);
+				'cache_enabled'            => isset( $settings['cache_enabled'] ) ? $settings['cache_enabled'] : false,
+				'cache_timeout'            => isset( $settings['cache_timeout'] ) ? $settings['cache_timeout'] : 60,
+				'max_cache'                => isset( $settings['max_cache'] ) ? $settings['max_cache'] : 12,
+			), $settings );
+
+			$cache_enabled = filter_var( $settings['cache_enabled'], FILTER_VALIDATE_BOOLEAN );
+
+			if ( $cache_enabled ) {
+				$data_settings['cache_id'] = $_REQUEST['settings']['cache_id'] ?? round( microtime( true ) * 10000 );
+				$data_settings['prev_month'] = $human_read_month;
+				$cache_id = sprintf( ' data-cache-id="%1$s"', $data_settings['cache_id'] );
+			}
 
 			$data_settings = htmlspecialchars( json_encode( $data_settings ) );
 
@@ -446,12 +522,13 @@ if ( ! class_exists( 'Jet_Listing_Render_Calendar' ) ) {
 			];
 
 			printf(
-				'<div class="%1$s" data-settings="%2$s" data-post="%3$d" data-listing-source="%4$s" data-query-id="%5$s">',
+				'<div class="%1$s" data-settings="%2$s" data-post="%3$d" data-listing-source="%4$s" data-query-id="%5$s"%6$s>',
 				implode( ' ', $container_classes ),
 				$data_settings,
 				get_the_ID(),
 				jet_engine()->listings->data->get_listing_source(),
-				$this->listing_query_id
+				$this->listing_query_id,
+				$cache_id ?? ''
 			);
 
 			do_action( 'jet-engine/listing/grid/before', $this );

@@ -17,6 +17,7 @@ class DB extends \Jet_Engine_Base_DB {
 
 	public static $prefix = 'jet_rel_';
 	public $relations_cache = [];
+	public $table_keys = false;
 
 	/**
 	 * Insert booking
@@ -80,8 +81,23 @@ class DB extends \Jet_Engine_Base_DB {
 			}
 		}
 
-		return self::wpdb()->update( $this->table(), $new_data, $where );
+		$result = self::wpdb()->update( $this->table(), $new_data, $where );
 
+		/**
+		 * https://github.com/Crocoblock/suggestions/issues/7774
+		 */
+		$this->reset_found_items_cache();
+
+		return $result;
+	}
+
+	/**
+	 * Set table keys to create indexes with the table creation
+	 * 
+	 * @param boolean $keys [description]
+	 */
+	public function set_table_keys( $keys = false ) {
+		$this->table_keys = $keys;
 	}
 
 	/**
@@ -117,9 +133,12 @@ class DB extends \Jet_Engine_Base_DB {
 			}
 		}
 
+		$keys = $this->table_keys;
+
 		return "CREATE TABLE $table (
 			$columns_schema
-			PRIMARY KEY (_ID)
+			PRIMARY KEY ( _ID ),
+			$keys
 		) $charset_collate;";
 
 	}

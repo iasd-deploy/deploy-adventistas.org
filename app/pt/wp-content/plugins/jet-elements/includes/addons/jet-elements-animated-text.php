@@ -41,6 +41,10 @@ class Jet_Elements_Animated_Text extends Jet_Elements_Base {
 		return array( 'cherry' );
 	}
 
+	public function get_style_depends() { 
+		return array( 'jet-animated-text', 'jet-animated-text-skin' ); 
+	}
+
 	public function get_script_depends() {
 		return array( 'jet-anime-js' );
 	}

@@ -4,7 +4,6 @@
 
 	const initLocationDistanceFilter = function() {
 
-
 		window.JetSmartFilters.filtersList.JetEngineLocationDistance = 'jet-smart-filters-location-distance';
 		window.JetSmartFilters.filters.JetEngineLocationDistance = class JetEngineLocationDistance extends window.JetSmartFilters.filters.Search {
 
@@ -38,6 +37,10 @@
 				} );
 
 				this.defaultLocation = $filter.data( 'current-location' );
+
+				if ( this.defaultLocation ) {
+					this.updateLocationData( this.defaultLocation, true );
+				}
 
 				if ( this.defaultLocation.address ) {
 					this.$locationInput.val( this.defaultLocation.address );
@@ -167,18 +170,24 @@
 			}
 
 			reset() {
-				this.updateLocationData( {}, true, [ 'distance' ] );
-				this.$distanceInput.find( 'option:selected' ).removeAttr( 'selected' );
+				this.resetLocationData( false );
+			}
+
+			resetLocationData( silent ) {
+				this.updateLocationData( {}, silent, [ 'address', 'longitude', 'latitude', 'distance' ] );
+				this.clearDistance();
 				this.clearLocation();
 			}
 
 			setData( newData ) {
 
+				this.resetLocationData( true );
+
 				if ( newData ) {
 					this.updateLocationData( { ...newData }, true );
 				}
 
-				if ( newData && newData.address ) {
+				if ( newData && undefined !== newData.address ) {
 
 					if ( 0 == newData.address && newData.latitude && newData.longitude ) {
 						this.$locationInput.val( this.currentLocationVerbose );
@@ -198,12 +207,21 @@
 			}
 
 			selectDistance( distance ) {
-				this.$distanceInput.find( 'option[value="' + distance + '"]' ).attr( 'selected', true );
+				this.clearDistance();
+				this.$distanceInput.find( 'option[value="' + distance + '"]' )
+					.prop( 'selected', true )
+					.attr( 'selected', true );
+			}
+
+			clearDistance() {
+				this.$distanceInput.find( 'option[selected]' )
+					.removeProp( 'selected' )
+					.removeAttr( 'selected' );
 			}
 
 			get activeValue() {
 
-				if ( ! this.hasLocation() && this.defaultLocation.distance == this.locationData.distance ) {
+				if ( ! this.hasLocation() && ! this.locationData.distance ) {
 					return false;
 				}
 				
@@ -249,7 +267,7 @@
 			}
 
 			processData() {
-				if ( this.hasLocation() ) {
+				if ( ! this.locationDataIsEmpty ) {
 					this.dataValue = { ...this.locationData };
 				} else {
 					this.dataValue = false;
@@ -263,8 +281,6 @@
 
 				this.switchClear();
 				this.switchLocate( true );
-
-				this.updateLocationData( {}, false, [ 'address', 'longitude', 'latitude' ] );
 
 			}
 
@@ -319,9 +335,10 @@
 
 				if ( 0 !== Object.keys( newData ).length ) {
 
-					if ( 0 !== Object.keys( this.defaultLocation ).length ) {
-						newData = { ...this.defaultLocation, ...newData };
-					}
+					// The following condition is commented to prevent conflicts with Reload or Mixed apply types.
+					// if ( 0 !== Object.keys( this.defaultLocation ).length ) {
+					// 	newData = { ...this.defaultLocation, ...newData };
+					// }
 
 					for ( const prop in newData ) {
 						this.locationData[ prop ] = newData[ prop ];
@@ -344,6 +361,7 @@
 				}
 
 				if ( ! silent ) {
+					this.emitFiterChange();
 					this.maybeApplyFilter();
 				}
 
@@ -351,6 +369,14 @@
 
 		};
 	}
+
+	// Added the filter name to the `filterNames` property on `DOMContentLoaded` event before `elementor/frontend/init` event
+	// to better compatibility with Elementor Popup.
+	window.addEventListener( 'DOMContentLoaded', () => {
+		if ( window.JetSmartFilters && -1 === window.JetSmartFilters.filterNames.indexOf( 'location-distance' ) ) {
+			window.JetSmartFilters.filterNames.push( 'location-distance' );
+		}
+	} );
 
 	if ( window.JetMapListingGeolocationFilterData && 'jet-smart-filters/before-init' === window.JetMapListingGeolocationFilterData.initEvent ) {
 		document.addEventListener( 'jet-smart-filters/before-init', ( e ) => {

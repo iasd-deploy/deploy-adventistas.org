@@ -75,6 +75,14 @@ if ( ! class_exists( 'Jet_Smart_Filters_Data' ) ) {
 		}
 
 		/**
+		 * Get current url.
+		 */
+		public function get_current_url() {
+
+			return (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		}
+
+		/**
 		 * Get baseurl.
 		 */
 		public function get_baseurl() {
@@ -172,16 +180,19 @@ if ( ! class_exists( 'Jet_Smart_Filters_Data' ) ) {
 		 */
 		public function get_choices_from_field_data( $args = array() ) {
 
+			$result = array();
+
 			$args = wp_parse_args( $args, array(
 				'field_key' => false,
 				'source'    => 'jet_engine',
 			) );
 
 			if ( empty( $args['field_key'] ) ) {
-				return array();
+				return $result;
 			}
 
-			$result = array();
+			// trimming accidentally entered spaces in the key field
+			$args['field_key'] = trim( $args['field_key'] );
 
 			switch ( $args['source'] ) {
 				case 'acf':
@@ -225,6 +236,8 @@ if ( ! class_exists( 'Jet_Smart_Filters_Data' ) ) {
 					if ( isset( $found_field['options_source'] ) && $found_field['options_source'] === 'manual_bulk' && ! empty( $found_field['bulk_options'] ) ) {
 						$bulk_options = explode( PHP_EOL, $found_field['bulk_options'] );
 
+						$result = array();
+
 						foreach ( $bulk_options as $option ) {
 							$parsed_option             = explode( '::', trim( $option ) );
 							$result[$parsed_option[0]] = isset( $parsed_option[1] ) ? $parsed_option[1] : $parsed_option[0];
@@ -254,12 +267,21 @@ if ( ! class_exists( 'Jet_Smart_Filters_Data' ) ) {
 				}
 			}
 
-			if ( empty( $found_field['options'] ) ) {
-				return $result;
+			if ( ! empty( $found_field['options'] ) ) {
+				foreach ( $found_field['options'] as $option ) {
+					$result[ $option['key'] ] = $option['value'];
+				}
 			}
 
-			foreach ( $found_field['options'] as $option ) {
-				$result[ $option['key'] ] = $option['value'];
+			if ( isset( $found_field['options_source'] ) && $found_field['options_source'] === 'manual_bulk' && ! empty( $found_field['bulk_options'] ) ) {
+				$bulk_options = explode( PHP_EOL, $found_field['bulk_options'] );
+
+				$result = array();
+
+				foreach ( $bulk_options as $option ) {
+					$parsed_option             = explode( '::', trim( $option ) );
+					$result[$parsed_option[0]] = isset( $parsed_option[1] ) ? $parsed_option[1] : $parsed_option[0];
+				}
 			}
 
 			return $result;
@@ -346,7 +368,20 @@ if ( ! class_exists( 'Jet_Smart_Filters_Data' ) ) {
 		public function get_terms_for_options( $tax = null, $child_of_current = false, $custom_args = array() ) {
 
 			$terms   = $this->get_terms_objects( $tax, $child_of_current, $custom_args );
-			$options = wp_list_pluck( $terms, 'name', 'term_id' );
+			$options = array();
+
+			foreach ( $terms as $term ) {
+				array_push( $options, array(
+					'value' => $term->term_id,
+					'label' => $term->name
+				) );
+
+				if ( jet_smart_filters()->settings->url_taxonomy_term_name === 'slug' ) {
+					$options[count($options) - 1]['data_attrs'] = array(
+						'url-value' => $term->slug
+					);
+				}
+			}
 
 			return apply_filters(
 				'jet-smart-filters/data/terms-for-options',
@@ -406,6 +441,10 @@ if ( ! class_exists( 'Jet_Smart_Filters_Data' ) ) {
 
 						if ( is_object( $value ) ){
 							$search_key = $value->term_id;
+						}
+
+						if ( is_array( $value ) && isset( $value['value'] ) ) {
+							$search_key = $value['value'];
 						}
 
 						if ( in_array( $search_key, $exclude_include_options ) ){

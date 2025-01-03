@@ -20,6 +20,7 @@
 				currentPopupSource: '',
 				currentPopupCustomFields: '',
 				currentPopupFields: [],
+				preloadWarnings: mapsSettings.preloadWarnings ?? '',
 			};
 		},
 		methods: {
@@ -45,6 +46,8 @@
 							type: 'success',
 							duration: 7000,
 						} );
+
+						self.preloadWarnings = response.data.additionalData.preloadWarnings ?? '';
 					} else {
 						self.$CXNotice.add( {
 							message: response.data.message,
@@ -121,6 +124,9 @@
 				this.currentPopupFields = [];
 				this.$refs.current_popup_fields.setValues( [] );
 				this.currentPopupCustomFields = '';
+			},
+			showPreloadWarnings: function() {
+				return this.preloadWarnings?.length > 0;
 			}
 		}
 	} );

@@ -187,7 +187,7 @@ if ( ! class_exists( 'Jet_Engine_Render_Dynamic_Link' ) ) {
 
 		public function get_link_label( $settings, $base_class, $url ) {
 
-			$label = ! Jet_Engine_Tools::is_empty( $settings['link_label'] ) ? $settings['link_label'] : false;
+			$label = ! Jet_Engine_Tools::is_empty( $settings, 'link_label' ) ? $settings['link_label'] : false;
 
 			if ( $label ) {
 

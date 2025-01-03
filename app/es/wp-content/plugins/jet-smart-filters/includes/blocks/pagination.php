@@ -510,11 +510,11 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Pagination' ) ) {
 		 */
 		public function render_callback( $settings = array() ) {
 
-			jet_smart_filters()->set_filters_used();
-
 			if ( empty( $settings['content_provider'] ) || $settings['content_provider'] === 'not-selected' ) {
 				return $this->is_editor() ? __( 'Please select a provider', 'jet-smart-filters' ) : false;
 			}
+
+			jet_smart_filters()->set_filters_used();
 
 			$base_class           = 'jet-smart-filters-' . $this->get_name();
 			$provider             = $settings['content_provider'];
@@ -535,9 +535,12 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Pagination' ) ) {
 			}
 
 			if ( $nav_enabled ) {
-				$controls['nav_enabled'] = true;
-				$controls['prev']        = $settings['prev_text'];
-				$controls['next']        = $settings['next_text'];
+				$controls['nav_enabled']       = true;
+				$controls['prev']              = $settings['prev_text'];
+				$controls['next']              = $settings['next_text'];
+				$controls['hide_inactive_nav'] = isset( $settings['hide_inactive_prev_next'] )
+					? filter_var( $settings['hide_inactive_prev_next'], FILTER_VALIDATE_BOOLEAN )
+					: false;
 			} else {
 				$controls['nav_enabled'] = false;
 			}

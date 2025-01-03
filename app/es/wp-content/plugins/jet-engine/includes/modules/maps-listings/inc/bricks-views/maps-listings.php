@@ -244,10 +244,23 @@ class Maps_Listings extends Listing_Grid {
 		$this->register_jet_control(
 			'marker_image',
 			[
-				'tab'      => 'content',
-				'label'    => esc_html__( 'Image', 'jet-engine' ),
-				'type'     => 'image',
-				'required' => [ 'marker_type', '=', 'image' ],
+				'tab'            => 'content',
+				'label'          => esc_html__( 'Image', 'jet-engine' ),
+				'type'           => 'image',
+				'hasDynamicData' => false,
+				'required'       => [ 'marker_type', '=', 'image' ],
+			]
+		);
+
+		$this->register_jet_control(
+			'marker_image_size',
+			[
+				'tab'         => 'content',
+				'label'       => esc_html__( 'Image Size', 'jet-engine' ),
+				'type'        => 'select',
+				'default'     => 'full',
+				'options'     => \Jet_Engine_Tools::get_image_sizes(),
+				'description' => __( 'Applies to the main marker if it is of image type, and to conditional image markers.', 'jet-engine' ),
 			]
 		);
 
@@ -371,7 +384,7 @@ class Maps_Listings extends Listing_Grid {
 		);
 
 		foreach ( jet_engine()->listings->get_callbacks_args() as $control_name => $control_args ) {
-			
+
 			$control_args = Options_Converter::convert( $control_args );
 
 			if ( ! empty( $control_args['required'] ) && is_array( $control_args['required'][0] ) ) {
@@ -452,9 +465,10 @@ class Maps_Listings extends Listing_Grid {
 		$markers_repeater->add_control(
 			'marker_image',
 			[
-				'label'    => esc_html__( 'Image', 'jet-engine' ),
-				'type'     => 'image',
-				'required' => [ 'marker_type', '=', 'image' ],
+				'label'          => esc_html__( 'Image', 'jet-engine' ),
+				'type'           => 'image',
+				'hasDynamicData' => false,
+				'required'       => [ 'marker_type', '=', 'image' ],
 			]
 		);
 
@@ -845,8 +859,10 @@ class Maps_Listings extends Listing_Grid {
 			$this->settings['scrollwheel'] = false;
 		}
 
+		$this->set_attribute( '_root', 'class', 'brxe-' . $this->id );
+		$this->set_attribute( '_root', 'class', 'brxe-jet-listing' );
 		$this->set_attribute( '_root', 'data-is-block', 'jet-engine/bricks-' . $this->jet_element_render );
-		$this->set_attribute( '_root', 'class', 'jet-listing-base' );
+		$this->set_attribute( '_root', 'data-id', $this->id );
 
 		$this->enqueue_scripts();
 
@@ -896,7 +912,7 @@ class Maps_Listings extends Listing_Grid {
 			}
 		}
 
-		return $attrs;
+		return parent::parse_jet_render_attributes( $attrs );
 	}
 
 	public function css_selector( $mod = null ) {

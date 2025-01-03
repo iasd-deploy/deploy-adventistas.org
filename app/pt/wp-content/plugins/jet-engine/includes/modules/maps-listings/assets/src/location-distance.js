@@ -93,8 +93,6 @@ registerBlockType( 'jet-smart-filters/location-distance', {
 			
 			const props = this.props;
 
-			console.log( props.attributes );
-
 			return [
 				props.isSelected && (
 					<InspectorControls
@@ -104,7 +102,7 @@ registerBlockType( 'jet-smart-filters/location-distance', {
 							<div>
 								<h4 style={{margin:'5px 0 0'}}>Please note!</h4>
 								<p style={{ color: '#757575', fontSize: '12px' }}>
-									This filter is compatible only with queries from JetEngine Query Builder. ALso you need to set up <a href="https://crocoblock.com/knowledge-base/jetsmartfilters/location-distance-filter-overview/" target="_blank">Geo Query</a> in your query settings to meke filter to work correctly.
+									This filter is compatible only with queries from JetEngine Query Builder. ALso you need to set up <a href="https://crocoblock.com/knowledge-base/jetsmartfilters/location-distance-filter-overview/" target="_blank">Geo Query</a> in your query settings to make the filter work correctly.
 								</p>
 							</div>
 							<SelectControl

@@ -34,6 +34,7 @@ class Render extends \Jet_Engine_Render_Listing_Grid {
 			'popup_offset'               => 40,
 			'marker_type'                => 'image',
 			'marker_image'               => null,
+			'marker_image_size'          => 'full',
 			'marker_icon'                => null,
 			'marker_label_type'          => 'post_title',
 			'marker_label_field'         => '',
@@ -223,10 +224,11 @@ class Render extends \Jet_Engine_Render_Listing_Grid {
 				}
 
 				$result[] = array(
-					'id'            => $post_id,
-					'latLang'       => $latlang,
-					'label'         => $this->get_marker_label( $post, $settings ),
-					'custom_marker' => $this->get_custom_marker( $post, $settings ),
+					'id'                 => $post_id,
+					'latLang'            => $latlang,
+					'label'              => $this->get_marker_label( $post, $settings ),
+					'custom_marker'      => $this->get_custom_marker( $post, $settings ),
+					'geo_query_distance' => $post->geo_query_distance ?? -1,
 				);
 
 			}
@@ -342,11 +344,12 @@ class Render extends \Jet_Engine_Render_Listing_Grid {
 
 		if ( $image_id ) {
 
-			$image_cache_key = 'jet_engine_marker_' . $image_id;
-			$image_url = wp_cache_get( $image_cache_key );
-
+			$image_size      = ! empty( $settings['marker_image_size'] ) ? $settings['marker_image_size'] : 'full';
+			$image_cache_key = sprintf( 'jet_engine_marker_%d_%s', $image_id, $image_size );
+			$image_url       = wp_cache_get( $image_cache_key );
+			
 			if ( ! $image_url ) {
-				$image_url = wp_get_attachment_image_url( $image_id, 'full' );
+				$image_url = wp_get_attachment_image_url( $image_id, $image_size );
 				wp_cache_set( $image_cache_key, $image_url );
 			}
 		} else {
@@ -543,11 +546,26 @@ class Render extends \Jet_Engine_Render_Listing_Grid {
 					return false;
 				} elseif ( is_array( $image ) ) {
 					$result['url'] = $image['url'];
-					return $result;
 				} else {
 					$result['url'] = $image;
+				}
+
+				$image_id = ! empty( $image['id'] ) ? $image['id'] : attachment_url_to_postid( $result['url'] );
+
+				if ( ! $image_id ) {
 					return $result;
 				}
+
+				$image_size = ! empty( $settings['marker_image_size'] ) ? $settings['marker_image_size'] : false;
+
+				if ( ! $image_size ) {
+					$widget_settings = $this->get_settings();
+					$image_size = ! empty( $widget_settings['marker_image_size'] ) ? $widget_settings['marker_image_size'] : 'full';
+				}
+
+				$result['url'] = wp_get_attachment_image_url( $image_id, $image_size );
+
+				return $result;
 
 			case 'icon':
 
@@ -557,7 +575,14 @@ class Render extends \Jet_Engine_Render_Listing_Grid {
 				if ( ! $icon ) {
 					return false;
 				} else {
-					$icon_html      = \Jet_Engine_Tools::render_icon( $icon, 'jet-map-marker', array( 'style' => 'cursor:pointer;' ) );
+					$image_size = ! empty( $settings['marker_image_size'] ) ? $settings['marker_image_size'] : false;
+
+					if ( ! $image_size ) {
+						$widget_settings = $this->get_settings();
+						$image_size = ! empty( $widget_settings['marker_image_size'] ) ? $widget_settings['marker_image_size'] : 'full';
+					}
+
+					$icon_html      = \Jet_Engine_Tools::render_icon( $icon, 'jet-map-marker', array( 'style' => 'cursor:pointer;' ), $image_size );
 					$result['html'] = $icon_html;
 					return $result;
 				}

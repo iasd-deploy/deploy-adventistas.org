@@ -78,6 +78,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Select_Filter' ) ) {
 			$content_provider     = isset( $args['content_provider'] ) ? $args['content_provider'] : false;
 			$additional_providers = isset( $args['additional_providers'] ) ? $args['additional_providers'] : false;
 			$apply_type           = isset( $args['apply_type'] ) ? $args['apply_type'] : false;
+			$apply_on             = isset( $args['apply_on'] ) ? $args['apply_on'] : false;
 
 			if ( ! $filter_id ) {
 				return false;
@@ -99,15 +100,24 @@ if ( ! class_exists( 'Jet_Smart_Filters_Select_Filter' ) ) {
 
 			switch ( $source ) {
 				case 'taxonomies':
-					$tax        = get_post_meta( $filter_id, '_source_taxonomy', true );
-					$query_type = 'tax_query';
-					$query_var  = $tax;
+					$tax              = get_post_meta( $filter_id, '_source_taxonomy', true );
+					$query_type       = 'tax_query';
+					$query_var        = $tax;
+					$only_child       = filter_var( get_post_meta( $filter_id, '_only_child', true ), FILTER_VALIDATE_BOOLEAN );
+					$show_empty_terms = filter_var( get_post_meta( $filter_id, '_show_empty_terms', true ), FILTER_VALIDATE_BOOLEAN );
+					$terms_orderby    = get_post_meta( $filter_id, '_terms_orderby', true );
+					$terms_order      = get_post_meta( $filter_id, '_terms_order', true );
+					$terms_meta_key   = '';
 
-					$only_child          = filter_var( get_post_meta( $filter_id, '_only_child', true ), FILTER_VALIDATE_BOOLEAN );
-					$show_empty_terms    = filter_var( get_post_meta( $filter_id, '_show_empty_terms', true ), FILTER_VALIDATE_BOOLEAN );
+					if ( in_array( $terms_orderby, array( 'meta_value', 'meta_value_num' ) ) ) {
+						$terms_meta_key = get_post_meta( $filter_id, '_terms_orderby_meta_value', '' );
+					}
 
 					$options = jet_smart_filters()->data->get_terms_for_options( $tax, $only_child, array(
 						'hide_empty' => ! $show_empty_terms,
+						'orderby'    => ! empty( $terms_orderby ) ? $terms_orderby : 'name',
+						'order'      => ! empty( $terms_order ) ? $terms_order : 'ASC',
+						'meta_key'   => $terms_meta_key
 					) );
 
 					if ( is_category() || is_tag() || is_tax( $tax ) ) {
@@ -123,16 +133,14 @@ if ( ! class_exists( 'Jet_Smart_Filters_Select_Filter' ) ) {
 					break;
 
 				case 'posts':
-					$post_type = get_post_meta( $filter_id, '_source_post_type', true );
-					$args      = array(
+					$post_type  = get_post_meta( $filter_id, '_source_post_type', true );
+					$posts_args = apply_filters( 'jet-smart-filters/filters/posts-source/args', array(
 						'post_type' => $post_type,
 						'post_status' => 'publish',
 						'posts_per_page' => -1
-					);
+					) );
 
-					$args = apply_filters( 'jet-smart-filters/filters/posts-source/args', $args );
-
-					$posts      = get_posts( $args );
+					$posts      = get_posts( $posts_args );
 					$query_type = 'meta_query';
 					$query_var  = get_post_meta( $filter_id, '_query_var', true );
 
@@ -207,6 +215,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Select_Filter' ) ) {
 				'content_provider'     => $content_provider,
 				'additional_providers' => $additional_providers,
 				'apply_type'           => $apply_type,
+				'apply_on'             => $apply_on,
 				'filter_id'            => $filter_id,
 				'is_hierarchical'      => $is_hierarchical,
 				'query_id'             => ! empty( $args['query_id'] ) ? $args['query_id'] : false,

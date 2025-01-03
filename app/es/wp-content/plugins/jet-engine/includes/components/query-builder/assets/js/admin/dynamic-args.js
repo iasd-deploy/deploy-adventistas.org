@@ -128,8 +128,10 @@ Vue.component( 'jet-query-dynamic-args', {
 				return;
 			}
 
-			this.$emit( 'input', this.formatResult() );
-			this.isActive = false;
+			setTimeout( function() {
+				this.$emit( 'input', this.formatResult() );
+				this.isActive = false;
+			}.bind( this ) );
 
 		},
 		switchIsActive: function() {

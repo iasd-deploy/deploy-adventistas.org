@@ -67,7 +67,7 @@ class SQL extends Base {
 		$location_hash = $this->get_field_value( $obj, $field_name . '_hash' );
 
 		if ( ! $location_hash ) {
-			$field_hash    = md5( $field_name );
+			$field_hash    = $this->get_field_prefix( $field_name );
 			$location_hash = $this->get_field_value( $obj, $field_hash . '_hash' );
 		}
 

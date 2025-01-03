@@ -77,8 +77,14 @@ class DB extends \Jet_Engine_Base_DB {
 			}
 		}
 
-		return self::wpdb()->update( $this->table(), $new_data, $where );
+		$result = self::wpdb()->update( $this->table(), $new_data, $where );
 
+		/**
+		 * https://github.com/Crocoblock/suggestions/issues/7774
+		 */
+		$this->reset_found_items_cache();
+
+		return $result;
 	}
 
 	/**

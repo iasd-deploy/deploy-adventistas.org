@@ -35,6 +35,14 @@
 				</div>
 			</div>
 		</div>
+		<div class="url-taxonomy-type-name">
+			<cx-vui-select
+				label="<?php _e( 'Taxonomy term name type in URL', 'jet-smart-filters' ); ?>"
+				:optionsList="data.url_taxonomy_term_name_options"
+				size="fullwidth"
+				v-model="settings.url_taxonomy_term_name"
+			/>
+		</div>
 		<div class="url-aliases-section">
 			<cx-vui-switcher
 				class="use-url-aliases"

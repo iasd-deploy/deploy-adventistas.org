@@ -841,6 +841,51 @@ window.JetEngineMapsProvider = function() {
 		return 'google';
 	}
 
+	this.getContainer = function( map ) {
+		return map.getDiv();
+	}
+
+	this.getBoundsJSON = function( map ) {
+		const bounds = map.getBounds();
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		return bounds.toJSON();
+	}
+
+	this.updateSyncBounds = function() {
+		const map = this;
+
+		const bounds = map.getBounds();
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		window.JetEngineMaps.dispatchMapSyncEvent( map, bounds.toJSON() );
+	}
+
+	this.initSync = function( map ) {
+		if ( map?.isJetEngineSyncInited || ! window.JetEngineMaps || ! window.JetSmartFilters ) {
+			return;
+		}
+		
+		map.addListener( 'dragend', this.updateSyncBounds );
+		map.addListener( 'bounds_changed', this.updateSyncBounds );
+
+		google.maps.event.addListenerOnce(
+			map,
+			'idle',
+			() => {
+				window.JetEngineMaps.dispatchMapSyncInitEvent( map )
+			}
+		);
+
+		map.isJetEngineSyncInited = true;
+	}
+
 	this.initMap = function( container, settings ) {
 
 		settings = settings || {};
@@ -850,6 +895,8 @@ window.JetEngineMapsProvider = function() {
 		}
 		
 		let map = new google.maps.Map( container, settings );
+
+		this.initSync( map );
 		
 		return map;
 	}
@@ -918,14 +965,22 @@ window.JetEngineMapsProvider = function() {
 	}
 
 	this.closePopup = function( infoBox, callback ) {
-		google.maps.event.addListener( infoBox, 'closeclick', callback );
+		google.maps.event.addListener( infoBox, 'closeclick', function( e ) {
+			callback( e );
+		} );
 	}
 
 	this.openPopup = function( trigger, callback, infobox, map, openOn ) {
-		google.maps.event.addListener( trigger, 'click', callback );
+		google.maps.event.addListener( trigger, 'click', function( e ) {
+			map.isInternalInteraction = true;
+			callback( e );
+		} );
 
 		if ( 'hover' === openOn ) {
-			google.maps.event.addListener( trigger, 'mouseover', callback );
+			google.maps.event.addListener( trigger, 'mouseover', function( e ) {
+				map.isInternalInteraction = true;
+				callback( e );
+			} );
 		}
 	}
 
@@ -981,6 +1036,7 @@ window.JetEngineMapsProvider = function() {
 	}
 
 	this.setAutoCenter = function( data ) {
+		data.map.isInternalInteraction = true;
 
 		data.map.fitBounds( data.bounds );
 
@@ -1028,10 +1084,10 @@ window.JetEngineMapsProvider = function() {
 		} );
 	};
 
-	this.panTo = function( data ) {
+	this.panTo = function( data, forceZoom = false ) {
 		data.map.panTo( data.position );
 
-		if ( data.zoom && data.zoom > data.map.getZoom() ) {
+		if ( forceZoom || data.zoom && data.zoom > data.map.getZoom() ) {
 			data.map.setZoom( data.zoom );
 		}
 	}

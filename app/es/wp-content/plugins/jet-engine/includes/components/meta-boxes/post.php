@@ -347,7 +347,9 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 				if ( ! $this->hide_field_names ) {
 
 					if ( ! empty( $description ) ) {
-						$description = rtrim( $description, '.' ) . ' <br>';
+						//trim removed in https://github.com/Crocoblock/issues-tracker/issues/11919
+						//$description = rtrim( $description, '.' ) . ' <br>';
+						$description = $description . ' <br>';
 					}
 
 					$description .= sprintf(
@@ -487,6 +489,10 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 
 						if ( ! empty( $field['repeater_collapsed'] ) ) {
 							$result[ $field['name'] ]['collapsed'] = filter_var( $field['repeater_collapsed'], FILTER_VALIDATE_BOOLEAN );
+						}
+
+						if ( ! empty( $field['repeater_save_separate'] ) ) {
+							$result[ $field['name'] ]['save_separate'] = filter_var( $field['repeater_save_separate'], FILTER_VALIDATE_BOOLEAN );
 						}
 
 						break;
@@ -629,7 +635,8 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 						);
 
 						// Set default value
-						$result[ $field['name'] ]['value'] = false;
+						//depends on on_by_default setting https://github.com/Crocoblock/issues-tracker/issues/11488
+						$result[ $field['name'] ]['value'] = ! empty( $field['on_by_default'] ) ? true : false;
 
 						break;
 
@@ -701,6 +708,13 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 		public function is_allowed_on_current_admin_hook( $hook ) {
 
 			if ( null !== $this->is_allowed_on_admin_hook ) {
+				return $this->is_allowed_on_admin_hook;
+			}
+
+			$pre_check = apply_filters( 'jet-engine/meta-boxes/is-allowed-on-current-admin-hook', null, $hook, $this );
+
+			if ( null !== $pre_check ) {
+				$this->is_allowed_on_admin_hook = $pre_check;
 				return $this->is_allowed_on_admin_hook;
 			}
 
@@ -870,6 +884,7 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 						'timeText'        => esc_html__( 'Time', 'jet-engine' ),
 						'hourText'        => esc_html__( 'Hour', 'jet-engine' ),
 						'minuteText'      => esc_html__( 'Minute', 'jet-engine' ),
+						'secondText'      => esc_html__( 'Second', 'jet-engine' ),
 						'currentText'     => esc_html__( 'Now', 'jet-engine' ),
 						'closeText'       => esc_html__( 'Done', 'jet-engine' ),
 						'monthNames'      => array_values( $wp_locale->month ),
@@ -1302,7 +1317,7 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 				$result['default'] = array();
 			}
 
-			if ( ! empty( $field['type'] ) && 'select' === $field['type'] && ! empty( $field['placeholder'] ) ) {
+			if ( ! empty( $field['type'] ) && 'select' === $field['type'] && ! empty( $field['placeholder'] ) && ! $multiple ) {
 				if ( $this->is_blocks() ) {
 					$result['options'][] = array(
 						'value' => '',
@@ -1384,6 +1399,10 @@ if ( ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 				}
 
 				$condition_field = $this->get_field_args_by_name( $condition['field'], $all_fields );
+
+				if ( empty( $condition_field['type'] ) ) {
+					continue;
+				}
 
 				switch( $condition_field['type'] ) {
 					case 'switcher':

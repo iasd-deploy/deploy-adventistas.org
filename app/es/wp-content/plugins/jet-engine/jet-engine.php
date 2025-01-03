@@ -3,7 +3,7 @@
  * Plugin Name: JetEngine
  * Plugin URI:  https://crocoblock.com/plugins/jetengine/
  * Description: The ultimate solution for managing custom post types, taxonomies and meta boxes.
- * Version:     3.4.1
+ * Version:     3.6.2
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-engine
@@ -21,7 +21,8 @@ if ( ! defined( 'WPINC' ) ) {
 if ( ! class_exists( 'Jet_Engine' ) ) {
 
 	/**
-	 * @property Jet_Engine_Booking_Forms $forms
+	 * @property Jet_Engine_Booking_Forms        $forms
+	 * @property  \Jet_Engine\Glossaries\Manager $glossaries
 	 *
 	 * Sets up and initializes the plugin.
 	 */
@@ -60,7 +61,7 @@ if ( ! class_exists( 'Jet_Engine' ) ) {
 		 *
 		 * @var string
 		 */
-		private $version = '3.4.1';
+		private $version = '3.6.2';
 
 		/**
 		 * Holder for base plugin path
@@ -108,6 +109,9 @@ if ( ! class_exists( 'Jet_Engine' ) ) {
 		 * @var Jet_Engine_Meta_Boxes
 		 */
 		public $meta_boxes;
+		/**
+		 * @var Jet_Engine\Relations\Manager
+		 */
 		public $relations;
 		/**
 		 * @var Jet_Engine_Listings
@@ -333,9 +337,9 @@ if ( ! class_exists( 'Jet_Engine' ) ) {
 		 *
 		 * @return void
 		 */
-		public function jet_dashboard_init() {
+		public function jet_dashboard_init( $force = false ) {
 
-			if ( is_admin() ) {
+			if ( is_admin() || $force ) {
 
 				$jet_dashboard_module_data = $this->framework->get_included_module_data( 'jet-dashboard.php' );
 

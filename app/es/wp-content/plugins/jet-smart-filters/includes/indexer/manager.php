@@ -462,7 +462,10 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Manager' ) ) {
 						}
 
 						if ( 'serialized' === $data_type ) {
-							$metadata_sql_and .= "( meta_key = '$meta_key' AND meta_value REGEXP '[\'\"]?;s:4:\"true\"|\:[\'\"]?(" . implode( '|', $data ) . ")[\'\"]?;[^s]' )";
+							// Escaping the + and * characters with double backslashes
+							$imploded_values = preg_replace( '/([+*])/', '\\\\\\\\$1', implode( '|', $data ) );
+
+							$metadata_sql_and .= "( meta_key = '$meta_key' AND meta_value REGEXP '[\'\"]?;s:4:\"true\"|\:[\'\"]?(" . $imploded_values . ")[\'\"]?;[^s]' )";
 						}
 
 						if ( 'normal' === $data_type ) {

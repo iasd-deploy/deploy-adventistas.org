@@ -85,6 +85,14 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 		return array( 'cherry' );
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	public function get_style_depends() { 
+		return array( 'jet-instagram-gallery', 'jet-instagram-gallery-skin' ); 
+	}
+
 	protected function register_controls() {
 
 		$css_scheme = apply_filters(
@@ -124,71 +132,86 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 		);
 
 		$this->add_control(
-			'hashtag',
+			'endpoint_notice',
 			array(
-				'label'       => esc_html__( 'Hashtag (enter without `#` symbol)', 'jet-elements' ),
-				'label_block' => true,
-				'type'        => Controls_Manager::TEXT,
-				'condition' => array(
+			   'type'  => Controls_Manager::RAW_HTML,
+				   'raw'  => sprintf(
+					 esc_html__( 'The Basic Display API may no longer be maintained or supported after a transition period. New app features and permissions will be available only in the Instagram API: %1$s', 'jet-elements' ),
+					 '<a target="_blank" href="https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/overview">' . esc_html__( 'More details', 'jet-elements' ) . '</a>'
+				 ),
+				 'content_classes' => 'elementor-panel-alert elementor-panel-alert-error',
+				 'condition' => array(
 					'endpoint' => 'hashtag',
-				),
-				'dynamic' => array(
-					'active' => true,
-					'categories' => array(
-						TagsModule::POST_META_CATEGORY,
-					),
-				),
+		 		),
 			)
-		);
+		 );
 
-		$this->add_control(
-			'use_insta_graph_api',
-			array(
-				'label'     => esc_html__( 'Use Instagram Graph API', 'jet-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'default'   => '',
-				'condition' => array(
-					'endpoint' => 'hashtag',
-				),
-			)
-		);
+		// $this->add_control(
+		// 	'hashtag',
+		// 	array(
+		// 		'label'       => esc_html__( 'Hashtag (enter without `#` symbol)', 'jet-elements' ),
+		// 		'label_block' => true,
+		// 		'type'        => Controls_Manager::TEXT,
+		// 		'condition' => array(
+		// 			'endpoint' => 'hashtag',
+		// 		),
+		// 		'dynamic' => array(
+		// 			'active' => true,
+		// 			'categories' => array(
+		// 				TagsModule::POST_META_CATEGORY,
+		// 			),
+		// 		),
+		// 	)
+		// );
 
-		$business_account_config = $this->get_business_account_config();
+		// $this->add_control(
+		// 	'use_insta_graph_api',
+		// 	array(
+		// 		'label'     => esc_html__( 'Use Instagram Graph API', 'jet-elements' ),
+		// 		'type'      => Controls_Manager::SWITCHER,
+		// 		'default'   => '',
+		// 		'condition' => array(
+		// 			'endpoint' => 'hashtag',
+		// 		),
+		// 	)
+		// );
 
-		if ( empty( $business_account_config['token'] ) || empty( $business_account_config['user_id'] ) ) {
-			$this->add_control(
-				'set_business_access_token',
-				array(
-					'type' => Controls_Manager::RAW_HTML,
-					'raw'  => sprintf(
-						esc_html__( 'Please set Business Instagram Access Token and User ID on the %1$s.', 'jet-elements' ),
-						'<a target="_blank" href="' . jet_elements_settings()->get_settings_page_link( 'integrations' ) . '">' . esc_html__( 'settings page', 'jet-elements' ) . '</a>'
-					),
-					'content_classes' => 'elementor-descriptor',
-					'condition' => array(
-						'endpoint'            => 'hashtag',
-						'use_insta_graph_api' => 'yes',
-					),
-				)
-			);
-		}
+		// $business_account_config = $this->get_business_account_config();
 
-		$this->add_control(
-			'order_by',
-			array(
-				'label'   => esc_html__( 'Order By', 'jet-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'recent_media',
-				'options' => array(
-					'recent_media' => esc_html__( 'Recent Media', 'jet-elements' ),
-					'top_media'    => esc_html__( 'Top Media', 'jet-elements' ),
-				),
-				'condition' => array(
-					'endpoint'            => 'hashtag',
-					'use_insta_graph_api' => 'yes',
-				),
-			)
-		);
+		// if ( empty( $business_account_config['token'] ) || empty( $business_account_config['user_id'] ) ) {
+		// 	$this->add_control(
+		// 		'set_business_access_token',
+		// 		array(
+		// 			'type' => Controls_Manager::RAW_HTML,
+		// 			'raw'  => sprintf(
+		// 				esc_html__( 'Please set Business Instagram Access Token and User ID on the %1$s.', 'jet-elements' ),
+		// 				'<a target="_blank" href="' . jet_elements_settings()->get_settings_page_link( 'integrations' ) . '">' . esc_html__( 'settings page', 'jet-elements' ) . '</a>'
+		// 			),
+		// 			'content_classes' => 'elementor-descriptor',
+		// 			'condition' => array(
+		// 				'endpoint'            => 'hashtag',
+		// 				'use_insta_graph_api' => 'yes',
+		// 			),
+		// 		)
+		// 	);
+		// }
+
+		// $this->add_control(
+		// 	'order_by',
+		// 	array(
+		// 		'label'   => esc_html__( 'Order By', 'jet-elements' ),
+		// 		'type'    => Controls_Manager::SELECT,
+		// 		'default' => 'recent_media',
+		// 		'options' => array(
+		// 			'recent_media' => esc_html__( 'Recent Media', 'jet-elements' ),
+		// 			'top_media'    => esc_html__( 'Top Media', 'jet-elements' ),
+		// 		),
+		// 		'condition' => array(
+		// 			'endpoint'            => 'hashtag',
+		// 			'use_insta_graph_api' => 'yes',
+		// 		),
+		// 	)
+		// );
 
 		$this->add_control(
 			'access_token_source',
@@ -217,7 +240,6 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 					),
 					'content_classes' => 'elementor-descriptor',
 					'condition' => array(
-						'endpoint' => 'self',
 						'access_token_source' => '',
 					),
 				)
@@ -1030,26 +1052,37 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 	public function render_gallery() {
 		$settings = $this->get_settings_for_display();
 
-		if ( 'hashtag' === $settings['endpoint'] ) {
+		// if ( 'hashtag' === $settings['endpoint'] ) {
 
-			if ( empty( $settings['hashtag'] ) ) {
-				$this->print_notice( esc_html__( 'Please, enter #hashtag.', 'jet-elements' ) );
-				return;
-			}
+		// 	if ( empty( $settings['hashtag'] ) ) {
+		// 		$this->print_notice( esc_html__( 'Please, enter #hashtag.', 'jet-elements' ) );
+		// 		return;
+		// 	}
 
-			if ( ! empty( $settings['use_insta_graph_api'] ) ) {
-				$business_account_config = $this->get_business_account_config();
+		// 	if ( ! empty( $settings['use_insta_graph_api'] ) ) {
+		// 		$business_account_config = $this->get_business_account_config();
 
-				if ( empty( $business_account_config['token'] || empty( $business_account_config['user_id'] ) ) ) {
-					$this->print_notice( esc_html__( 'Please, enter Business Access Token and User ID.', 'jet-elements' ) );
-					return;
-				}
-			}
+		// 		if ( empty( $business_account_config['token'] || empty( $business_account_config['user_id'] ) ) ) {
+		// 			$this->print_notice( esc_html__( 'Please, enter Business Access Token and User ID.', 'jet-elements' ) );
+		// 			return;
+		// 		}
+		// 	}
+		// }
+
+		// if ( 'self' === $settings['endpoint'] && ! $this->get_access_token() ) {
+		// 	$this->print_notice( esc_html__( 'Please, enter Access Token.', 'jet-elements' ) );
+		// 	return;
+		// }
+
+		if ( 'hashtag' === $settings['endpoint'] && ! $this->get_access_token() ) {
+
+			$this->print_notice( esc_html__( 'Please, enter Business Access Token. This API is only available for Instagram professional accounts', 'jet-elements' ) );
+			return;
 		}
 
-		if ( 'self' === $settings['endpoint'] && ! $this->get_access_token() ) {
-			$this->print_notice( esc_html__( 'Please, enter Access Token.', 'jet-elements' ) );
-			return;
+		if ( ! $this->get_access_token() ) {
+		 	$this->print_notice( esc_html__( 'Please, enter Business Access Token.', 'jet-elements' ) );
+		 	return;
 		}
 
 		$html = '';
@@ -1086,7 +1119,7 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 
 		$this->config = array(
 			'endpoint'            => $endpoint,
-			'target'              => ( 'hashtag' === $endpoint ) ? sanitize_text_field( $settings[ $endpoint ] ) : 'users',
+			//'hashtag'              => ( 'hashtag' === $endpoint ) ? sanitize_text_field( $settings[ $endpoint ] ) : 'users',
 			'posts_counter'       => $settings['posts_counter'],
 			'post_link'           => filter_var( $settings['post_link'], FILTER_VALIDATE_BOOLEAN ),
 			'post_link_type'      => $settings['post_link_type'],
@@ -1311,21 +1344,25 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 			return $data;
 		}
 
-		if ( $config['use_graph_api'] ) {
-			$response = $this->remote_get_from_qraph_api( $config );
-		} else {
-			$response = $this->remote_get( $config );
-		}
+		// if ( $config['use_graph_api'] ) {
+		// 	$response = $this->remote_get_from_qraph_api( $config );
+		// } else {
+		// 	$response = $this->remote_get( $config );
+		// }
+
+		$response = $this->remote_get( $config );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
-		if ( 'hashtag' === $config['endpoint'] && ! $config['use_graph_api'] ) {
-			$data = $this->get_response_data( $response );
-		} else {
-			$data = $this->get_response_data_from_official_api( $response );
-		}
+		// if ( 'hashtag' === $config['endpoint'] && ! $config['use_graph_api'] ) {
+		// 	$data = $this->get_response_data( $response );
+		// } else {
+		// 	$data = $this->get_response_data_from_official_api( $response );
+		// }
+
+		$data = $this->get_response_data_from_official_api( $response );
 
 		if ( empty( $data ) ) {
 			return array();
@@ -1679,20 +1716,29 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 	 */
 	public function get_grab_url( $config ) {
 
-		if ( 'hashtag' == $config['endpoint'] ) {
-			$url = sprintf( $this->get_tags_url(), $config['target'] );
-			$url = add_query_arg( array( '__a' => 1 ), $url );
+		// if ( 'hashtag' == $config['endpoint'] ) {
+		// 	$url = sprintf( $this->get_tags_url(), $config['target'] );
+		// 	$url = add_query_arg( array( '__a' => 1 ), $url );
 
-		} else {
-			$url = $this->get_self_url();
-			$url = add_query_arg(
-				array(
-					'fields'       => 'id,media_type,media_url,thumbnail_url,permalink,caption',
-					'access_token' => $this->get_access_token(),
-				),
-				$url
-			);
-		}
+		// } else {
+		// 	$url = $this->get_self_url();
+		// 	$url = add_query_arg(
+		// 		array(
+		// 			'fields'       => 'id,media_type,media_url,thumbnail_url,permalink,caption',
+		// 			'access_token' => $this->get_access_token(),
+		// 		),
+		// 		$url
+		// 	);
+		// }
+
+		$url = $this->get_self_url();
+		$url = add_query_arg(
+			array(
+				'fields'       => 'id,media_type,media_url,thumbnail_url,permalink,caption',
+				'access_token' => $this->get_access_token(),
+			),
+			$url
+		);
 
 		return $url;
 	}
@@ -1774,9 +1820,9 @@ class Jet_Elements_Instagram_Gallery extends Jet_Elements_Base {
 	 * @return string
 	 */
 	public function get_transient_key() {
-		return sprintf( 'jet_elements_instagram_%s_%s%s_posts_count_%s_caption_%s_widget_id_%s',
+		return sprintf( 'jet_elements_instagram_%s_%s_posts_count_%s_caption_%s_widget_id_%s',
 			$this->config['endpoint'],
-			$this->config['target'],
+			//$this->config['target'],
 			$this->config['use_graph_api'] ? '_order_' . $this->config['order_by'] : '',
 			$this->config['posts_counter'],
 			$this->config['post_caption_length'],

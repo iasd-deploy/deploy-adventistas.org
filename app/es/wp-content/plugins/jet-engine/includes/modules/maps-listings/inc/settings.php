@@ -25,6 +25,39 @@ class Settings {
 
 		add_action( 'wp_ajax_jet_engine_maps_save_settings', array( $this, 'save_settings' ) );
 
+		add_action( 'wp_ajax_jet_engine_maps_validate_google_map_key', array( $this, 'validate_google_map_key' ) );
+
+	}
+
+	/**
+	 * Validate Google Maps API key
+	 *
+	 * @return [type] [description]
+	 */
+	public function validate_google_map_key() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json( array( 'error_message' => __( 'Access denied', 'jet-engine' ) ) );
+		}
+
+		$nonce = ! empty( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, $this->settings_key ) ) {
+			wp_send_json( array( 'error_message' => __( 'Nonce validation failed. Please, reload the page and try again.', 'jet-engine' ) ) );
+		}
+
+		$api_key = $_REQUEST['key'] ?? '';
+
+		if ( empty( $api_key ) ) {
+			wp_send_json( array( 'error_message' => __( 'No API Key provided', 'jet-engine' ) ) );
+		}
+
+		$address = rawurlencode( $_REQUEST['address'] ?? '' );
+
+		$url = sprintf( 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s', $address, $api_key );
+
+		$response = wp_remote_get( $url );
+
+		wp_send_json( json_decode( wp_remote_retrieve_body( $response ) ) );
 	}
 
 	/**
@@ -55,7 +88,12 @@ class Settings {
 
 		update_option( $this->settings_key, $settings, false );
 
-		wp_send_json_success( array( 'message' => __( 'Settings saved', 'jet-engine' ) ) );
+		wp_send_json_success(
+			array(
+				'message' => __( 'Settings saved', 'jet-engine' ),
+				'additionalData' => apply_filters( 'jet-engine/maps-listing/settings/save-response/additional-data', array(), $settings ),
+			)
+		);
 
 	}
 
@@ -115,16 +153,19 @@ class Settings {
 		wp_localize_script(
 			'jet-engine-maps-settings',
 			'JetEngineMapsSettings',
-			array(
-				'_nonce'          => wp_create_nonce( $this->settings_key ),
-				'settings'        => $this->get_all(),
-				'sources'         => $sources,
-				'fieldsProviders' => $fields_providers,
-				'fields'          => $fields,
-				'customSources'   => $custom_sources,
-				'renderProviders' => Module::instance()->providers->get_providers_for_js( 'map' ),
-				'geoProviders'    => Module::instance()->providers->get_providers_for_js( 'geocode' ),
-			)
+			apply_filters(
+				'jet-engine/maps-listing/settings/js',
+				array(
+					'_nonce'          => wp_create_nonce( $this->settings_key ),
+					'settings'        => $this->get_all(),
+					'sources'         => $sources,
+					'fieldsProviders' => $fields_providers,
+					'fields'          => $fields,
+					'customSources'   => $custom_sources,
+					'renderProviders' => Module::instance()->providers->get_providers_for_js( 'map' ),
+					'geoProviders'    => Module::instance()->providers->get_providers_for_js( 'geocode' ),
+				)
+			),
 		);
 
 		do_action( 'jet-engine/maps-listing/settings/after-assets' );
@@ -226,6 +267,18 @@ class Settings {
 						><?php _e( 'Add existing meta field', 'jet-engine' ); ?></a>
 					</div>
 				</cx-vui-textarea>
+				<div
+					class="cx-vui-component"
+					style="border:none;padding-top:0;"
+					v-if="settings.enable_preload_meta"
+				>
+					<cx-vui-alert
+						style="width:100%;"
+						type="warning"
+						:value="showPreloadWarnings()"
+						v-html="this.preloadWarnings"
+					></cx-vui-alert>
+				</div>
 				<cx-vui-switcher
 					label="<?php _e( 'Avoid markers overlapping', 'jet-engine' ); ?>"
 						description="<?php _e( 'Add a slight offset to avoid overlapping markers with the same addresses', 'jet-engine' ); ?>"

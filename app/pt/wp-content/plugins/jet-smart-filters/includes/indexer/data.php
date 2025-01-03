@@ -36,12 +36,16 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 
 			foreach ( jet_smart_filters()->query->get_default_queries() as $provider => $queries ) {
 				foreach ( $queries as $query_id => $query_args ) {
-					$query_args   = jet_smart_filters()->utils->merge_query_args( $query_args, jet_smart_filters()->query->get_query_args() );
 					$provider_key = $provider . '/' . $query_id;
 
 					if ( empty( $this->indexing_data[$provider_key] ) ) {
 						continue;
 					}
+
+					$query_args = jet_smart_filters()->utils->merge_query_args(
+						$query_args,
+						jet_smart_filters()->query->get_query_args()
+					);
 
 					$provider_indexed_data = $this->get_indexed_data( $provider_key, $query_args );
 
@@ -52,7 +56,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 			}
 
 			if ( ! empty( $indexed_data ) ) {
-				$args['jetFiltersIndexedData'] = apply_filters( 'jet-smart-filters/filters/indexed-data', $indexed_data );
+				$args['jetFiltersIndexedData'] = $indexed_data;
 			}
 
 			do_action( 'jet-smart-filters/indexer/after-prepare-data' );
@@ -89,9 +93,9 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 				$indexed_data = $this->get_indexed_data( $provider_key, $query_args );
 			}
 
-			$args['jetFiltersIndexedData'] = apply_filters( 'jet-smart-filters/filters/indexed-data', array(
+			$args['jetFiltersIndexedData'] = array(
 				$provider_key => $indexed_data
-			) );
+			);
 
 			do_action( 'jet-smart-filters/indexer/after-prepare-data' );
 
@@ -244,12 +248,20 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 						$query_type,
 						$key,
 						$data,
-						$this
+						$this,
+						$queried_ids,
+						$provider_key
 					);
 				}
 			}
 
-			return $indexed_data;
+			return apply_filters( 'jet-smart-filters/filters/indexed-data', $indexed_data, array(
+				'provider_key'  => $provider_key,
+				'query_args'    => $query_args,
+				'type'          => $type,
+				'queried_ids'   => $queried_ids,
+				'indexing_data' => $indexing_data
+			) );
 		}
 
 		/**
@@ -355,7 +367,6 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 						break;
 
 					case 'posts':
-
 						$query_type = 'meta_query';
 						$query_var  = $source['_query_var'][0];
 						$post_type  = isset( $source['_source_post_type'] ) ? $source['_source_post_type'][0] : false;
@@ -399,7 +410,6 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 						$options     = ! empty( $custom_args['options'] ) ? $custom_args['options'] : false;
 
 						if ( empty( $options ) ) {
-						
 							$options = apply_filters( 'jet-smart-filters/filters/filter-options', $options, $filter_id, false );
 
 							if ( ! empty( $options ) ) {
@@ -407,7 +417,6 @@ if ( ! class_exists( 'Jet_Smart_Filters_Indexer_Data' ) ) {
 									return '' !== $value;
 								} );
 							}
-
 						}
 
 						$data[$query_var] = $options;

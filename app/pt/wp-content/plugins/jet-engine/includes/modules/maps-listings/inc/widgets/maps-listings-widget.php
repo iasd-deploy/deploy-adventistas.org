@@ -293,6 +293,17 @@ class Maps_Listings_Widget extends \Elementor\Jet_Listing_Grid_Widget {
 		);
 
 		$this->add_control(
+			'marker_image_size',
+			array(
+				'label'       => __( 'Image Size', 'jet-engine' ),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'full',
+				'options'     => \Jet_Engine_Tools::get_image_sizes(),
+				'description' => __( 'Applies to the main marker if it is of image type, and to conditional image markers.', 'jet-engine' ),
+			)
+		);
+
+		$this->add_control(
 			'marker_icon',
 			array(
 				'label'       => __( 'Icon', 'jet-engine' ),

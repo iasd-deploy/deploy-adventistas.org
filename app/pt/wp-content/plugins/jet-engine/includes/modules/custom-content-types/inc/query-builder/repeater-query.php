@@ -141,15 +141,19 @@ class Repeater_Query {
 			return $object;
 		}
 
-		$flag = \OBJECT;
-		$content_type->db->set_format_flag( $flag );
-
 		$item = $content_type->db->get_item( $object_id );
 
 		if ( ! $item ) {
 			return $object;
 		}
 
-		return $item;
+		/**
+		 * Ensure we sent an object as response, becase format_flag don't work as expected.
+		 * It happens when some other source query item without the OBJECT flag
+		 * and results are cached in Jet_Engine_Base_DB
+		 *
+		 * https://github.com/Crocoblock/issues-tracker/issues/11593
+		 */
+		return (object) $item;
 	}
 }

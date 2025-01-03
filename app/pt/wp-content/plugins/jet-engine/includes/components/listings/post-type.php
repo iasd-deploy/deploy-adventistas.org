@@ -48,7 +48,6 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'listings_page_assets' ) );
 
 				add_filter( 'post_row_actions', array( $this, 'remove_view_action' ), 10, 2 );
-				add_action( 'current_screen', array( $this, 'no_elementor_notice' ) );
 
 			}
 
@@ -131,25 +130,6 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 		}
 
 		/**
-		 * Add notice on listings page if Elementor not installed
-		 *
-		 * @return void
-		 */
-		public function no_elementor_notice() {
-
-			if ( jet_engine()->has_elementor() ) {
-				return;
-			}
-
-			$screen = get_current_screen();
-
-			if ( $screen->id !== 'edit-' . $this->slug() ) {
-				return;
-			}
-
-		}
-
-		/**
 		 * Actions posts
 		 *
 		 * @param  [type] $actions [description]
@@ -166,21 +146,41 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 
 		}
 
+		/**
+		 * Assets related to create new listing/component form
+		 * 
+		 * @param  boolean $force_print_templates [description]
+		 * @param  array   $vars                  [description]
+		 * @return [type]                         [description]
+		 */
 		public function listing_form_assets( $force_print_templates = false, $vars = array() ) {
+
+			jet_engine()->register_jet_plugins_js();
+
+			/**
+			 * Hook fires also in Elemntor editor for inline create listing in Listing Grid widget.
+			 * So be careful with enqueuing additional assets on this hook.
+			 * @see https://github.com/Crocoblock/issues-tracker/issues/13481
+			 */
+			do_action( 'jet-engine/templates/before-listing-assets' );
+
 			wp_enqueue_script(
 				'jet-listings-form',
 				jet_engine()->plugin_url( 'assets/js/admin/listings-popup.js' ),
-				array( 'jquery' ),
+				array( 'jquery', 'jet-plugins' ),
 				jet_engine()->get_version(),
 				true
 			);
 
-			wp_localize_script( 'jet-listings-form', 'JetListingsSettings', array_merge( array(
-				'hasElementor' => jet_engine()->has_elementor(),
-				'exclude'      => array(),
-				'defaults'     => array(),
-				'_nonce'       => wp_create_nonce( $this->nonce_action ),
-			), $vars ) );
+			wp_localize_script( 'jet-listings-form', 'JetListingsSettings', apply_filters(
+				'jet-engine/templates/localized-settings',
+				array_merge( array(
+					'hasElementor' => jet_engine()->has_elementor(),
+					'exclude'      => array(),
+					'defaults'     => array(),
+					'_nonce'       => wp_create_nonce( $this->nonce_action ),
+				), $vars )
+			) );
 
 			wp_enqueue_style(
 				'jet-listings-form',
@@ -197,15 +197,42 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 			
 		}
 
+		/**
+		 * Check if we currently on the Listing Items list page.
+		 *
+		 * @return boolean
+		 */
+		public function is_listings_edit_page() {
+
+			$screen = get_current_screen();
+
+			if ( $screen && $screen->id === 'edit-' . $this->slug() ) {
+				return true;
+			} elseif ( $screen && $screen->id !== 'edit-' . $this->slug() ) {
+				return false;
+			}
+
+			// Catch the case when screen is not set yet
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : false;
+
+			if ( $request_uri
+				&& false !== strpos( $request_uri, 'edit.php' )
+				&& ! empty( $_GET['post_type'] )
+				&& $this->slug() === $_GET['post_type']
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		public function get_nonce_action() {
 			return $this->nonce_action;
 		}
 
 		public function listings_page_assets() {
 
-			$screen = get_current_screen();
-
-			if ( $screen->id !== 'edit-' . $this->slug() ) {
+			if ( ! $this->is_listings_edit_page() ) {
 				return;
 			}
 
@@ -274,9 +301,9 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 
 			$args = array(
 				'labels' => array(
-					'name'               => esc_html__( 'Listing Items', 'jet-engine' ),
-					'singular_name'      => esc_html__( 'Listing Item', 'jet-engine' ),
-					'add_new'            => esc_html__( 'Add New', 'jet-engine' ),
+					'name'               => esc_html__( 'Listing Items/Components', 'jet-engine' ),
+					'singular_name'      => esc_html__( 'Listing Item/Components', 'jet-engine' ),
+					'add_new'            => esc_html__( 'Add New Listing Item', 'jet-engine' ),
 					'add_new_item'       => esc_html__( 'Add New Item', 'jet-engine' ),
 					'edit_item'          => esc_html__( 'Edit Item', 'jet-engine' ),
 					'new_item'           => esc_html__( 'Add New Item', 'jet-engine' ),
@@ -296,7 +323,9 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 				'exclude_from_search' => true,
 				'capability_type'     => 'post',
 				'rewrite'             => false,
-				'supports'            => array( 'title', 'editor', 'thumbnail', 'author', 'elementor', 'custom-fields' ),
+				'supports'            => array( 
+					'title', 'editor', /*'thumbnail',*/ 'author', 'elementor', 'custom-fields'
+				),
 			);
 
 			if ( current_user_can( 'edit_posts' ) ) {
@@ -323,8 +352,8 @@ if ( ! class_exists( 'Jet_Engine_Listings_Post_Type' ) ) {
 
 			add_submenu_page(
 				jet_engine()->admin_page,
-				esc_html__( 'Listings', 'jet-engine' ),
-				esc_html__( 'Listings', 'jet-engine' ),
+				esc_html__( 'Listings/Components', 'jet-engine' ),
+				esc_html__( 'Listings/Components', 'jet-engine' ),
 				'edit_pages',
 				'edit.php?post_type=' . $this->slug()
 			);

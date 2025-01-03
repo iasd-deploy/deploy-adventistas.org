@@ -53,6 +53,7 @@ class Custom_Posts extends Posts {
 
 		if ( ! empty( $this->field_groups ) ) {
 			add_action( 'save_post', array( $this, 'preload_groups' ), 9999 );
+			add_action( 'jet-engine/maps-listing/preload/force/custom-posts', array( $this, 'force_preload_groups' ) );
 		}
 	}
 

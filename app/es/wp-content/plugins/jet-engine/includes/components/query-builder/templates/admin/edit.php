@@ -60,6 +60,20 @@
 				:size="'fullwidth'"
 				v-model="generalSettings.cache_query"
 			></cx-vui-switcher>
+			<cx-vui-input
+				:label="'<?php _e( 'Cache Expires', 'jet-engine' ); ?>'"
+				:description="'<?php _e( 'Object cache expiration time in seconds. Default 0 (no expiration). Please note: this option makes sence when external Object cache used (Redis, Memcached, etc.). In other case cache is actual during single request.', 'jet-engine' ); ?>'"
+				:wrapper-css="[ 'equalwidth' ]"
+				size="fullwidth"
+				v-model="generalSettings.cache_expires"
+				:conditions="[
+					{
+						'input':   generalSettings.cache_query,
+						'compare': 'equal',
+						'value':   true,
+					}
+				]"
+			></cx-vui-input>
 			<cx-vui-switcher
 				:label="'<?php _e( 'Register Rest API Endpoint', 'jet-engine' ); ?>'"
 				:description="'<?php _e( 'Register WordPress Rest API endpoint to make query results publicly accessible and allow to get current query data remotely.', 'jet-engine' ); ?>'"
@@ -218,7 +232,7 @@
 							:value="argRow.arg"
 							@input="( event ) => { updateQueryArgs( index, 'arg', event.target.value ) }"
 							class="cx-vui-input"
-							placeholder="<?php _e( 'Query Argumnet', 'jet-engine' ); ?>"
+							placeholder="<?php _e( 'Query Argument', 'jet-engine' ); ?>"
 						/>
 						<input
 							type="text"
@@ -248,6 +262,15 @@
 									@click.stop="resetQueryArgDelete()"
 								><?php _e( 'No', 'jet-engine' ); ?></span>
 							</div>
+						</cx-vui-button>
+					</div>
+					<div class="jet-engine-query-builder-api-args__actions">
+						<cx-vui-button
+							:button-style="'link-accent'"
+							:size="'link'"
+							@click="addQueryArgRow"
+						>
+							<span slot="label"><?php _e( '+ Add new', 'jet-engine' ); ?></span>
 						</cx-vui-button>
 					</div>
 				</div>
@@ -362,6 +385,16 @@
 						size="fullwidth"
 						name="query_preview_query_string"
 						v-model="generalSettings.preview_query_string"
+						@input="updatePreview"
+					></cx-vui-input>
+					<cx-vui-input
+						label="<?php _e( 'Preview query count', 'jet-engine' ); ?>"
+						description="<?php _e( 'Number of items to show', 'jet-engine' ); ?>"
+						:wrapper-css="[ 'preview-control' ]"
+						type="number"
+						size="fullwidth"
+						name="query_preview_query_count"
+						v-model="generalSettings.preview_query_count"
 						@input="updatePreview"
 					></cx-vui-input>
 				</div>

@@ -20,7 +20,7 @@ class Jet_Smart_Filters_Compatibility_Manager {
 
 		if ( defined( 'WPML_ST_VERSION' ) ) {
 			require jet_smart_filters()->plugin_path( 'includes/compatibility/wpml.php' );
-			new Jet_Smart_Filters_Compatibility_WMPL();
+			new Jet_Smart_Filters_Compatibility_WPML();
 		}
 
 		if ( class_exists( 'WooCommerce' ) ) {
@@ -29,12 +29,11 @@ class Jet_Smart_Filters_Compatibility_Manager {
 		}
 
 		if ( function_exists( 'jet_engine' ) ) {
-			require jet_smart_filters()->plugin_path( 'includes/compatibility/jet-engine.php' );
+			require jet_smart_filters()->plugin_path( 'includes/compatibility/jet-engine/manager.php' );
 			new Jet_Smart_Filters_Compatibility_JE();
 		}
 
 		add_filter( 'jet-smart-filters/filters/localized-data',  array( $this, 'datepicker_texts' ) );
-
 	}
 
 	public function datepicker_texts( $args ) {
@@ -104,5 +103,4 @@ class Jet_Smart_Filters_Compatibility_Manager {
 
 		return $args;
 	}
-
 }

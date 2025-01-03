@@ -54,6 +54,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Date_Period_Filter' ) ) {
 			$content_provider     = isset( $args['content_provider'] ) ? $args['content_provider'] : false;
 			$additional_providers = isset( $args['additional_providers'] ) ? $args['additional_providers'] : false;
 			$apply_type           = isset( $args['apply_type'] ) ? $args['apply_type'] : false;
+			$apply_on             = isset( $args['apply_on'] ) ? $args['apply_on'] : false;
 			$button_text          = isset( $args['button_text'] ) ? $args['button_text'] : false;
 			$button_icon          = isset( $args['button_icon'] ) ? $args['button_icon'] : false;
 			$hide_button          = isset( $args['hide_button'] ) ? $args['hide_button'] : false;
@@ -92,6 +93,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Date_Period_Filter' ) ) {
 				'content_provider'       => $content_provider,
 				'additional_providers'   => $additional_providers,
 				'apply_type'             => $apply_type,
+				'apply_on'               => $apply_on,
 				'filter_id'              => $filter_id,
 				'hide_button'            => $hide_button,
 				'button_text'            => $button_text,

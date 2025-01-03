@@ -1,5 +1,233 @@
 # ChangeLog
 
+## 3.6.2
+* ADD: Map Listings. Map synch filer for JetSmartFilters;
+* ADD: Dynamic Image. Caption option;
+* ADD: Query Builder. CCT query. Add search parameter;
+* UPD: Query Builder. Show numeric Query ID in the queries list;
+* UPD: Dynamic Visibility. Prevent conditions checks in the Elementor editor in some cases to optimize performance;
+* FIX: Data Stores. WPML. Ensure that only original post is added to store;
+* FIX: Icons visibility problem inside iconpicker meta field in some cases;
+* FIX: Profile Builder. Set user-related Component context as current user for while component renders;
+* FIX: Bricks. CCT Dynamic Image Marker;
+* FIX: Bricks. Incorrect {query_results_count_filter} output after filtering;
+* FIX: Elementor. Markup break on containers with "a" tag;
+* FIX: CCT. JSF indexer shows 0 in some cases;
+* FIX: Map Listings. Leaflet maps provider problem on addresses with special chars;
+* FIX: Components. Ensure component-related assets enqueued only on Listing Items page;
+* FIX: Dynamic Image. Elementor lightbox compatibility.
+
+## 3.6.1.2
+* FIX: JetSmartFilters - Fatal error when using Query Builder with Random order.
+
+## 3.6.1.1
+* FIX: Bricks. Fatal error when using Query Builder with Bricks loop.
+
+## 3.6.1
+* ADD: `jet-engine/relations/types/mix/items/users` & `jet-engine/relations/types/mix/item-title/users` filters to change related users lists format;
+* UPD: CCT. Show warning when leaving CCT Item Edit page only in case if there are unsaved changes;
+* UPD: Allow to change Listing Grid HTML tags by hooking into liting grid setting - https://github.com/Crocoblock/suggestions/issues/7256#issuecomment-2535372125;
+* FIX: Bricks. Code Signature error for code blocks inside listing grid items;
+* FIX: Bricks. Query Loop + Query builder + Load More + Dynamic Styles problem;
+* FIX: Bricks. Prevent PHP warnings in some cases;
+* FIX: Custom Meta Storage. Geo Query compatibility;
+* FIX: Custom Meta Storage. Admin Filters;
+* FIX: PHP 8.1+ deprecated notice in some cases;
+* FIX: Listing Grid. JSF signature verification with Lazy Load;
+* FIX: Components. Better handling of Elementor dynamic CSS;
+* FIX: Map Listings. Preload  coordinates for field groups for posts created by JetFormBuilder;
+* FIX: Listing Grid. Do not do Load More if query -1 in items per page;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7818
+
+## 3.6.0.1
+* FIX: Map Listing missed on the front-end after 3.6.0 update.
+
+## 3.6.0
+* ADD: AI webiste builder;
+* ADD: Dynamic Calendar: Allow to select month and year;
+* ADD: Timber/Twig Views: Emmet support;
+* ADD: Components: Rich Text control type;
+* ADD: Query Builder: allow to edit queries from the front-end;
+* UPD: Relations: Allow to manually reorder items;
+* FIX: CCT: Ensure CCT item returned as object for the repeater query;
+* FIX: WPML compatibility. PHP warnings in some cases;
+* FIX: Object cache reset on the data update in custom DB tables;
+* FIX: Reset Object Stack index on stack decrease;
+* FIX: Prevent PHP notices on new DB tables creation in some cases.
+
+## 3.5.8
+* ADD: Bricks. Allow to use JetEngine macros in dynamic data with {je_macros:%macros_tag%} dynamic tag;
+* ADD: "jet-engine/custom-meta-tables/object-schema/{$object_slug}" hook to modify created custom meta table schema;
+* FIX: Block Editor. Correctly duplicate Listing Grid block;
+* FIX: Block Editor. Component styles affects core styles in editor;
+* FIX: Bricks: Query Loop + Query Builder with CCT + Load more problem;
+* FIX: Bricks: Re-init scripts after month switch in Dynamic Calendar & Map Listing;
+* FIX: Bricks: Better Listing Grid built with Bricks & WPML compatibility;
+* FIX: Bricks: Layout Switcher breaks content after listing;
+* FIX: Map Listings: Displaying of distance in the popup in Map Listing;
+* FIX: Profile Builder: Profile Menu & WPML compatibility;
+* FIX: Query Builder: Allow to set Cache Expiration period for external object cache storages;
+* FIX: Excessive AJAX requests in Block Editor in some cases;
+* FIX: Dynamic tags in Listing Popup.
+
+## 3.5.7
+* UPD: https://github.com/Crocoblock/suggestions/issues/7752;
+* UPD: https://github.com/Crocoblock/suggestions/issues/7757;
+* FIX: Default settings for Listing grid in Bricks;
+* FIX: CCT query count;
+* FIX: Rank Math meta description lost in some cases;
+* FIX: Bricks. Query select not appearing in section loop;
+* FIX: Empty Profile Builder dashboard in some cases.
+
+## 3.5.6
+* ADD: Calendar. Frontend cache;
+* ADD: Map Field. Allow manually edit text address to save;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7697;
+* FIX: https://github.com/Crocoblock/suggestions/issues/6014;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7657;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7678;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7628;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7706;
+* FIX: Bricks. Loop with JetEngine Query Builder + Query Builder Switcher + JSF Load More;
+* FIX: Listing Grig Injections. Injections with negative item number;
+* FIX: Profile Builder. Subpages meta title doesn't work;
+* FIX: Components. Background image issue;
+* FIX: Components. Context on a Single User Page;
+* FIX: Dynamic Visibility. Repeater values check.
+
+## 3.5.5
+* ADD: CCT. Register CCT providers for JetSearch;
+* ADD: Bricks. {je_current_object_field} dynamic token;
+* UPD: Taxonomies: Allow to set query_var parameter to taxonomy slug;
+* FIX: Bricks. Components display inside popups;
+* FIX: Profile Builder & Dynamic Visibility. Is Profile Page condition in Blocks editor;
+* FIX: Profile Builder: WPML Language switcher not working properly on Profile Builder pages;
+* FIX: WooCommerce: PHP warning on order page in some cases;
+* FIX: Meta Fields: PHP warning in some cases;
+* FIX: Relations: Filter listing for terms by 2 relations;
+* DEL: Removed Borlabs Cookie integration in prefer to use native integration from Borlabs.
+
+## 3.5.4
+* ADD: Indexes for Relations tables;
+* ADD: Ability to make Repeater Listing items clickable with link from repeater item;
+* UPD: Skins import. Allow to update existing CPTs;
+* FIX: https://github.com/Crocoblock/suggestions/issues/2841;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7325;
+* FIX: Bug with Dynamic Data in Bricks Loop with WC Product Query;
+* FIX: Quick edit for Multiple Select that has default checked items;
+* FIX: Bricks. Listing Grid Injection output wrong post info;
+* FIX: Components. Blocks/Timber components lose styles in Bricks editor;
+
+## 3.5.3
+* ADD: Dynamic Terms Widget. Fallback Field;
+* UPD: Listing Grid Widget. Change Custom Query control UI type;
+* FIX: Locations and Distance filter. Multiple filter on the page;
+* FIX: Data Stores. Remove from User IP Store + Polylang and WPML;
+* FIX: Bricks. Export/import Bricks listings and components;
+* FIX: Blocks editor & Bricks. Lazy Load + Auto Column;
+* FIX: Bricks. Listing on archive page with lazy load is not displayed;
+* FIX: Bricks. Elements doesn't show info in Bricks query loop after on of the previous updates;
+* FIX: Meta Fields. Value is not presetting in repeater inner checkbox field.
+* FIX: Components & Bricks. Styling problems.
+
+## 3.5.2
+* ADD: Custom Meta Storage. Trigger core hooks after adding, updating, deleting custom storage fields;
+* ADD: `Parent Object` context;
+* UPD: Product type list in WC meta box conditional settings;
+* UPD: Field vdata alidation in Quick Edit section;
+* FIX: Dynamic Visibility: Compatibility with Elemetns cache fgor Elementor;
+* FIX: Gamipress fatal error;
+* FIX: Components + Bricks:  PHP warning;
+* FIX: Bricks + Listing Grid: Re-initialize Bricks scripts after `load more` event;
+* FIX: Advanced date: getting incorrect next or end date;
+* FIX: Injection Listing not working with Meta or Taxonomy;
+* FIX: Glossary: Handle errors for file glossaries after site migration;
+* FIX: Issue with layout of wysiwyg metafield;
+* FIX: Set current page object for Listing Grid popups;
+
+## 3.5.1
+* ADD: `jet-engine/relations/types/posts/get-items/post-statuses` hook;
+* FIX: Bricks Builder: Improve the generation of styles for the listing grid;
+* FIX: CCT Quick Edit always scroll to top of the page;
+* FIX: Meta fields for WooCommerce orders with High-performance order storage feature;
+* FIX: Field values count callback when WooCommerce is activated;
+* FIX: Filtering dynamic table by query without cache query results;
+* FIX: An issue with delete post option;
+* FIX: Fatal errors in some cases;
+* FIX: Converts a value to non-negative integer;
+* FIX: Ensure listing document type is always set for Elementor;
+* FIX: Sets the queried object for rendering JetEngine dynamic widgets in a popup;
+* FIX: Dynamic Link widget do not show correct link in Elementor Loop item on Profile page;
+* FIX: Warning about unique "key" prop in block editor;
+* FIX: Dynamic Visibility. Deprecated error with PHP 8.3.4;
+* FIX: Dynamic Calendar. Multi days aren't shown.
+
+## 3.5.0
+* ADD: Components Functionality;
+* ADD: Allow to store default post Meta Data in custom DB tables;
+* ADD: Query Builder: new query type - Merged Query;
+* ADD: Allow to store repeater sub fields as separate meta fields;
+* ADD: Layout Switcher module: stable release;
+* UPD: Minor fixes and improvements.
+
+## 3.4.6
+* ADD: Aability to set Query Builder preview query count;
+* FIX: Bricks Builder. Dynamic User Data in Listing Grid;
+* FIX: Bricks Builder. Generating dynamic styles for the Dynamic Calendar;
+* FIX: Bricks Builder. Filters + Lazy Load and Custom Query in listing;
+* FIX: https://github.com/Crocoblock/suggestions/issues/7481;
+* FIX: Not all Listing Items templates appear on the injection listing dropdown;
+* FIX: Fatal error if no macro object;
+* FIX: Data Store issue with Polylang;
+
+## 3.4.5
+* ADD: Query Builder. Add ability to query Form Records by IDs for JetFormBuilder Query type;
+* FIX: Dynamic Calendar. Problem with displaying current month events;
+* FIX: Bricks Builder. Problem with the Dynamic Image and infinite loop slider in the Listing Grid;
+* FIX: Listing Grid. Injection by checkbox meta doesn't work;
+* FIX: Listing Grid. Infinite Scroll duplicates items in Blocks Editor;
+* FIX: Related data incorrectly get on the front-end in some cases;
+* FIX: Dynamic Function fail on SQL with whitespaces after semi-colon;
+* FiX: Permalink option with context for related items doesn't work in some cases.
+
+## 3.4.4
+* ADD: Ability to sort by calc columns in SQL query https://github.com/Crocoblock/suggestions/issues/7200;
+* ADD: Allow to delete related meta data when deleting meta field;
+* UPD: Compatibility of Media and Gallery meta field types with SEO plugins;
+* UPD: Allow to ddd more than 1 header in the REST API Endpoints https://github.com/Crocoblock/suggestions/issues/7294;
+* UPD: Add 'custom' to size units for the column gap in the Listing Grid widget for Elementor;
+* FIX: Can't display relation meta data in Bricks Loop;
+* FIX: 404 error when the page has the same slug as the account page;
+* FIX: Profile Builder redirection doesn't work on main account page for users with restricted access;
+* FIX: Dynamic Field is breaking in Bricks, when there is nested query loop;
+* FIX: Register CCT Dynamic tags for ajax request.
+
+## 3.4.3
+* ADD: `jet-engine/maps-listings/autocomplete-url-args/openstreetmap` filter;
+* FIX: JetSmartFilters+JetEngine: Pagination/Load More with random order;
+* FIX: Bricks. Dynamic field. Image gallery slider, image size;
+* FIX: Bricks: Data store button causes error in console, if there is no Elementor plugin installed;
+* FIX: Process adding custom meta values with single quotes;
+* FIX: Dynamic fields in the Elementor Loop Grid with exclude current post causes warnings;
+* FIX: Bricks: Dynamic Styles for CCT;
+* FIX: Location & Distance filter in the popup does not work;
+* FIX: Reset radius in Location and Distance filter;
+* FIX: Purchased Products macros https://github.com/Crocoblock/suggestions/issues/7447;
+* FIX: Taxonomy admin filters doesn't work with private posts;
+* FIX: Colorpicker meta field disregarded in gradient background type;
+
+## 3.4.2
+* ADD: an ability to change a cct_created date in CCT Admin UI;
+* ADD: Masonry Layout for Images gallery grid callback;
+* FIX: Relations + Polylang compatibility;
+* FIX: Warnings in CCT Repeater listing;
+* FIX: Clickable listing template + Add to Cart source;
+* FIX: JS process filters on re-init;
+* FIX: Current WP Query. 'Posts per page' settings do not work;
+* FIX: Add custom value / save custom indexer problems;
+* FIX: Bricks. Fatal error in the listing (CPT/User/Term) when use bricks dynamic tag;
+* FIX: Bricks. Show media field type.
+
 ## 3.4.1
 * UPD: Elementor Views: Allow manually set field name in Current Object Field dynamic tag;
 * FIX: Relations: Relation meta data do not displays on the Map Listing;

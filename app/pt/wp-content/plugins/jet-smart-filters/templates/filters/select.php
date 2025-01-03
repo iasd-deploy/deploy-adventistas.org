@@ -47,9 +47,9 @@ $accessibility_label = $args['accessibility_label'];
 
 		<?php
 
-		foreach ( $options as $value => $label ) {
-
+		foreach ( $options as $optionKey => $optionData ) {
 			$selected = '';
+			extract( jet_smart_filters()->utils->сreate_option_data( $optionKey, $optionData ), EXTR_OVERWRITE );
 
 			if ( $current ) {
 				if ( is_array( $current ) && in_array( $value, $current ) ) {
@@ -66,6 +66,9 @@ $accessibility_label = $args['accessibility_label'];
 				data-label="<?php echo $label; ?>"
 				data-counter-prefix="<?php echo $counter_prefix; ?>"
 				data-counter-suffix="<?php echo $counter_suffix; ?>"
+				<?php if ( ! empty( $data_attrs ) ) {
+					echo jet_smart_filters()->utils->generate_data_attrs( $data_attrs );
+				} ?>
 				<?php echo $selected; ?>
 			><?php echo $label; ?></option>
 			<?php

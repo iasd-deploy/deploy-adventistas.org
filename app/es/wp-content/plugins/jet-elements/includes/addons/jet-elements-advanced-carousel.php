@@ -42,6 +42,19 @@ class Jet_Elements_Advanced_Carousel extends Jet_Elements_Base {
 		return array( 'cherry' );
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'jet-carousel', 'jet-carousel-skin', 'jet-banner' ];
+	}
+
 	public function get_script_depends() {
 		return array( 'jet-slick' );
 	}
@@ -396,6 +409,9 @@ class Jet_Elements_Advanced_Carousel extends Jet_Elements_Base {
 				'options'            => jet_elements_tools()->get_select_range( 10 ),
 				'frontend_available' => true,
 				'render_type'        => 'template',
+				'condition' => array(
+					'fluid_width!' => 'true',
+				),
 			)
 		);
 

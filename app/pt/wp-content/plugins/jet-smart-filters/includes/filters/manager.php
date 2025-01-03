@@ -71,11 +71,11 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Manager' ) ) {
 				'settings'        => jet_smart_filters()->providers->get_provider_settings(),
 				'misc'            => array(
 					'week_start'       => get_option( 'start_of_week' ),
-					'url_type'         => jet_smart_filters()->settings->get( 'url_structure_type' ),
+					'url_type'         => jet_smart_filters()->settings->url_structure_type,
 					'valid_url_params' => $this->get_valid_url_params(),
 				),
 				'props'           => jet_smart_filters()->query->get_query_props(),
-				'extra_props'     => array(),
+				'extra_props'     => new stdClass(),
 				'templates'       => $this->get_localization_templates(),
 				'plugin_settings' => array(
 					'use_tabindex'       => jet_smart_filters()->settings->get( 'use_tabindex', false ),
@@ -90,6 +90,22 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Manager' ) ) {
 					)
 				)
 			) );
+
+			if ( jet_smart_filters()->render->use_signature_verification && ! empty( $localized_data['settings'] ) ) {
+				foreach( $localized_data['settings'] as $provider => $provider_queries ) {
+					foreach( $provider_queries as $query_id => $query_settings ) {
+						
+						if ( ! empty( $query_settings['jsf_signature'] ) ) {
+							unset( $query_settings['jsf_signature'] );
+						}
+
+						$signature = jet_smart_filters()->render->create_signature( $query_settings );
+						$query_settings['jsf_signature'] = $signature;
+
+						$localized_data['settings'][ $provider ][ $query_id ] = $query_settings;
+					}
+				}
+			}
 
 			wp_localize_script( 'jet-smart-filters', 'JetSmartFilterSettings', $localized_data );
 		}
@@ -127,7 +143,9 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Manager' ) ) {
 				'sort',
 				'alphabet',
 				'_s',
+				'_sm',
 				'pagenum',
+				'plain_query',
 				// backward compatibility
 				'jet-smart-filters',
 				'jet_paged',
@@ -149,35 +167,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Manager' ) ) {
 				return;
 			}
 
-			wp_register_style(
-				'font-awesome',
-				jet_smart_filters()->plugin_url( 'assets/lib/font-awesome/font-awesome.min.css' ),
-				array(),
-				'4.7.0'
-			);
-
-			wp_enqueue_style(
-				'jet-smart-filters',
-				jet_smart_filters()->plugin_url( 'assets/css/public.css' ),
-				array('font-awesome'),
-				jet_smart_filters()->get_version()
-			);
-
-			// Filter inline styles
-			$tabindex_color = jet_smart_filters()->settings->get( 'tabindex_color', '#0085f2' );
-
-			$filter_inline_styles = "
-				.jet-filter {
-					--tabindex-color: $tabindex_color;
-					--tabindex-shadow-color: " . jet_smart_filters()->utils->hex2rgba( $tabindex_color, 0.4 ) . ";
-				}
-			";
-
-			if ( jet_smart_filters()->provider_preloader->is_enabled ) {
-				$filter_inline_styles .= jet_smart_filters()->provider_preloader->css;
-			}
-
-			wp_add_inline_style( 'jet-smart-filters', $filter_inline_styles );
+			wp_enqueue_style( 'jet-smart-filters' );
 		}
 
 		/**

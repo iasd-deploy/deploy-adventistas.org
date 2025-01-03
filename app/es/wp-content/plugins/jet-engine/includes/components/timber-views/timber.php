@@ -52,6 +52,8 @@ class Package {
 		require_once $this->package_path( 'view/render.php' );
 		require_once $this->package_path( 'conditional-tags.php' );
 		require_once $this->package_path( 'object-factory.php' );
+		require_once $this->package_path( 'content-setter.php' );
+		require_once $this->package_path( 'components/register.php' );
 		
 		$this->editor   = new Editor\Render();
 		$this->listing  = new Editor\Listing();
@@ -59,6 +61,8 @@ class Package {
 		$this->render   = new View\Render();
 
 		new Conditional_Tags();
+		new Components\Register();
+		new Content_Setter();
 
 		add_action( 'init', [ $this, 'after_init_hook' ], 999 );
 
@@ -126,6 +130,12 @@ class Package {
 		return $template->render( $context );
 	}
 
+	/**
+	 * get twig context for given object.
+	 *
+	 * @param  object $object Object to get contxt for.
+	 * @return array
+	 */
 	public function get_context_for_object( $object ) {
 
 		$context        = [];
@@ -144,7 +154,6 @@ class Package {
 		$object_factory->set_current( $object );
 
 		return apply_filters( 'jet-engine/twig-views/current-context', $context, $object );
-
 	}
 
 	/**

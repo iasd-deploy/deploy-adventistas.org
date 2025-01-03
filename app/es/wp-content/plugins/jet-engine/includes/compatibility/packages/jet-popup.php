@@ -156,6 +156,31 @@ if ( ! class_exists( 'Jet_Engine_Popup_Package' ) ) {
 				return $content;
 			}
 
+			//https://github.com/Crocoblock/issues-tracker/issues/9853
+			//try setting queried object based on the current page URL
+			//filter `jet-engine/compatibility/popup-package/set-queried-object` may be used to prevent this
+			if ( ! empty( $popup_data['page_url'] ) && apply_filters( 'jet-engine/compatibility/popup-package/set-queried-object', true, $popup_data ) ) {
+				//https://github.com/Crocoblock/issues-tracker/issues/11887
+				//ensure that wp_redirect will not work when setting queried object
+				add_filter( 'wp_redirect', '__return_false', PHP_INT_MAX );
+
+				$_SERVER['REQUEST_URI'] = str_replace( site_url(), '', $popup_data['page_url'] );
+				$_SERVER['REQUEST_URI'] = preg_replace( '/#.+$/', '', $_SERVER['REQUEST_URI'] );
+				$_SERVER['PHP_SELF']    = '/index.php';
+
+				global $wp;
+	
+				$wp->parse_request();
+				$wp->query_posts();
+				wp_reset_postdata();
+
+				do_action( 'jet-engine/profile-builder/query/maybe-setup-props' );
+				
+				jet_engine()->listings->objects_stack->save_root();
+
+				remove_filter( 'wp_redirect', '__return_false', PHP_INT_MAX );
+			}
+			
 			do_action( 'jet-engine/compatibility/popup-package/get-content', $content, $popup_data );
 
 			$source   = ! empty( $popup_data['listingSource'] ) ? $popup_data['listingSource'] : 'posts';

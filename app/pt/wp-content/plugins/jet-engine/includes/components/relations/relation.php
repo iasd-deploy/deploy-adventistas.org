@@ -1,6 +1,8 @@
 <?php
 namespace Jet_Engine\Relations;
 
+use Jet_Engine\Relations\Storage\Ordering;
+
 /**
  * Relation object
  */
@@ -32,12 +34,13 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Relation {
 
-	private $raw_args = array();
-	private $rel_id = array();
-	private $controls;
-	private $rel_cache_group = 'jet_engine_rel';
-	private $update_context  = null;
-	private $control_context = null;
+	protected $raw_args = array();
+	protected $rel_id = array();
+	protected $controls;
+	protected $rel_cache_group = 'jet_engine_rel';
+	protected $update_context  = null;
+	protected $control_context = null;
+	protected $query_order = array();
 
 	public $db;
 	public $meta_db;
@@ -73,6 +76,12 @@ class Relation {
 
 		do_action( 'jet-engine/relations/init/' . $rel_id, $this );
 
+		if ( 'date' === Ordering::instance()->get_mode() ) {
+			$this->query_order = array( array(
+				'orderby' => 'created',
+				'order'   => 'desc',
+			) );
+		}
 	}
 
 	public function init_public_rest_api() {
@@ -619,7 +628,7 @@ class Relation {
 		$children  = wp_cache_get( $cache_key, $this->rel_cache_group );
 
 		if ( ! $children ) {
-			$children = $this->db->query( $query_args );
+			$children = $this->get_items( $query_args );
 			wp_cache_set( $cache_key, $children, $this->rel_cache_group );
 		}
 
@@ -665,7 +674,7 @@ class Relation {
 		$parents   = wp_cache_get( $cache_key, $this->rel_cache_group );
 
 		if ( ! $parents ) {
-			$parents = $this->db->query( $query_args );
+			$parents = $this->get_items( $query_args );
 			wp_cache_set( $cache_key, $parents, $this->rel_cache_group );
 		}
 
@@ -737,7 +746,7 @@ class Relation {
 		$result    = wp_cache_get( $cache_key, $this->rel_cache_group );
 
 		if ( ! $result ) {
-			$result = $this->db->query( $query_args );
+			$result = $this->get_items( $query_args );
 		}
 
 		if ( 'all' !== $fields ) {
@@ -750,6 +759,16 @@ class Relation {
 
 		return apply_filters( 'jet-engine/relations/get-siblings', $result, $object_id, $fields, $this );
 
+	}
+
+	/**
+	 * Internal wrapper to db::query method
+	 *
+	 * @param  array  $query_args [description]
+	 * @return [type]             [description]
+	 */
+	public function get_items( $query_args = [] ) {
+		return $this->db->query( $query_args, 0, 0, $this->query_order );
 	}
 
 	/**
@@ -1271,6 +1290,12 @@ class Relation {
 
 		if ( ! empty( $exists ) ) {
 			return $exists[0];
+		}
+
+		$allow_update = apply_filters( 'jet-engine/relation/update/allow_update', true, $parent_object, $child_object, $this );
+
+		if ( ! $allow_update ) {
+			return false;
 		}
 
 		do_action( 'jet-engine/relation/update/before', $parent_object, $child_object, $this );

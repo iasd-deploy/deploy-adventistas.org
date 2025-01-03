@@ -399,6 +399,25 @@ if ( ! class_exists( 'Jet_Engine_Blocks_Views_Type_Grid' ) ) {
 					),
 					'css_selector' => array(
 						':is( {{WRAPPER}} > .jet-listing-grid > .jet-listing-grid__items, {{WRAPPER}} > .jet-listing-grid > .jet-listing-grid__slider > .jet-listing-grid__items > .slick-list > .slick-track, {{WRAPPER}} > .jet-listing-grid > .jet-listing-grid__scroll-slider > .jet-listing-grid__items ) > .jet-listing-grid__item' => 'padding-top: calc({{VALUE}}{{UNIT}} / 2); padding-bottom: calc({{VALUE}}{{UNIT}} / 2);',
+						':is( {{WRAPPER}} > .jet-listing-grid, {{WRAPPER}} > .jet-listing-grid > .jet-listing-grid__slider, {{WRAPPER}} > .jet-listing-grid > .jet-listing-grid__scroll-slider ) > .jet-listing-grid__items.grid-collapse-gap' => 'margin-top: calc(-{{VALUE}}{{UNIT}} / 2); margin-bottom: calc(-{{VALUE}}{{UNIT}} / 2);',
+					),
+				)
+			);
+
+			$this->controls_manager->add_control(
+				array(
+					'id'         => 'collapse_first_last_gap',
+					'type'       => 'toggle',
+					'label'      => esc_html__( 'Correct first/last row gap', 'jet-engine' ),
+					'help'       => esc_html__( 'Correct first/last row Ensure that the first and last rows do not have unnecessary gap on top/bottom.', 'jet-engine' ),
+					'return_value' => array(
+						'true'  => 'true',
+						'false' => 'false',
+					),
+					'attributes' => array(
+						'default' => array(
+							'value' => false,
+						)
 					),
 				)
 			);

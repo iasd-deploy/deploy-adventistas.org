@@ -1,5 +1,13 @@
 # Elementor Pro - by Elementor.com
 
+#### 3.26.2 - 2024-12-22
+
+* Fix: Menu items are not clickable in various scenarios in Menu widget ([#29191](https://github.com/elementor/elementor/issues/29191))
+
+#### 3.26.1 - 2024-12-17
+
+* Fix: Restore deprecated `Plugin::enqueue_styles()` function to avoid errors with 3rd party plugins
+
 #### 3.26.0 - 2024-12-16
 
 * New: Introducing dynamic content support for Off-canvas in Loop Grid widget templates - enabling seamless display of additional content dynamically ([#29049](https://github.com/elementor/elementor/issues/29049), [#28935](https://github.com/elementor/elementor/issues/28935), [#7106](https://github.com/elementor/elementor/issues/7106))

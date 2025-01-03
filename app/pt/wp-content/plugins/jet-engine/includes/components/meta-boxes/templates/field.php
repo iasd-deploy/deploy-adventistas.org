@@ -14,6 +14,8 @@
 		:wrapper-css="[ 'equalwidth' ]"
 		size="fullwidth"
 		:value="field.name"
+		:error="fieldError"
+		@on-keyup="fieldError = false"
 		@input="setFieldProp( 'name', $event )"
 		@on-input-change="sanitizeFieldName()"
 	></cx-vui-input>
@@ -405,7 +407,12 @@
 				'input':    field.object_type,
 				'compare': 'equal',
 				'value':   'field',
-			}
+			},
+			{
+				'input':   field.is_multiple,
+				'compare': 'not_equal',
+				'value':   true,
+			},
 		], 'placeholder' )"
 	></cx-vui-input>
 	<cx-vui-switcher
@@ -612,6 +619,7 @@
 							'jet-engine-conditional-field': true,
 							'cx-vui-repeater-item__copy': true,
 							'jet-engine-conditional-field--active': hasConditions( rField ),
+							'jet-engine-conditional-field--invalid': repeaterFieldConditionsInvalid( rField, field ),
 						}"
 					>
 						<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414">
@@ -1004,6 +1012,35 @@
 	</cx-vui-component-wrapper>
 
 	<cx-vui-switcher
+		label="<?php _e( 'Save as separate fields', 'jet-engine' ); ?>"
+		description="<?php _e( 'Toggle this option to store the value of each repeater field as a separate field', 'jet-engine' ); ?>"
+		:wrapper-css="[ 'equalwidth' ]"
+		:value="field.repeater_save_separate"
+		@input="setFieldProp( 'repeater_save_separate', $event )"
+		:conditions="getFilteredFieldConditions( [
+			{
+				'input':   field.type,
+				'compare': 'equal',
+				'value':   'repeater',
+			},
+			{
+				'input':   field.object_type,
+				'compare': 'equal',
+				'value':   'field',
+			},
+			{
+				'input':   'repeater_save_separate',
+				'compare': 'not_in',
+				'value':   disabledFields,
+			},
+			{
+				'input':   'repeater_save_separate',
+				'compare': 'not_in',
+				'value':   hideOptions,
+			}
+		], 'repeater_save_separate' )"
+	></cx-vui-switcher>
+	<cx-vui-switcher
 		label="<?php _e( 'Collapsed', 'jet-engine' ); ?>"
 		description="<?php _e( 'Toggle this option to collapse repeater items on page load', 'jet-engine' ); ?>"
 		:wrapper-css="[ 'equalwidth' ]"
@@ -1239,6 +1276,25 @@
 		], 'default_val' )"
 		@input="setFieldProp( 'default_val', $event )"
 	></cx-vui-input>
+	<cx-vui-switcher
+		label="<?php _e( 'On by default', 'jet-engine' ); ?>"
+		description="<?php _e( 'Make switcher On by default', 'jet-engine' ); ?>"
+		:wrapper-css="[ 'equalwidth' ]"
+		:value="field.on_by_default"
+		@input="setFieldProp( 'on_by_default', $event )"
+		:conditions="getFilteredFieldConditions( [
+			{
+				'input':    field.type,
+				'compare': 'equal',
+				'value':   'switcher',
+			},
+			{
+				'input':    field.object_type,
+				'compare': 'equal',
+				'value':   'field',
+			}
+		], 'on_by_default' )"
+	></cx-vui-switcher>
 	<cx-vui-switcher
 		label="<?php _e( 'Is required', 'jet-engine' ); ?>"
 		description="<?php _e( 'Toggle this option to make this field as required one', 'jet-engine' ); ?>"

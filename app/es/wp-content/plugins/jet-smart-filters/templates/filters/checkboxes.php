@@ -49,8 +49,9 @@ $current = $this->get_current_filter_value( $args );
 		echo $walker->walk( $options, 0, $args );
 		echo '</div>';
 	} else {
-		foreach ( $options as $value => $label ) {
+		foreach ( $options as $optionKey => $optionData ) {
 			$checked = '';
+			extract( jet_smart_filters()->utils->сreate_option_data( $optionKey, $optionData ), EXTR_OVERWRITE );
 
 			if ( $current ) {
 				if ( is_array( $current ) && in_array( $value, $current ) ) {

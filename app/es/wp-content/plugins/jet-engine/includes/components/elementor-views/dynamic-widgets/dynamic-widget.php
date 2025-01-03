@@ -186,10 +186,6 @@ abstract class Jet_Listing_Dynamic_Widget extends \Elementor\Widget_Base {
 
 	public function jet_settings( $setting = null ) {
 
-		if ( is_admin() ) {
-			return $this->get_settings( $setting );
-		}
-
 		if ( null === $this->jet_settings ) {
 			$this->jet_settings = $this->jet_with_defaults( $this->get_data( 'settings' ) );
 		}

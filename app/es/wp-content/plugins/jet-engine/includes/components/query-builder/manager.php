@@ -61,6 +61,7 @@ class Manager extends \Jet_Engine_Base_WP_Intance {
 	public $queries = array();
 	public $listings;
 	public $editor;
+	public $frontend_editor = null;
 
 	/**
 	 * Instance.
@@ -96,8 +97,18 @@ class Manager extends \Jet_Engine_Base_WP_Intance {
 		add_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'init_rest' ) );
 		add_action( 'jet-engine/meta-boxes/init-options-sources', array( $this, 'init_options_source' ) );
 
+		add_filter( 'jet-engine/listing-injections/item-meta-value', array( $this, 'get_injection_repeater_field_value' ), 10, 3 );
+
 		$this->init_admin_pages();
 
+	}
+
+	public function get_injection_repeater_field_value( $value, $post, $meta_key ) {
+		if ( ! class_exists( 'Jet_Engine_Queried_Repeater_Item' ) || ! is_a( $post, 'Jet_Engine_Queried_Repeater_Item' ) ) {
+			return $value;
+		}
+
+		return isset( $post->$meta_key ) ? array( $post->$meta_key ) : false;
 	}
 
 	public function init_options_source() {
@@ -181,9 +192,14 @@ class Manager extends \Jet_Engine_Base_WP_Intance {
 		require $this->component_path( 'query-gateway/manager.php' );
 		require $this->component_path( 'helpers/posts-per-page-manager.php' );
 		require $this->component_path( 'traits/query-count.php' );
+		require_once $this->component_path( 'frontend-editor.php' );
 
 		$this->editor   = new Query_Editor();
 		$this->listings = new Listings\Manager();
+
+		if ( is_user_logged_in() && apply_filters( 'jet-engine/query-builder/frontend-editor/is-enabled', current_user_can( 'manage_options' ) ) ) {
+			$this->frontend_editor = new Frontend_Editor();
+		}
 
 		new Query_Gateway\Manager;
 

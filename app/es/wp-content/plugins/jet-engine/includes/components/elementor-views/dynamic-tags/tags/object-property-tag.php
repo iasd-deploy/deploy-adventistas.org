@@ -76,10 +76,10 @@ class Jet_Engine_Object_Property_Tag extends Elementor\Core\DynamicTags\Data_Tag
 		);
 
 		$this->add_control(
-			'notice',
+			'advanced_section_notice',
 			array(
 				'type' => Elementor\Controls_Manager::RAW_HTML,
-				'raw'  => '<div style="font-weight: bold; font-style: italic;">' . esc_html__( 'The following settings only work for string values.', 'jet-engine' ) . '</div>',
+				'raw'  => '<i>' . esc_html__( 'The following settings only work for string values.', 'jet-engine' ) . '</i>',
 			)
 		);
 

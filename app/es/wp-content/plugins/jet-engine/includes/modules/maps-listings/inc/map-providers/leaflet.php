@@ -81,6 +81,11 @@ class Leaflet extends Base {
 			true 
 		);
 
+		wp_add_inline_script(
+			'jet-leaflet-map',
+			'window.JetEngineLeaflet = window.L;'
+		);
+
 		if ( $marker_clustering ) {
 			wp_enqueue_script(
 				'jet-leaflet-markercluster',

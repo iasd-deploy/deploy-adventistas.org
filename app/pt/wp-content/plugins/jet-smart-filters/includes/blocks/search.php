@@ -501,15 +501,15 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Search' ) ) {
 		 */
 		public function render_callback( $settings = array() ) {
 
-			jet_smart_filters()->set_filters_used();
-
-			if ( empty( $settings['filter_id'] ) ) {
+			if ( ! jet_smart_filters()->utils->is_filter_published( $settings['filter_id'] ) ) {
 				return $this->is_editor() ? __( 'Please select a filter', 'jet-smart-filters' ) : false;
 			}
 
 			if ( empty( $settings['content_provider'] ) || $settings['content_provider'] === 'not-selected' ) {
 				return $this->is_editor() ? __( 'Please select a provider', 'jet-smart-filters' ) : false;
 			}
+
+			jet_smart_filters()->set_filters_used();
 
 			$filter_id            = apply_filters( 'jet-smart-filters/render_filter_template/filter_id', $settings['filter_id'] );
 			$base_class           = 'jet-smart-filters-' . $this->get_name();

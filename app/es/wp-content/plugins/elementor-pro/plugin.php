@@ -224,6 +224,12 @@ class Plugin {
 		return $frontend_file_path;
 	}
 
+	/**
+	 * @deprecated 3.26.0
+	 * @return void
+	 */
+	public function enqueue_styles(): void {}
+
 	public function enqueue_frontend_scripts() {
 		$suffix = $this->get_assets_suffix();
 

@@ -4,6 +4,28 @@ namespace Jet_Engine\Modules\Dynamic_Visibility;
 class Condition_Checker {
 
 	/**
+	 * Prevent condition check.
+	 * By default prevent for admin, can be changed with hook.
+	 *
+	 * @return boolen
+	 */
+	public function prevent_check() {
+
+		$prevent_check = false;
+
+		if ( is_admin() && ! empty( $_GET['post'] ) ) {
+			$prevent_check = true;
+		}
+
+		/**
+		 * Allows to disbale or modify preventing of conditions check.
+		 */
+		$prevent_check = apply_filters( 'jet-engine/modules/dynamic-visibility/condition/prevent-check', $prevent_check );
+
+		return $prevent_check;
+	}
+
+	/**
 	 * Check render conditions
 	 *
 	 * @param  [type] $result  [description]

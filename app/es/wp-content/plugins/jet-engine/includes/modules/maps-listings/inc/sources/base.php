@@ -2,6 +2,7 @@
 namespace Jet_Engine\Modules\Maps_Listings\Source;
 
 use Jet_Engine\Modules\Maps_Listings\Module;
+use Jet_Engine\Modules\Maps_Listings\Map_Field;
 
 abstract class Base {
 
@@ -27,6 +28,10 @@ abstract class Base {
 
 	abstract public function get_failure_key( $obj );
 
+	public function get_field_prefix( $field ) {
+		return Map_Field::get_field_prefix( $field );
+	}
+
 	/**
 	 * Defines if is source is for preloading non-JetEngine fields
 	 * @return boolean [description]
@@ -51,7 +56,7 @@ abstract class Base {
 	 * @param  [type]
 	 * @param  string
 	 * @param  [type]
-	 * @return [type]
+	 * @return void|array
 	 */
 	public function get_field_coordinates( $obj, $location_string = '', $field_name = null ) {
 
@@ -59,7 +64,7 @@ abstract class Base {
 			$field_name = $this->lat_lng->meta_key;
 		}
 
-		$field_hash    = md5( $field_name );
+		$field_hash    = $this->get_field_prefix( $field_name );
 		$location_hash = $this->get_field_value( $obj, $field_hash . '_hash' );
 
 		// Try to get legacy preloaded data and update it
@@ -127,6 +132,17 @@ abstract class Base {
 	public function preload_groups( $obj_id ) {
 		$this->lat_lng->set_current_source( $this->get_id() );
 		$this->lat_lng->preload_groups( $obj_id );
+	}
+
+	/**
+	 * Force preload fields groups
+	 *
+	 * @param  int  $obj_id
+	 * @return void
+	 */
+	public function force_preload_groups( $obj_id ) {
+		$this->lat_lng->not_done();
+		$this->preload_groups( $obj_id );
 	}
 
 	public function get_field_groups() {

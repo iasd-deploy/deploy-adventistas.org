@@ -87,7 +87,7 @@ class Button_Function extends \Jet_Engine\Timber_Views\View\Functions\Base {
 		$args['synch_grid_id'] = [
 			'label'       => __( 'Listing grid ID', 'jet-engine' ),
 			'type'        => 'text',
-			'description' => __( 'Here you need to set listing ID to reload. The same ID must be set in the Advanced settings of selected listing', 'jet-engine' ),
+			'description' => __( 'Here you need to set listing ID to reload. The same ID must be set in the Advanced settings of selected listing. Put comma-separated IDs to update multiple listings.', 'jet-engine' ),
 			'condition'   => array(
 				'synch_grid' => 'true',
 			),

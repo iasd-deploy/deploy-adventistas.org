@@ -459,6 +459,53 @@
 			}
 		},
 
+		observer: function( $element, callback, options = {} ) {
+
+			const defaultOptions = {
+				offset: '0px', // Default offset
+				triggerOnce: true, // Trigger only once when entering the viewport
+			};
+
+			options = jQuery.extend( defaultOptions, options );
+
+			const observerOptions = {
+				root: null, // Default to the viewport
+				rootMargin: '0px', 
+				threshold: 0, 
+			};
+
+			 // Track the previous position of each element
+			const previousY = new WeakMap();
+
+			const observer = new IntersectionObserver(( entries, observer ) => {
+				entries.forEach(( entry ) => {
+
+					const currentY = entry.boundingClientRect.y;
+            		const prevY = previousY.get( entry.target ) || currentY;
+					const element = entry.target;
+					const direction = currentY < prevY ? 'down' : 'up';
+					 // Update the previous position
+					 previousY.set( entry.target, currentY );
+
+					if ( entry.isIntersecting ) {
+						const result = callback.call( element, direction, entry );
+						// If triggerOnce is enabled, unobserve the element
+						if ( options.triggerOnce ) {
+							observer.unobserve( element );
+						}
+						return result;
+					} 
+				});
+			}, observerOptions );
+			
+			// Attach observer to each element
+			$element.each( function () {
+				observer.observe( this );
+			});
+
+    		return observer;
+		},
+
 		prepareWaypointOptions: function( $scope, waypointOptions ) {
 			var options = waypointOptions || {},
 				$parentPopup = $scope.closest( '.jet-popup__container-inner, .elementor-popup-modal .dialog-message' );
@@ -533,7 +580,7 @@
 								breakpointsSettings[currentDeviceMode]['circumference']
 			);
 
-			elementorFrontend.waypoint( $scope, function() {
+			JetElements.observer( $scope, function() {
 
 				// animate counter
 				var $number = $scope.find( '.circle-counter__number' ),
@@ -1345,7 +1392,7 @@
 				type         = $target.data( 'type' ),
 				deltaPercent = percent * 0.01;
 
-			elementorFrontend.waypoint( $target, function( direction ) {
+			JetElements.observer( $target, function( direction ) {
 				var $this        = $( this ),
 					animeObject  = { charged: 0 },
 					$statusBar   = $( '.jet-progress-bar__status-bar', $this ),
@@ -1384,8 +1431,8 @@
 							$( { Counter: 0 } ).animate( { Counter: currentValue }, {
 								duration: 1000,
 								easing: 'swing',
-								step: function () {
-									$percent.text( Math.ceil( this.Counter ) + '/' + maxValue );
+								step: function ( now ) { 
+									$percent.text( Math.round( now ) + '/' + maxValue ); 
 								}
 							} );
 						}
@@ -1730,7 +1777,26 @@
 				accessibility     = true,
 				prevDeviceToShowValue,
 				prevDeviceToScrollValue,
-				slidesCount;
+				slidesCount,
+				jetListing        = eTarget.closest( '.jet-listing-grid' ).hasClass( 'jet-listing' ),
+				jetListingItem    = eTarget.closest( '.jet-listing-grid__item' ),
+				jetnextArrow      = eTarget.find( '.prev-arrow' ),
+				jetprevArrow      = eTarget.find( '.next-arrow' );
+
+			// Compatibility slick carousel with jet listing
+			if ( jetListing && jetListingItem ){
+
+				options.nextArrow = false;
+				options.prevArrow = false;
+
+				jetListingItem.find( jetnextArrow ).on( 'click', function () {
+					$target.slick( 'slickPrev' );
+				});
+
+				jetListingItem.find( jetprevArrow ).on( 'click', function () {
+					$target.slick( 'slickNext' );
+				});
+			}
 
 			if ( $target.hasClass( 'jet-image-comparison__instance' ) ) {
 				accessibility = false;
@@ -1969,6 +2035,10 @@
 
 			if ( options.slidesToShow >= slidesCount ) {
 				options.dots = false;
+			}
+
+			if ( options.variableWidth ) { 
+				options.slidesToShow = 1; 
 			}
 
 			defaultOptions = {
@@ -2638,7 +2708,7 @@
 				};
 			}
 
-			elementorFrontend.waypoint( $scope, function() {
+			JetElements.observer( $scope, function() {
 				var chartInstance = new Chart( $canvas, {
 					type:    'pie',
 					data:    data,
@@ -2695,7 +2765,7 @@
 				}
 			}
 
-			elementorFrontend.waypoint( $chart_canvas, function() {
+			JetElements.observer( $chart_canvas, function() {
 				var $this         = $( this ),
 					ctx           = $this[0].getContext( '2d' ),
 					wrappedLabels = [];
@@ -2746,7 +2816,7 @@
 				return;
 			}
 
-			elementorFrontend.waypoint( $line_chart_canvas, function() {
+			JetElements.observer( $line_chart_canvas, function() {
 
 				var $this   = $( this ),
 					ctx     = $this[0].getContext( '2d' ),
@@ -3966,6 +4036,10 @@
 					let $section  = sections[section].selector,
 						sectionId = $section.attr( 'id' );
 
+					if ( settings.sectionSwitch  ) { 
+						return false; 
+					}
+
 					if ( ! $('#' + sectionId  ).isInViewport() ) {
 						$( '[data-anchor=' + sectionId + ']', $instance ).removeClass( 'active' );
 					}
@@ -3975,7 +4049,7 @@
 			for ( var section in sections ) {
 				var $section = sections[section].selector;
 
-				elementorFrontend.waypoint( $section, function( direction ) {
+				JetElements.observer( $section, function( direction ) {
 					var $this = $( this ),
 						sectionId = $this.attr( 'id' );
 
@@ -3999,7 +4073,7 @@
 					triggerOnce: false
 				} );
 
-				elementorFrontend.waypoint( $section, function( direction ) {
+				JetElements.observer( $section, function( direction ) {
 					var $this = $( this ),
 						sectionId = $this.attr( 'id' );
 

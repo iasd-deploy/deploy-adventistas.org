@@ -147,28 +147,9 @@ class Query {
 		$use_load_more = ! empty( $settings['use_load_more'] ) ? $settings['use_load_more'] : false;
 		$use_load_more = filter_var( $use_load_more, FILTER_VALIDATE_BOOLEAN );
 
-		// Add `orderby` args to the request if use random order
-		if ( $use_load_more && ! empty( $query->current_wp_query ) ) {
-
-			$orderby = $query->current_wp_query->get( 'orderby' );
-
-			if ( ! empty( $orderby ) && is_array( $orderby ) ) {
-
-				$has_random_orderby = false;
-
-				foreach ( $orderby as $key => $order ) {
-
-					if ( false === strpos( $key, 'RAND' ) ) {
-						continue;
-					}
-
-					$has_random_orderby = true;
-				}
-
-				if ( $has_random_orderby ) {
-					$request['filtered_query']['orderby'] = $orderby;
-				}
-			}
+		// Add `orderby random seed` to the request if use random order
+		if ( $use_load_more && ! empty( $query->final_query['_random_seed'] ) ) {
+			$request['filtered_query']['_random_seed'] = $query->final_query['_random_seed'];
 		}
 
 		return $request;

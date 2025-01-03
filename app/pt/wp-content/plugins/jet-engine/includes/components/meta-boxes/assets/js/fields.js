@@ -13,7 +13,7 @@ Vue.component( 'jet-meta-field-options', {
 			default: function() {
 				return {};
 			},
-		}
+		},
 	},
 	data() {
 		return {
@@ -141,12 +141,18 @@ Vue.component( 'jet-meta-field', {
 		slugDelimiter: {
 			type: String,
 			default: function() {
-				return '-';
+				return '_';
 			},
 		},
 		index: {
 			type: Number,
 			default: 0,
+		},
+		reservedNames: {
+			type: Array,
+			default: function() {
+				return [];
+			},
 		}
 	},
 	data() {
@@ -159,6 +165,7 @@ Vue.component( 'jet-meta-field', {
 			i18n: JetEngineFieldsConfig.i18n,
 			quickEditSupports: JetEngineFieldsConfig.quick_edit_supports,
 			iconsLibraries: JetEngineFieldsConfig.icons_libraries,
+			fieldError: false,
 		};
 	},
 	created() {
@@ -201,6 +208,7 @@ Vue.component( 'jet-meta-field', {
 			this.$emit( 'input', this.field );
 		},
 		getFilteredFieldConditions: function( conditions, fieldOption ) {
+
 			return window.JetPlugins.hooks.applyFilters( 
 				'jetEngine.metaFields.fieldConditions',
 				conditions,
@@ -238,12 +246,27 @@ Vue.component( 'jet-meta-field', {
 			var regex = /\s+/g;
 			var name  = this.field.name || this.field.title;
 			
-			name = name.toLowerCase().replace( regex, this.slugDelimiter );;
+			name = name.toLowerCase().replace( regex, this.slugDelimiter );
 			name = window.JetEngineTools.maybeCyrToLatin( name );
 			names.splice( this.index, 1 );
 
 			if ( -1 !== names.indexOf( name ) ) {
 				name = name + '_' + Math.floor( Math.random() * Math.floor( 999 ) );
+			}
+
+			if ( this.reservedNames 
+				&& this.reservedNames.length
+				&& this.reservedNames.includes( name )
+			) {
+				
+				this.fieldError = true;
+				this.$CXNotice.add( {
+					message: `'${name}' is reserved for internal use. Please rename this field`,
+					type: 'error',
+					duration: 8000,
+				} );
+
+				return;
 			}
 
 			this.$set( this.field, 'name', name );
@@ -489,6 +512,34 @@ Vue.component( 'jet-meta-field', {
 		hasConditions: function( object ) {
 			return object.conditional_logic && object.conditions && object.conditions.length;
 		},
+		getRepeaterFields: function( repeater ) {
+			let fields = [];
+
+			if ( ! Array.isArray( repeater?.['repeater-fields'] ) ) {
+				return fields;
+			}
+
+			for ( const field of repeater['repeater-fields'] ) {
+				fields.push( field.name );
+			}
+
+			return fields;
+		},
+		repeaterFieldConditionsInvalid( object, repeater ) {
+			if ( ! Array.isArray( object?.conditions ) ) {
+				return false;
+			}
+
+			const rFields = this.getRepeaterFields( repeater );
+
+			for ( const condition of object.conditions ) {
+				if ( ! rFields.includes( condition.field ) || condition.field === object.name ) {
+					return true;
+				}
+			}
+			
+			return false;
+		},
 		getRandomID: function() {
 			return Math.floor( Math.random() * 8999 ) + 1000;
 		},
@@ -521,8 +572,18 @@ Vue.component( 'jet-meta-fields', {
 		slugDelimiter: {
 			type: String,
 			default: function() {
-				return '-';
+				return '_';
 			},
+		},
+		reservedNames: {
+			type: Array,
+			default: function() {
+				return [];
+			},
+		},
+		fieldValidationCallback: {
+			type: Function,
+			default: null,
 		},
 	},
 	data: function() {
@@ -599,6 +660,26 @@ Vue.component( 'jet-meta-fields', {
 		},
 	},
 	methods: {
+		fieldIsValid: function( field, returnType ) {
+
+			returnType = returnType || 'bool';
+
+			if ( this.fieldValidationCallback ) {
+				try {
+					this.fieldValidationCallback( field );
+				} catch( e ) {
+					if ( 'error' === returnType ) {
+						return e;
+					} else {
+						return false;
+					}
+				}
+
+			}
+
+			return true;
+
+		},
 		onInput: function() {
 			this.$emit( 'input', this.fieldsList );
 		},
@@ -695,6 +776,19 @@ Vue.component( 'jet-meta-fields', {
 		},
 		hasConditions: function( object ) {
 			return object.conditional_logic && object.conditions && object.conditions.length;
+		},
+		conditionsInvalid( object ) {
+			if ( ! Array.isArray( object?.conditions ) ) {
+				return false;
+			}
+
+			for ( const condition of object.conditions ) {
+				if ( ! this.fieldsNames.includes( condition.field ) || condition.field === object.name ) {
+					return true;
+				}
+			}
+			
+			return false;
 		},
 		setConditionsFieldProps: function( fieldIndex, rFieldIndex, valueObj ) {
 

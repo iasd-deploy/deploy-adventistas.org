@@ -62,8 +62,14 @@ class Update_Preview extends \Jet_Engine_Base_API_Endpoint {
 		$more  = '';
 		$count = $query->get_items_total_count();
 
-		if ( 10 < $count ) {
-			$items = array_slice( $items, 0, 10 );
+		$max_count = absint( $preview['query_count'] ?? 10 );
+
+		if( ! $max_count  ) {
+			$max_count = 10;
+		}
+
+		if ( $max_count < $count ) {
+			$items = array_slice( $items, 0, $max_count );
 			$more  = "\r\n...";
 		}
 
@@ -90,9 +96,9 @@ class Update_Preview extends \Jet_Engine_Base_API_Endpoint {
 				$wp_query = new \WP_Query( array( 'p' => $pid ) );
 			}
 
-		}
+		} elseif ( ! empty( $preview['page_url'] ) && false !== strpos( $_SERVER['REQUEST_URI'], '/wp-json/' ) ) {
 
-		if ( ! empty( $preview['page_url'] ) ) {
+			// Raw URL processing is allowed only for pretty permalinks
 			$_SERVER['REQUEST_URI'] = preg_replace(
 				'/wp-json\/.*/',
 				ltrim( $preview['page_url'], '/' ),
@@ -103,6 +109,7 @@ class Update_Preview extends \Jet_Engine_Base_API_Endpoint {
 
 			$wp->parse_request();
 			$wp->query_posts();
+			wp_reset_postdata();
 
 		}
 

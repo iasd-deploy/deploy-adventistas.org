@@ -171,6 +171,24 @@
 					label="<?php _e( 'Account Page', 'jet-engine' ); ?>"
 					key="account_page"
 				>
+					<cx-vui-textarea
+						label="<?php _e( 'Account Page Title', 'jet-engine' ); ?>"
+						description="<?php _e( 'Set seo title for account page', 'jet-engine' ); ?>"
+						:wrapper-css="[ 'equalwidth', 'has-macros' ]"
+						size="fullwidth"
+						v-model="settings.account_page_seo_title"
+					>
+						<jet-profile-macros @add-macro="addMacroToField( $event, 'account_page_seo_title' )" :active-tab="activeTab"></jet-profile-macros>
+					</cx-vui-textarea>
+					<cx-vui-textarea
+						label="<?php _e( 'Account Page Description', 'jet-engine' ); ?>"
+						description="<?php _e( 'Set seo description for account page', 'jet-engine' ); ?>"
+						:wrapper-css="[ 'equalwidth', 'has-macros' ]"
+						size="fullwidth"
+						v-model="settings.account_page_seo_desc"
+					>
+						<jet-profile-macros @add-macro="addMacroToField( $event, 'account_page_seo_desc' )" :active-tab="activeTab"></jet-profile-macros>
+					</cx-vui-textarea>
 					<cx-vui-select
 						label="<?php _e( 'For not authorized users', 'jet-engine' ); ?>"
 						description="<?php _e( 'What to do when non-authorized user try to access account page', 'jet-engine' ); ?>"
@@ -322,7 +340,7 @@
 						size="fullwidth"
 						v-model="settings.user_page_seo_title"
 					>
-						<jet-profile-macros @add-macro="addMacroToField( $event, 'user_page_seo_title' )"></jet-profile-macros>
+						<jet-profile-macros @add-macro="addMacroToField( $event, 'user_page_seo_title' )" :active-tab="activeTab"></jet-profile-macros>
 					</cx-vui-textarea>
 					<cx-vui-textarea
 						label="<?php _e( 'User Page Description', 'jet-engine' ); ?>"
@@ -331,7 +349,7 @@
 						size="fullwidth"
 						v-model="settings.user_page_seo_desc"
 					>
-						<jet-profile-macros @add-macro="addMacroToField( $event, 'user_page_seo_desc' )"></jet-profile-macros>
+						<jet-profile-macros @add-macro="addMacroToField( $event, 'user_page_seo_desc' )" :active-tab="activeTab"></jet-profile-macros>
 					</cx-vui-textarea>
 					<cx-vui-select
 						label="<?php _e( 'User Page Image Field', 'jet-engine' ); ?>"

@@ -93,7 +93,11 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Base' ) ) {
 				return false;
 			}
 
-			$predefined_value = get_post_meta( $filter_id, '_default_filter_value', true );
+			$predefined_value = apply_filters( 'jet-smart-filters/filters/predefined-value',
+				get_post_meta( $filter_id, '_default_filter_value', true ),
+				$filter_id,
+				$this->get_id()
+			);
 
 			return $predefined_value == ''
 				? false

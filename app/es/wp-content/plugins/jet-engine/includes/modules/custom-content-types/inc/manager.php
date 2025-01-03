@@ -146,6 +146,20 @@ class Manager extends \Jet_Engine_Base_WP_Intance {
 				$this->_post_types_map[ $instance->get_arg( 'related_post_type' ) ] = $instance->get_arg( 'slug' );
 			}
 
+			// Initialize JetSearch compatibility
+			add_action( 'jet-search/sources/register', function( $source_manager ) use ( $instance ) {
+
+				if ( ! class_exists( '\Jet_Engine\Modules\Custom_Content_Types\Jet_Search\Source' ) ) {
+					require Module::instance()->module_path( 'jet-search/source.php' );
+				}
+
+				$source = new Jet_Search\Source();
+				$source->set_cct_instance( $instance );
+
+				$source_manager->register_source( $source );
+
+			} );
+
 		}
 
 		do_action( 'jet-engine/custom-content-types/after-register-instances', $this );
@@ -399,6 +413,7 @@ class Manager extends \Jet_Engine_Base_WP_Intance {
 		$result  = array();
 		$options = array(
 			'random_order' => __( 'Random order', 'jet-engine' ),
+			'preserve_ids' => __( 'Preserve item ID order given in the query arguments', 'jet-engine' ),
 		);
 
 		if ( $for_js ) {

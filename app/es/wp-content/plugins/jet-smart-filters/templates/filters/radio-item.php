@@ -3,7 +3,7 @@
  * Checkbox list item template
  */
 
-$checked_icon = apply_filters( 'jet-smart-filters/templates/radio/checked-icon', 'fa fa-check' );
+$checked_icon = apply_filters( 'jet-smart-filters/templates/radio/checked-icon', jet_smart_filters()->print_template( 'svg/check.svg' ) );
 $collapsible  = isset( $args['collapsible'] ) ? $args['collapsible'] : false;
 
 ?>
@@ -20,12 +20,17 @@ $collapsible  = isset( $args['collapsible'] ) ? $args['collapsible'] : false;
 			name="<?php echo $query_var; ?>"
 			value="<?php echo $value; ?>"
 			data-label="<?php echo $label; ?>"
+			<?php if ( ! empty( $data_attrs ) ) {
+				echo jet_smart_filters()->utils->generate_data_attrs( $data_attrs );
+			} ?>
 			aria-label="<?php echo $label; ?>"
 			<?php echo $checked; ?>
 		>
 		<div class="jet-radio-list__button">
 			<?php if ( $show_decorator ) : ?>
-				<span class="jet-radio-list__decorator"><i class="jet-radio-list__checked-icon <?php echo $checked_icon ?>"></i></span>
+				<span class="jet-radio-list__decorator">
+					<i class="jet-radio-list__checked-icon"><?php echo $checked_icon ?></i>
+				</span>
 			<?php endif; ?>
 			<span class="jet-radio-list__label"><?php echo $label; ?></span>
 			<?php

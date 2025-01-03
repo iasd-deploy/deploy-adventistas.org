@@ -71,7 +71,7 @@ registerBlockType( 'jet-smart-filters/user-geolocation', {
 							<div>
 								<h4 style={{margin:'5px 0 0'}}>Please note!</h4>
 								<p style={{ color: '#757575', fontSize: '12px' }}>
-									This filter is compatible only with queries from JetEngine Query Builder. ALso you need to set up <a href="https://crocoblock.com/knowledge-base/jetengine/how-to-set-geo-search-based-on-user-geolocation/" target="_blank">Geo Query</a> in your query settings to meke filter to work correctly.
+									This filter is compatible only with queries from JetEngine Query Builder. ALso you need to set up <a href="https://crocoblock.com/knowledge-base/jetengine/how-to-set-geo-search-based-on-user-geolocation/" target="_blank">Geo Query</a> in your query settings to make the filter work correctly.
 								</p>
 							</div>
 							<SelectControl

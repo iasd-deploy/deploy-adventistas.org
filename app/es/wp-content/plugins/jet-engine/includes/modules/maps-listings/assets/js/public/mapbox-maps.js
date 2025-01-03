@@ -44,6 +44,66 @@ window.JetEngineMapsProvider = function() {
 		return 'mapbox';
 	}
 
+	this.getContainer = function( map ) {
+		return map.getContainer();
+	}
+
+	this.getBoundsJSON = function( map ) {
+		const bounds = map.getBounds();
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		return {
+			east: bounds.getEast(),
+			north: bounds.getNorth(),
+			south: bounds.getSouth(),
+			west: bounds.getWest()
+		};
+	}
+
+	this.updateSyncBounds = function() {
+
+		const map = this;
+
+		const bounds = map.getBounds();
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		window.JetEngineMaps.dispatchMapSyncEvent(
+			map,
+			{
+				east: bounds.getEast(),
+				north: bounds.getNorth(),
+				south: bounds.getSouth(),
+				west: bounds.getWest()
+			}
+		);
+	}
+
+	this.initSync = function( map ) {
+		
+		if ( map?.isJetEngineSyncInited || ! window.JetEngineMaps || ! window.JetSmartFilters ) {
+			return;
+		}
+
+		map.on( 'zoomend', this.updateSyncBounds );
+		map.on( 'moveend', this.updateSyncBounds );
+		map.on( 'resize', this.updateSyncBounds );
+
+		map.once(
+			'load',
+			() => {
+				window.JetEngineMaps.dispatchMapSyncInitEvent( map );
+			}
+		);
+
+		map.isJetEngineSyncInited = true;
+	}
+	
 	this.initMap = function( container, settings ) {
 
 		settings = settings || {};
@@ -84,6 +144,8 @@ window.JetEngineMapsProvider = function() {
 		mapboxgl.accessToken = window.JetEngineMapboxData.token;
 
 		const map = new mapboxgl.Map( parsedSettings );
+
+		this.initSync( map );
 
 		return map;
 	}
@@ -156,6 +218,7 @@ window.JetEngineMapsProvider = function() {
 	this.openPopup = function( trigger, callback, infobox, map, openOn ) {
 
 		infobox.popup.on( 'open', () => {
+			map.isInternalInteraction = true;
 			callback();
 			this._activePopup = infobox.popup;
 		} );
@@ -166,6 +229,7 @@ window.JetEngineMapsProvider = function() {
 			const markerDiv = trigger.getElement();
 
 			markerDiv.addEventListener( 'mouseenter', () => {
+				map.isInternalInteraction = true;
 				this.triggerOpenPopup( trigger );
 			} );
 		}
@@ -212,6 +276,8 @@ window.JetEngineMapsProvider = function() {
 	}
 
 	this.setAutoCenter = function( data ) {
+		data.map.isInternalInteraction = true;
+
 		this.fitMapBounds( data );
 	}
 

@@ -83,7 +83,9 @@
 
 			ajaxRequest.nonce = window.JetEnginMBAjaxConditionsSettings.nonce;
 
-			$.ajax({
+			this?.xhr?.abort();
+
+			this.xhr = $.ajax({
 				url: window.ajaxurl,
 				type: 'POST',
 				dataType: 'json',
@@ -102,6 +104,10 @@
 					}
 				}
 			} ).fail( function( jqXHR, textStatus, errorThrown ) {
+				if ( textStatus === 'abort' ) {
+					return;
+				}
+				
 				alert( errorThrown );
 			} );
 
@@ -253,8 +259,8 @@
 				var args = arguments;
 
 				var later = () => {
-					this.timeout = null;
 					clearTimeout( this.timeout );
+					this.timeout = null;
 					callback.apply( context, args );
 				};
 
@@ -270,8 +276,37 @@
 	class GutenAjaxConditions extends AjaxConditions {
 
 		init() {
+			this.currentTerms = {};
 			wp.data.subscribe( this.debounce( this.updateData, 100 ).bind( this ) );
 			this.updateData();
+		}
+
+		updateData() {
+			if ( this.termsChanged() ) {
+				this.currentTerms = this.getTerms();
+				super.updateData();
+			}
+		}
+
+		termsChanged() {
+			const prev = this.currentTerms ?? {};
+			const current = this.getTerms() ?? {};
+			
+			if ( Object.keys( prev ).length !== Object.keys( current ).length ) {
+				return true;
+			}
+
+			for ( const tax in current ) {
+				if ( ! prev[ tax ] || prev[ tax ].length !== current[ tax ].length ) {
+					return true;
+				}
+
+				if ( ! prev[ tax ].every( ( term ) => current[ tax ].includes( term ) ) ) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		getTemplate() {

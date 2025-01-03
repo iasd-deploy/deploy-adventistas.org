@@ -327,6 +327,7 @@
 					:wrapper-css="[ 'equalwidth' ]"
 					v-model="generalSettings.hide_field_names"
 				></cx-vui-switcher>
+				<?php do_action( 'jet-engine/custom-content-types/edit-type/custom-settings' ); ?>
 			</div>
 		</cx-vui-collapse>
 		<cx-vui-popup
@@ -350,7 +351,7 @@
 				<code style="display:block; width: 100%; font-size:12px;">{{ restBase }}{{ generalSettings.slug }}/?cct_author_id=1&_orderby=_ID&_order=desc&_ordertype=integer</code>
 			</div>
 		</cx-vui-popup>
-		<jet-meta-fields v-model="metaFields" :hide-options="[ 'show_in_rest', 'revision_support' ]" slug-delimiter="_"></jet-meta-fields>
+		<jet-meta-fields v-model="metaFields" :hide-options="[ 'show_in_rest', 'revision_support', 'repeater_save_separate' ]" slug-delimiter="_"></jet-meta-fields>
 		<cx-vui-collapse
 			:collapsed="false"
 		>

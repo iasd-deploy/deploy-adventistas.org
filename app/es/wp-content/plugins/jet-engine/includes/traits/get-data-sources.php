@@ -4,6 +4,8 @@
  */
 
 trait Jet_Engine_Get_Data_Sources_Trait {
+
+	public static $sources_cache = [];
 	
 	/**
 	 * Get meta fields for post type
@@ -11,6 +13,12 @@ trait Jet_Engine_Get_Data_Sources_Trait {
 	 * @return array
 	 */
 	public function get_dynamic_sources( $for = 'media', $is_common = false ) {
+
+		$common_prefix = $is_common ? '/common' : '';
+
+		if ( ! empty( self::$sources_cache[ $for . $common_prefix ] ) ) {
+			return self::$sources_cache[ $for . $common_prefix ];
+		}
 
 		if ( 'media' === $for ) {
 
@@ -36,6 +44,10 @@ trait Jet_Engine_Get_Data_Sources_Trait {
 					array(
 						'value' => '_permalink',
 						'label' => __( 'Permalink', 'jet-engine' ),
+					),
+					array(
+						'value' => '_file',
+						'label' => __( 'Media File', 'jet-engine' ),
 					),
 					array(
 						'value' => 'delete_post_link',
@@ -68,12 +80,10 @@ trait Jet_Engine_Get_Data_Sources_Trait {
 		}
 
 		$result = apply_filters(
-			'jet-engine/blocks-views/editor/dynamic-sources/fields',
+			'jet-engine/dynamic-sources/url-fields',
 			array_merge( array( $default ), $meta_fields ),
 			$for
 		);
-
-		$common_prefix = $is_common ? '/common' : '';
 
 		if ( 'media' === $for ) {
 			$hook_name = 'jet-engine/listings/dynamic-image/fields' . $common_prefix;
@@ -102,6 +112,10 @@ trait Jet_Engine_Get_Data_Sources_Trait {
 					continue;
 				}
 
+				if ( ! isset( $data['label'] ) ) {
+					continue;
+				}
+
 				$values = array();
 
 				if ( ! empty( $data['options'] ) ) {
@@ -121,7 +135,9 @@ trait Jet_Engine_Get_Data_Sources_Trait {
 
 		}
 
-		return $result;
+		self::$sources_cache[ $for . $common_prefix ] = $result;
+
+		return self::$sources_cache[ $for . $common_prefix ];
 
 	}
 

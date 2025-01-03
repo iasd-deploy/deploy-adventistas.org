@@ -58,6 +58,8 @@ if ( ! class_exists( 'CX_Controls_Base' ) ) {
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_depends' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_depends' ) );
+
+			do_action( 'cx-interface-builder/control/construct', $this );
 		}
 
 		/**

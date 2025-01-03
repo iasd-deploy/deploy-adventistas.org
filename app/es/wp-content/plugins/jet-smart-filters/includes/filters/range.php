@@ -65,6 +65,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Range_Filter' ) ) {
 			$content_provider     = isset( $args['content_provider'] ) ? $args['content_provider'] : false;
 			$additional_providers = isset( $args['additional_providers'] ) ? $args['additional_providers'] : false;
 			$apply_type           = isset( $args['apply_type'] ) ? $args['apply_type'] : false;
+			$apply_on             = isset( $args['apply_on'] ) ? $args['apply_on'] : false;
 
 			if ( ! $filter_id ) {
 				return false;
@@ -93,6 +94,11 @@ if ( ! class_exists( 'Jet_Smart_Filters_Range_Filter' ) ) {
 			if ( ! $step ) {
 				$step = 1;
 			}
+
+			/**
+			 * Allow to convert non-callable string callback name to callable array/object
+			 */
+			$source_cb = apply_filters( 'jet-smart-filters/range-filter/string-callback-callable', $source_cb );
 
 			if ( is_callable( $source_cb ) ) {
 				$data = call_user_func( $source_cb, array( 'key' => $query_var ) );
@@ -126,6 +132,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Range_Filter' ) ) {
 				'content_provider'          => $content_provider,
 				'additional_providers'      => $additional_providers,
 				'apply_type'                => $apply_type,
+				'apply_on'                  => $apply_on,
 				'inputs_enabled'            => $inputs_enabled,
 				'inputs_separators_enabled' => $inputs_separators_enabled,
 				'prefix'                    => jet_smart_filters_macros( $prefix ),

@@ -62,7 +62,7 @@ if ( ! class_exists( 'Jet_Engine_Compatibility' ) ) {
 					'cb'   => 'function_exists',
 					'args' => 'jet_theme_core',
 				),
-				'wpml.php' => array(
+				'wpml/wpml.php' => array(
 					'cb'   => 'defined',
 					'args' => 'ICL_SITEPRESS_VERSION',
 				),

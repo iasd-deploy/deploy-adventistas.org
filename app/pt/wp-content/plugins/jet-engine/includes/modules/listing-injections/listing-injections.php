@@ -157,7 +157,7 @@ if ( ! class_exists( 'Jet_Engine_Module_Listing_Injections' ) ) {
 		 *
 		 * @return [type] [description]
 		 */
-		public function reset_injected_counter() {
+		public function reset_injected_counter( $render_instance ) {
 
 			if ( ! empty( $this->injected_counter ) ) {
 				$this->parent_injected_counter = $this->injected_counter;
@@ -167,6 +167,11 @@ if ( ! class_exists( 'Jet_Engine_Module_Listing_Injections' ) ) {
 			$this->injected_counter = array();
 			$this->injected_indexes = array();
 			$this->is_last_static_hooked = false;
+
+			//to fix https://github.com/Crocoblock/issues-tracker/issues/9216
+			if ( $render_instance->listing_id ?? false ) {
+				unset( $this->static_injections[ $render_instance->listing_id ] );
+			}
 		}
 
 		public function set_parent_injected_counter() {
@@ -463,7 +468,10 @@ if ( ! class_exists( 'Jet_Engine_Module_Listing_Injections' ) ) {
 
 							switch ( $class ) {
 								case 'WP_Post':
-									$meta_val = get_post_meta( $post->ID, $meta_key );
+									$user_fields = jet_engine()->listings->data->user_fields;
+									jet_engine()->listings->data->user_fields = array();
+									$meta_val = array( jet_engine()->listings->data->get_meta( $meta_key, $post ) );
+									jet_engine()->listings->data->user_fields = $user_fields;
 									break;
 
 								case 'WP_User':
@@ -522,13 +530,23 @@ if ( ! class_exists( 'Jet_Engine_Module_Listing_Injections' ) ) {
 									break;
 
 								case 'LIKE':
-									if ( false !== strpos( $compare_val, $meta_val ) ) {
+
+									if ( is_array( $meta_val ) ) {
+										$meta_val = json_encode( $meta_val );
+									}
+
+									if ( false !== strpos( $meta_val, $compare_val ) ) {
 										$matched = true;
 									}
 									break;
 
 								case 'NOT LIKE':
-									if ( false === strpos( $compare_val, $meta_val ) ) {
+
+									if ( is_array( $meta_val ) ) {
+										$meta_val = json_encode( $meta_val );
+									}
+
+									if ( false === strpos( $meta_val, $compare_val ) ) {
 										$matched = true;
 									}
 									break;
@@ -607,7 +625,7 @@ if ( ! class_exists( 'Jet_Engine_Module_Listing_Injections' ) ) {
 						$terms = ! empty( $item['terms'] ) ? explode( ',', $item['terms'] ) : array();
 						$terms = array_map( 'trim', $terms );
 
-						if ( ! empty( $terms ) && has_term( $terms, $tax, $post ) ) {
+						if ( ! empty( $terms ) && $this->object_has_terms( $post, $tax, $terms ) ) {
 							if ( $once ) {
 								if ( ! isset( $this->injected_counter[ $item['item'] ] ) ) {
 									$this->increase_count( $item['item'], $i, $item );
@@ -698,6 +716,19 @@ if ( ! class_exists( 'Jet_Engine_Module_Listing_Injections' ) ) {
 
 			return false;
 
+		}
+
+		public function object_has_terms( $object, $tax = '', $terms = [] ) {
+
+				$result    = false;
+				$object_id = isset( $object->ID ) ? $object->ID : false;
+		
+				if ( ! empty( $terms ) && $object_id ) {
+					$result = has_term( $terms, $tax, $object_id );
+				}
+				
+				return apply_filters( 'jet-engine/listing-injections/object-has-terms', $result, $object, $tax, $terms );
+		
 		}
 
 		public function get_injected_hash( $item ) {

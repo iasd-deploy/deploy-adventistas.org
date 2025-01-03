@@ -134,6 +134,10 @@
 				} );
 
 				mapProvider.closePopup( infowindow, function() {
+					if ( activeInfoWindow?.map ) {
+						activeInfoWindow.map.isInternalInteraction = false;
+					}
+
 					activeInfoWindow = false;
 				}, map );
 
@@ -182,11 +186,21 @@
 					}
 
 					var querySeparator = general.querySeparator || '?';
-					var api = general.api + querySeparator + 'listing_id=' + general.listingID + '&post_id=' + markerData.id + '&source=' + general.source;
+					var api = general.api +
+					          querySeparator +
+							  'listing_id=' + general.listingID +
+							  '&post_id=' +
+							  markerData.id +
+							  '&source=' + general.source +
+							  '&geo_query_distance=' + markerData.geo_query_distance;
 					var queriedID = $container.data( 'queried-id' );
 
 					if ( queriedID ) {
 						api += '&queried_id=' + queriedID;
+					}
+
+					if ( mapID ) {
+						api += '&element_id=' + mapID;
 					}
 
 					jQuery.ajax({
@@ -213,6 +227,12 @@
 						JetEngineMaps.initHandlers( $container.find( '.jet-map-box' ) );
 
 						activeInfoWindow = infowindow;
+
+						if ( window.bricksIsFrontend ) {
+							document.dispatchEvent(
+								new CustomEvent("bricks/ajax/query_result/displayed")
+							);
+						}
 
 					}).fail( function( error ) {
 
@@ -248,6 +268,8 @@
 					position: mapProvider.getMarkerPosition( marker ),
 					zoom: general.zoomOnOpen ? +general.zoomOnOpen : false,
 				} );
+
+				map.isInternalInteraction = false;
 			};
 
 			var setAutoCenter = function() {
@@ -318,6 +340,7 @@
 			}
 
 			map    = mapProvider.initMap( $container[0], mapSettings );
+			
 			bounds = mapProvider.initBounds();
 			width  = parseInt( general.width, 10 );
 			offset = parseInt( general.offset, 10 );
@@ -381,7 +404,7 @@
 
 				}
 
-				if ( autoCenter || ! customCenter ) {
+				if ( ! map.jeFiltersAutoCenterBlock && ( autoCenter || ! customCenter ) ) {
 					setAutoCenter();
 				}
 
@@ -536,6 +559,65 @@
 			}
 
 			return false;
+		},
+
+		//map - map instance
+		//bounds - an object containing 'south', 'west', 'north', 'east' coordinates
+		dispatchMapSyncEvent: function( map, bounds ) {
+
+			const mapDiv = mapProvider.getContainer( map );
+			//debounce event dispatch to prevent unnecessary filter requests on zoom/pan change
+			clearTimeout( mapDiv?.JetEngineMapDebounceTimer );
+
+			let debounceTime = + ( JetEngineSettings?.mapSyncFilter?.debounceTime ?? 500 );
+			
+			if ( ! isFinite( debounceTime ) ) {
+				debounceTime = 1000;
+			}
+
+			mapDiv.JetEngineMapDebounceTimer = setTimeout(
+				JetEngineMaps.dispatchMapSyncEventImmediate,
+				debounceTime,
+				mapDiv,
+				bounds,
+				map
+			);
+		},
+
+		dispatchMapSyncEventImmediate: function( mapDiv, bounds, map ) {
+			if ( map.isInternalInteraction ) {
+				map.isInternalInteraction = false;
+				return;
+			}
+
+			const event = new CustomEvent(
+				"jet-engine/maps/update-sync-bounds",
+				{
+					detail: {
+						div: mapDiv,
+						bounds: bounds,
+						map: map,
+						mapProvider
+					},
+				}
+			);
+			
+			document.dispatchEvent( event );
+		},
+
+		dispatchMapSyncInitEvent: function( map ) {
+			const event = new CustomEvent(
+				"jet-engine/maps/init-sync-bounds",
+				{
+					detail: {
+						map: map,
+						div: mapProvider.getContainer( map ),
+						mapProvider
+					},
+				}
+			);
+			
+			document.dispatchEvent( event );
 		},
 
 	};

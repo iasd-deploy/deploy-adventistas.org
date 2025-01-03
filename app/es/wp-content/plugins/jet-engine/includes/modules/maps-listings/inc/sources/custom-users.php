@@ -53,6 +53,7 @@ class Custom_Users extends Users {
 
 		if ( ! empty( $this->field_groups ) ) {
 			add_action( 'wp_update_user', array( $this, 'preload_groups' ), 9999 );
+			add_action( 'jet-engine/maps-listing/preload/force/custom-users', array( $this, 'force_preload_groups' ) );
 		}
 
 	}

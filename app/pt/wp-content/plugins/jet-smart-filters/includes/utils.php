@@ -14,6 +14,55 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 	 */
 	class Jet_Smart_Filters_Utils {
 		/**
+		 * Сhecks if the filter exists and that it is published
+		 */
+		public function is_filter_published( $filter_id ) {
+
+			if ( empty( $filter_id ) ) {
+				return false;
+			}
+
+			global $wpdb;
+
+			$filter_id = intval( $filter_id );
+
+			$query = $wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} 
+				WHERE post_type = 'jet-smart-filters'
+				AND post_status = 'publish'
+				AND ID = %d",
+				$filter_id
+			);
+
+			$published_filter_id = $wpdb->get_var( $query );
+
+			return $published_filter_id ? true : false;
+		}
+
+		/**
+		 * Returns only published filters from the passed IDs.
+		 */
+		public function select_published_filters( $filter_ids ) {
+
+			if ( ! is_array( $filter_ids ) || empty( $filter_ids ) ) {
+				return array();
+			}
+
+			global $wpdb;
+
+			$filter_ids_string = implode( ',', array_map( 'intval', $filter_ids ) );
+		
+			$query = "SELECT ID FROM {$wpdb->posts}
+					  WHERE post_type = 'jet-smart-filters'
+					  AND post_status = 'publish'
+					  AND ID IN ($filter_ids_string)";
+		
+			$published_filters = $wpdb->get_col( $query );
+		
+			return $published_filters;
+		}
+
+		/**
 		 * Returns HTML as string from file
 		 */
 		public function get_file_html( $path ) {
@@ -59,6 +108,44 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 			$html_template = $this->get_template_html( $template );
 
 			return preg_replace('/\/\s*%\s*\$value\s*%\s*\//', $value, $html_template );
+		}
+
+		/**
+		 * Creates an associative array with value and label from input data of any type( $data = String / Array )
+		 */
+		public function сreate_option_data( $key, $data ) {
+
+			$option = array(
+				'value' => $key,
+				'label' => $data
+			);
+
+			if ( is_array( $data ) ) {
+				$option['label'] = $key;
+
+				// merge option properties
+				$option = array_merge( $option, $data );
+			}
+
+			return $option;
+		}
+
+		/**
+		 * Generates HTML date attributes from array
+		 */
+		public function generate_data_attrs( $data ) {
+
+			if ( ! is_array( $data ) ) {
+				return '';
+			}
+
+			$data_attrs = '';
+
+			foreach ( $data as $key => $value ) {
+				$data_attrs .= 'data-' . $key . '="' . htmlspecialchars( $value, ENT_QUOTES ) . '" ';
+			}
+
+			return trim( $data_attrs );
 		}
 
 		/**
@@ -139,11 +226,17 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 					}
 				}
 
-				if ( 'post__in' === $key && ! empty( $current_query_args[ $key ] ) ) {
-					$value = array_intersect( $current_query_args[ $key ], $value );
+				if ( 'post__in' === $key ) {
+					if ( ! is_array( $value ) ) {
+						$value = ! empty( $value ) ? array( $value ) : array();
+					}
 
-					if ( empty( $value ) ) {
-						$value = array( PHP_INT_MAX );
+					if ( ! empty( $current_query_args[ $key ] ) ) {
+						$value = array_intersect( $current_query_args[ $key ], $value );
+
+						if ( empty( $value ) ) {
+							$value = array( PHP_INT_MAX );
+						}
 					}
 				}
 
@@ -265,7 +358,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 			/**
 			 * @todo Merge smae keys and process hierarchy
 			 */
-			$url_type = jet_smart_filters()->settings->get( 'url_structure_type' );
+			$url_type = jet_smart_filters()->settings->url_structure_type;
 
 			if ( ! $base_url ) {
 				$base_url = $_SERVER['REQUEST_URI'];
@@ -308,7 +401,9 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 					break;
 			}
 
-			return $result;
+			return jet_smart_filters()->URL_aliases->use_url_aliases
+				? jet_smart_filters()->URL_aliases->apply_aliases_to_url( $result )
+				: $result;
 		}
 
 		/**
@@ -417,6 +512,78 @@ if ( ! class_exists( 'Jet_Smart_Filters_Utils' ) ) {
 						stripslashes($value);
 
 			return $value;
+		}
+
+		/**
+		 * Сonvert array with term slugs to ids
+		 */
+		public function convert_term_slugs_to_ids( $array ) {
+
+			global $wpdb;
+		
+			// collect all slugs into one array
+			$slugs         = [];
+			$flatten_array = function( $value ) use ( &$slugs ) {
+				if ( is_string( $value ) ) {
+					$slugs[] = $value;
+				}
+			};
+
+			array_walk_recursive( $array, $flatten_array );
+		
+			// if the array with slugs is empty
+			if ( empty( $slugs ) ) {
+				return $array;
+			}
+
+			// get all term IDs by slugs
+			$placeholders = implode( ',', array_fill( 0, count( $slugs ), '%s' ) );
+			$query        = $wpdb->prepare(
+				"SELECT t.term_id, t.slug FROM {$wpdb->terms} t
+				WHERE t.slug IN ($placeholders)",
+				...$slugs
+			);
+
+			$terms = $wpdb->get_results( $query );
+	
+			// convert the result to the format [slug => term_id]
+			$term_map = [];
+
+			foreach ( $terms as $term ) {
+				$term_map[$term->slug] = $term->term_id;
+			}
+	
+			// recursively replace slugs with term_id in the original array
+			array_walk_recursive( $array, function( &$value ) use ( $term_map ) {
+				if (is_string( $value ) && isset( $term_map[$value] ) ) {
+					$value = $term_map[$value];
+				}
+			});
+		
+			return $array;
+		}
+
+		/**
+		 * Function to merge arrays by the key of the first array and the value of the second
+		 */
+		function mergeArraysByKeyAndValue( $firstArray, $secondArray, $valueKey = 'value' ) {
+
+			$resultArray = [];
+		
+			foreach ($firstArray as $key => $item) {
+				foreach ($secondArray as $secondItem) {
+					if (!isset($secondItem[$valueKey]) || $secondItem[$valueKey] != $key) {
+						continue;
+					}
+		
+					$mergedItem = array_merge($item, $secondItem);
+					$resultArray[] = $mergedItem;
+
+					break;
+				}
+			}
+		
+			return $resultArray;
 		}
 	}
 }

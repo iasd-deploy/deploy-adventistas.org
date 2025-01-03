@@ -97,6 +97,12 @@ class Jet_Smart_Filters_Terms_Walker extends Walker {
 			}
 		}
 
+		if ( jet_smart_filters()->settings->url_taxonomy_term_name === 'slug' && isset( $cat->slug ) ) {
+			$data_attrs = array(
+				'url-value' => $cat->slug
+			);
+		}
+
 		ob_start();
 
 		include $template;

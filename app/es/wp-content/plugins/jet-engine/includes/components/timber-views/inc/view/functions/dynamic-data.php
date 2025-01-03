@@ -26,6 +26,7 @@ class Dynamic_Data extends Base {
 			'option_name' => 'dynamic_field_option',
 			'var_name' => 'dynamic_field_var_name',
 			'custom_key' => 'dynamic_field_post_meta_custom',
+			'fallback' => 'field_fallback',
 			'context' => 'object_context',
 		];
 

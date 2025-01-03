@@ -42,6 +42,10 @@ class Jet_Elements_Images_Layout extends Jet_Elements_Base {
 		return array( 'cherry' );
 	}
 
+	public function get_style_depends() { 
+		return array( 'jet-images-layout', 'jet-images-layout-skin' ); 
+	}
+
 	public function get_script_depends() {
 		return array( 'imagesloaded', 'jet-salvattore' );
 	}

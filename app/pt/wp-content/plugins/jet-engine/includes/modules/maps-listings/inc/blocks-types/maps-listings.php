@@ -121,6 +121,10 @@ class Maps_Listing_Blocks_Views_Type extends \Jet_Engine_Blocks_Views_Type_Base 
 				'type'    => 'string',
 				'default' => '',
 			),
+			'marker_image_size' => array(
+				'type'    => 'string',
+				'default' => 'full',
+			),
 			'marker_image_field_custom' => array(
 				'type'    => 'string',
 				'default' => '',

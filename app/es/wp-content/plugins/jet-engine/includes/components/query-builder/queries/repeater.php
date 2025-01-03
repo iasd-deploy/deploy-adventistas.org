@@ -216,7 +216,7 @@ class Repeater_Query extends Base_Query {
 				}
 
 				$compare = ! empty( $clause['compare'] ) ? $clause['compare'] : '=';
-				$value   = ! \Jet_Engine_Tools::is_empty( $clause['value'] ) ? $clause['value'] : '';
+				$value   = ! \Jet_Engine_Tools::is_empty( $clause, 'value' ) ? $clause['value'] : '';
 
 				$matched = false;
 
@@ -427,6 +427,14 @@ class Repeater_Query extends Base_Query {
 			}
 
 			$object = apply_filters( 'jet-engine/query-builder/repeater-query/object-by-id', $object, $this );
+		}
+
+		/**
+		 * If we get an array - let's assume it's what we need and just convert it to object.
+		 * https://github.com/Crocoblock/issues-tracker/issues/11593
+		 */
+		if ( ! empty( $object ) && is_array( $object ) ) {
+			$object = (object) $object;
 		}
 
 		if ( is_object( $object ) ) {

@@ -16,6 +16,7 @@
 			helpLinks: JetEngineQueryConfig.help_links,
 			typesComponents: JetEngineQueryConfig.types_components,
 			hasClipboard: window.navigator.clipboard,
+			permalinksType: JetEngineQueryConfig.permalinks_type,
 			showDeleteDialog: false,
 			saving: false,
 			suggestions: [],
@@ -53,8 +54,6 @@
 						if ( ! self.generalSettings.api_access_role ) {
 							self.$set( self.generalSettings, 'api_access_role', [] );
 						}
-
-						console.log( self.generalSettings.api_schema );
 
 						if ( ! self.generalSettings.api_schema ) {
 							self.$set( self.generalSettings, 'api_schema', [ { arg: '', value: '' } ] );
@@ -156,9 +155,9 @@
 				
 				this.$set( this.generalSettings.api_schema[ index ], prop, value );
 
-				if ( value && index === this.generalSettings.api_schema.length - 1 ) {
-					this.generalSettings.api_schema.push( { arg: '', value: '' } );
-				}
+				// if ( value && index === this.generalSettings.api_schema.length - 1 ) {
+				// 	this.generalSettings.api_schema.push( { arg: '', value: '' } );
+				// }
 
 			},
 			deleteQueryArgument( index ) {
@@ -169,6 +168,9 @@
 					this.generalSettings.api_schema.push( { arg: '', value: '' } );
 				}
 
+			},
+			addQueryArgRow() {
+				this.generalSettings.api_schema.push( { arg: '', value: '' } );
 			},
 			resetQueryArgDelete() {
 				this.queryArgToDelete = -1;
@@ -227,6 +229,10 @@
 					preview.query_string = self.generalSettings.preview_query_string;
 				}
 
+				if ( self.generalSettings.preview_query_count ) {
+					preview.query_count = self.generalSettings.preview_query_count;
+				}
+
 				query         = self.generalSettings[ self.generalSettings.query_type ];
 				dynamic_query = self.generalSettings[ '__dynamic_' + self.generalSettings.query_type ];
 
@@ -278,8 +284,12 @@
 					method: 'get',
 					path: JetEngineQueryConfig.api_path_search_preview + '?_s=' + value,
 				} ).then( function( response ) {
+
 					self.suggestions = response.data;
-					self.suggestions.unshift( { id: 0, text: 'Use raw URL string', url: value } );
+
+					if ( 'plain' !== self.permalinksType ) {
+						self.suggestions.unshift( { id: 0, text: 'Use raw URL string', url: value } );
+					}
 				} ).catch( function( response ) {
 					//self.errorNotices.push( response.message );
 

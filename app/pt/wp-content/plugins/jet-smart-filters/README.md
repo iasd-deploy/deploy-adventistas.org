@@ -2,6 +2,148 @@
 
 # ChangeLog
 
+## 3.6.0.1
+
+- FIX: prevent system notices appearing
+
+## 3.6.0
+
+- ADD: SEO Title & Description
+- ADD: taxonomy term name type in URL (ID/Slug)
+- ADD: filters compatibility with the products variation
+- ADD: filter taxonomy terms options sorting
+- UPD: added description for "Apply button" with redirect
+- FIX: re-init Bricks builder scripts after filtering dynamic calendar
+- FIX: add property to store base query variables for "reload" filter type
+
+## 3.5.8
+
+- UPD: Compatibility with Elementor 3.26
+- ADD: Ability to close the dropdown on clicking the Apply button
+- FIX: indexer with `_tax_query`
+
+## 3.5.7.1
+
+- FIX: hot fix: hierarchical, alphabet, geomap filters
+
+## 3.5.7
+
+- ADD: apply button active state conditions
+- FIX: work of two searches with different types together
+- FIX: Sorting filter WPML
+- FIX: filters are broken on front with "Dynamic Visibility"
+- FIX: indexer with taxonomy source and _tax_query key 
+- FIX: posts disappearing when translating with Polylang
+- FIX: included element section
+- FIX: added props to event ajaxFilters/updated
+
+## 3.5.6
+
+- ADD: checkboxes list filter relational operator option between items 
+- ADD: page reload apply type on value change
+- ADD: search filter input focus styles
+- UPD: initialize filter styles before rendering the filters themselves
+- FIX: indexer counter style "Position" option with elementor Optimized Control Loading
+- FIX: do not display a filter if it was selected in the widget and then deleted or moved to trash
+- FIX: Refactored provider "Bricks query loop" for better clarity
+
+## 3.5.5
+
+- ADD: Pagination Load More autoscroll
+- FIX: hierarchical filter clearing select control from filling with browser cache after returning to page
+- FIX: data source post args
+- FIX: permalink rewrite rules for JSF
+- FIX: active filters/tags with $ in value
+- FIX: additional settings search
+
+## 3.5.4
+
+- ADD: filter hook 'jet-smart-filters/filters/predefined-value'
+- FIX: CCT display bulk options
+- FIX: elementor products filtering issue with Loop Carousel having terms query
+- FIX: don't hide parent element if nested elements are not empty
+- FIX: date range filter translation
+- FIX: Indexer when filter option starts with +/*
+- FIX: save "N Selected NUMBER OF NAMED ITEMS" option in Gutenberg
+- FIX: Group terms by parents & Сollapsible styles
+- FIX: Added method merge_query_vars
+- FIX: remove font-awesome
+
+## 3.5.3
+
+- UPD: remove font-awesome
+- UPD: JetDashboard to v2.2.0
+- FIX: WooCommerce Shortcode with Query ID
+- FIX: hierarchical filter fatal errore
+- FIX: collapsible filter shift
+- FIX: hide inactive filters
+- FIX: generate new popups after filtering
+- FIX: Add preloader to the first item of the bricks loop
+
+
+## 3.5.2
+
+- FIX: indexer for ePro Posts provider on the archive page
+- FIX: ePro Archive Products with url aliases
+- FIX: URL aliases + dynamic tag
+- FIX: URL Structure Type for different permalink structures
+- FIX: ePro Archive Products + Query ID with url aliases
+- FIX: synchronization of hierarchical filters
+- FIX: Re-initialize Bricks scripts in listing grid after JetSmartFilters filtering
+
+## 3.5.1
+
+- ADD: do_shortcode to ePro loop grid provider No Result Text option
+- UPD: open collapsible checked items on initialization
+- UPD: open the checkbox filter dropdown on top when the page at it's bottom
+- FIX: range filter for safari
+- FIX: html decode for search filter on reload
+- FIX: Indexer + Custom query
+- FIX: added support for native text control in Bricks loop when no results are found.
+
+## 3.5.0
+
+- ADD: SEO & Sitemap Rules
+- ADD: "Add signatures to filters requests" option
+- ADD: pagination 'Hide inactive' option
+- ADD: Additional Settings -> Dropdown -> Add apply button
+- ADD: pagination for JetEngine listing Data Store on AJAX
+- ADD: create/verify request signatures to avoid request hacking
+- ADD: 'jet-smart-filters/range-filter/search-query' filter
+- FIX: twice init the Listing Grid after filtering
+- FIX: error for 3.4.3+ version
+
+## 3.4.5
+
+- ADD: trimming accidentally entered spaces in the "Custom Field Key"
+- ADD: 'jet-smart-filters/range-filter/string-callback-callable' filter
+- UPD: JetWooBuilder Products Grid/List providers remake
+- FIX: same filters synchronization
+- FIX: url with plain_query
+- FIX: Move blocks registration to 'init' hook
+- FIX: removed the keyboard on devices for 'Date Period'
+- FIX: elementor dynamic-tags require files
+
+## 3.4.4
+
+- FIX: links in Crocoblock Dashboard
+- FIX: nested provider preloader
+- FIX: ePro products add query args condition
+- FIX: no update indexer if 'Change Counters' = 'never'
+- FIX: the 'paged' property has added by default
+- FIX: Deprecated: Creation of dynamic property on PHP 8.1+
+- FIX: _plain_query::post__in single value
+
+## 3.4.3
+
+- FIX: Products Loop sorting on reload
+- FIX: ePro loop grid sorting filter
+- FIX: ePro Loop Grid if global widget
+- FIX: url aliases
+- FIX: location & distance filter with redirect
+- FIX: getting additional filters
+- FIX: deprecated
+
 ## 3.4.2
 
 - FIX: indexer value with quotation mark

@@ -19,6 +19,7 @@ if ( ! class_exists( 'Jet_Smart_Filters_Hierarchy' ) ) {
 		protected $filter     = null;
 		protected $single_tax = null;
 		protected $hierarchy  = null;
+		protected $sort_data  = array();
 
 		/**
 		 * Class constructor
@@ -48,6 +49,23 @@ if ( ! class_exists( 'Jet_Smart_Filters_Hierarchy' ) ) {
 			$this->values    = $values;
 			$this->args      = $args;
 			$this->hierarchy = $this->get_hierarchy();
+			$this->sort_data = array(
+				'orderby'  => get_post_meta( $this->filter_id, '_ih_terms_orderby', true ),
+				'order'    => get_post_meta( $this->filter_id, '_ih_terms_order', true ),
+				'meta_key' => ''
+			);
+
+			if ( empty( $this->sort_data['orderby'] ) ) {
+				$this->sort_data['orderby'] = 'name';
+			}
+
+			if ( empty( $this->sort_data['order'] ) ) {
+				$this->sort_data['order'] = 'ASC';
+			}
+
+			if ( in_array( $this->sort_data['orderby'], array( 'meta_value', 'meta_value_num' ) ) ) {
+				$this->sort_data['meta_key'] = get_post_meta( $this->filter_id, '_ih_terms_orderby_meta_value', '' );
+			}
 
 			if ( $use_query_args ) {
 				$this->update_values_from_query_args();
@@ -62,13 +80,12 @@ if ( ! class_exists( 'Jet_Smart_Filters_Hierarchy' ) ) {
 			if ( $this->hierarchy )
 				return $this->hierarchy;
 
+			$result    = array();
 			$hierarchy = get_post_meta( $this->filter_id, '_ih_source_map', true );
 
 			if ( empty( $hierarchy ) ) {
-				return false;
+				return $result;
 			}
-
-			$result = array();
 
 			foreach ( array_values( $hierarchy ) as $depth => $data ) {
 
@@ -189,6 +206,9 @@ if ( ! class_exists( 'Jet_Smart_Filters_Hierarchy' ) ) {
 					false,
 					array(
 						'parent' => $parent,
+						'orderby'    => $this->sort_data['orderby'],
+						'order'      => $this->sort_data['order'],
+						'meta_key'   => $this->sort_data['meta_key']
 					)
 				);
 			} else {
@@ -243,6 +263,8 @@ if ( ! class_exists( 'Jet_Smart_Filters_Hierarchy' ) ) {
 				if ( ! empty( $ids ) ) {
 					$terms_args['object_ids'] = array_keys( $ids );
 				}
+
+				$terms_args = array_merge( $this->sort_data, $terms_args );
 
 				$result = jet_smart_filters()->data->get_terms_for_options(
 					$curr_level['tax'],

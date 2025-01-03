@@ -98,7 +98,7 @@ class Jet_Smart_Filters_Provider_EPro_Loop_Grid extends Jet_Smart_Filters_Provid
 					'text'      => 'jet-smart-filters-elementor-loop-no-result'
 				));
 
-				echo '<div class="' . $classes['container'] . '"><div class="' . $classes['text'] . '">' . $no_result_text . '</div></div>';
+				echo '<div class="' . $classes['container'] . '"><div class="' . $classes['text'] . '">' . do_shortcode( $no_result_text ) . '</div></div>';
 			}
 		}
 	}
@@ -324,7 +324,8 @@ class Jet_Smart_Filters_Provider_EPro_Loop_Grid extends Jet_Smart_Filters_Provid
 				$skin->set_parent( $widget );
 				$skin->render_by_mode();
 			} else {
-				$widget->render_by_mode();
+				//$widget->render_by_mode();
+				$widget->render_content();
 			}
 
 			$content = ob_get_clean();
@@ -470,6 +471,15 @@ class Jet_Smart_Filters_Provider_EPro_Loop_Grid extends Jet_Smart_Filters_Provid
 				$query_args[ $query_var ] = $value;
 			}
 
+		}
+
+		if ( isset( $query_args['post_type'] ) && $query_args['post_type'] === 'product' && function_exists( 'WC' ) ) {
+			foreach ( ['orderby', 'order'] as $value ) {
+				if ( array_key_exists( $value, $args ) ) {
+					WC()->query->remove_ordering_args();
+					break;
+				}
+			}
 		}
 
 		// query args type conversion from string to boolean

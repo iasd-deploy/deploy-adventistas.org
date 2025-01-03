@@ -109,13 +109,15 @@ abstract class Jet_Smart_Filters_Admin_Setting_Page_Base extends Page_Module_Bas
 				'use_indexed_filters'               => jet_smart_filters()->settings->get( 'use_indexed_filters' ),
 				'avaliable_post_types'              => jet_smart_filters()->settings->get( 'avaliable_post_types', $default_avaliable_post_types ),
 				'use_auto_indexing'                 => jet_smart_filters()->settings->get( 'use_auto_indexing' ),
-				'url_structure_type'                => jet_smart_filters()->settings->get( 'url_structure_type', 'plain' ),
+				'url_structure_type'                => jet_smart_filters()->settings->url_structure_type,
+				'url_taxonomy_term_name'            => jet_smart_filters()->settings->url_taxonomy_term_name,
 				'rewritable_post_types'             => jet_smart_filters()->settings->get( 'rewritable_post_types', $default_rewritable_post_types ),
 				'use_url_aliases'                   => jet_smart_filters()->settings->get( 'use_url_aliases', 'false' ),
 				'url_aliases'                       => jet_smart_filters()->settings->get( 'url_aliases', $default_url_aliases ),
 				'use_url_aliases_example'           => jet_smart_filters()->settings->get( 'use_url_aliases_example', 'false' ),
 				'url_aliases_example'               => htmlspecialchars_decode( jet_smart_filters()->settings->get( 'url_aliases_example', '/page/jsf/jet-engine/tax/category:1;post_tag:2/meta/meta-key:data-1/' ) ),
 				'ajax_request_types'                => jet_smart_filters()->settings->get( 'ajax_request_types', 'self' ),
+				'use_signature_verification'        => jet_smart_filters()->settings->get( 'use_signature_verification', false ),
 				'use_tabindex'                      => jet_smart_filters()->settings->get( 'use_tabindex', false ),
 				'tabindex_color'                    => jet_smart_filters()->settings->get( 'tabindex_color', '#0085f2' ),
 				'use_provider_preloader'            => jet_smart_filters()->provider_preloader->is_enabled,
@@ -124,10 +126,14 @@ abstract class Jet_Smart_Filters_Admin_Setting_Page_Base extends Page_Module_Bas
 				'provider_preloader_type'           => jet_smart_filters()->provider_preloader->type,
 				'provider_preloader_styles'         => jet_smart_filters()->provider_preloader->styles,
 				'provider_preloader_css'            => jet_smart_filters()->provider_preloader->css,
+				'use_seo_sitemap'                   => jet_smart_filters()->settings->is_seo_enabled,
+				'seo_sitemap_rules'                 => jet_smart_filters()->seo->sitemap->rules,
+				'wc_hide_out_of_stock_variations'   => jet_smart_filters()->settings->wc_hide_out_of_stock_variations
 			),
 			'data'           => array(
 				'avaliable_providers_options'  => $this->get_avaliable_providers(),
 				'avaliable_post_types_options' => $this->get_post_types_for_options(),
+				'providers_list_options'       => $this->get_providers_list_options(),
 				'ajax_request_types_options'   => array(
 					array(
 						'value' => 'default',
@@ -152,9 +158,22 @@ abstract class Jet_Smart_Filters_Admin_Setting_Page_Base extends Page_Module_Bas
 						'label' => 'Permalink',
 					)
 				),
+				'url_taxonomy_term_name_options' => array(
+					array(
+						'value' => 'term_id',
+						'label' => 'ID',
+					),
+					array(
+						'value' => 'slug',
+						'label' => 'Slug',
+					)
+				),
 				'rewritable_post_types_options'   => $this->get_rewritable_post_types_options(),
 				'url_aliases_example_default'     => '/page/jsf/jet-engine/tax/category:1;post_tag:2/meta/meta-key:data-1/',
 				'provider_preloader_type_options' => jet_smart_filters()->provider_preloader->type_options,
+				'seo_sitemap_filters_options'     => jet_smart_filters()->seo->sitemap->get_filters_options(),
+				'seo_sitemap_xml_path'            => jet_smart_filters()->seo->sitemap->get_sitemap_path(),
+				'seo_sitemap_xml_url'             => jet_smart_filters()->seo->sitemap->get_sitemap_url(),
 			)
 		);
 	}
@@ -218,5 +237,24 @@ abstract class Jet_Smart_Filters_Admin_Setting_Page_Base extends Page_Module_Bas
 		$post_types['users'] = __( 'Users', 'jet-smart-filters' );
 
 		return $post_types;
+	}
+
+	public function get_providers_list_options() {
+
+		$options = jet_smart_filters()->data->content_providers();
+		array_shift( $options );
+
+		$options = array_map(
+			function( $key, $value ) {
+				return array(
+					'value' => $key,
+					'label' => $value
+				);
+			},
+			array_keys( $options ),
+			$options
+		);
+
+		return $options;
 	}
 }

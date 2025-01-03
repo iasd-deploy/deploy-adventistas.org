@@ -790,6 +790,15 @@ if ( ! class_exists( 'Jet_Engine_Listings_Data' ) ) {
 				case 'current_post_author':
 					return jet_engine()->listings->data->get_current_author_object();
 
+				case 'parent_object':
+					$parent_object = jet_engine()->listings->objects_stack->get_parent_object_from_stack();
+
+					if ( ! $parent_object ) {
+						$parent_object = jet_engine()->listings->objects_stack->get_root_object();
+					}
+
+					return $parent_object;
+
 				default:
 					return apply_filters( 'jet-engine/listings/data/object-by-context/' . $context, null );
 			}
@@ -981,6 +990,12 @@ if ( ! class_exists( 'Jet_Engine_Listings_Data' ) ) {
 		 */
 		public function get_meta( $key = null, $object = null, $source = null ) {
 
+			//moved before trying to get value from user to fix issue with Dynamic Image
+			//https://github.com/Crocoblock/issues-tracker/issues/11251
+			if ( ! $object ) {
+				$object = $this->get_current_object();
+			}
+
 			if ( in_array( $key, $this->user_fields ) ) {
 
 				if ( $object && 'WP_User' === get_class( $object ) ) {
@@ -1003,11 +1018,11 @@ if ( ! class_exists( 'Jet_Engine_Listings_Data' ) ) {
 			}
 
 			if ( ! $object ) {
-				$object = $this->get_current_object();
+				return false;
 			}
 
-			if ( ! $object ) {
-				return false;
+			if ( property_exists( $object, $key ) ) {
+				return maybe_unserialize( $object->$key );
 			}
 
 			$class  = get_class( $object );
@@ -1080,6 +1095,7 @@ if ( ! class_exists( 'Jet_Engine_Listings_Data' ) ) {
 						);
 					}
 
+					return $result;
 			}
 
 		}

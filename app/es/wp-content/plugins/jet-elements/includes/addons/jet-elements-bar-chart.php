@@ -58,6 +58,16 @@ class Jet_Elements_Bar_Chart extends Jet_Elements_Base {
 	}
 
 	/**
+	 * Retrieve the list of style the widget depended on.
+	 *
+	 * @return array
+	 */
+
+	public function get_style_depends() { 
+		return array( 'jet-charts' ); 
+	}
+
+	/**
 	 * Retrieve the list of scripts the widget depended on.
 	 *
 	 * @return array

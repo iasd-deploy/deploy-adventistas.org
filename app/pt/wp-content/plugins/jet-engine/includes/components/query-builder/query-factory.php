@@ -36,6 +36,7 @@ class Query_Factory {
 		$query_config['query']         = isset( $args[ $type ] ) ? $args[ $type ] : array();
 		$query_config['dynamic_query'] = isset( $args[ '__dynamic_' . $type ] ) ? $args[ '__dynamic_' . $type ] : array();
 		$query_config['cache_query']   = isset( $args['cache_query'] ) ? filter_var( $args['cache_query'], FILTER_VALIDATE_BOOLEAN ) : true;
+		$query_config['cache_expires'] = isset( $args['cache_expires'] ) ? absint( $args['cache_expires'] ) : 0;
 
 		$query_config['preview'] = array(
 			'post_id'      => ! empty( $args['preview_page'] ) ? $args['preview_page'] : false,
@@ -89,6 +90,7 @@ class Query_Factory {
 			require_once Manager::instance()->component_path( 'queries/comments.php' );
 			require_once Manager::instance()->component_path( 'queries/repeater.php' );
 			require_once Manager::instance()->component_path( 'queries/current-wp-query.php' );
+			require_once Manager::instance()->component_path( 'queries/merged-query.php' );
 
 			$defaults = array(
 				'sql'              => __NAMESPACE__ . '\Queries\SQL_Query',
@@ -98,6 +100,7 @@ class Query_Factory {
 				'comments'         => __NAMESPACE__ . '\Queries\Comments_Query',
 				'repeater'         => __NAMESPACE__ . '\Queries\Repeater_Query',
 				'current-wp-query' => __NAMESPACE__ . '\Queries\Current_WP_Query',
+				'merged-query'     => __NAMESPACE__ . '\Queries\Merged_Query',
 			);
 
 			foreach ( $defaults as $type => $class ) {

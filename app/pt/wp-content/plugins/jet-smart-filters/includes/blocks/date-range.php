@@ -1107,16 +1107,16 @@ if ( ! class_exists( 'Jet_Smart_Filters_Block_Date_Range' ) ) {
 		 * Return callback
 		 */
 		public function render_callback( $settings = array() ) {
-			
-			jet_smart_filters()->set_filters_used();
 
-			if ( empty( $settings['filter_id'] ) ) {
+			if ( ! jet_smart_filters()->utils->is_filter_published( $settings['filter_id'] ) ) {
 				return $this->is_editor() ? __( 'Please select a filter', 'jet-smart-filters' ) : false;
 			}
 
 			if ( empty( $settings['content_provider'] ) || $settings['content_provider'] === 'not-selected' ) {
 				return $this->is_editor() ? __( 'Please select a provider', 'jet-smart-filters' ) : false;
 			}
+
+			jet_smart_filters()->set_filters_used();
 
 			if ( 'ajax' === $settings['apply_type'] ) {
 				$apply_type = 'ajax-reload';

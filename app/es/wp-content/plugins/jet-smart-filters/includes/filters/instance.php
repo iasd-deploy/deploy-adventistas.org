@@ -135,6 +135,10 @@ if ( ! class_exists( 'Jet_Smart_Filters_Filter_Instance' ) ) {
 				$atts['data-query-var-suffix'] = $args['query_var_suffix'];
 			}
 
+			if ( ! empty( $args['apply_on'] ) ) {
+				$atts['data-apply-on'] = $args['apply_on'];
+			}
+
 			if ( ! empty( $args['is_hierarchical'] ) ) {
 				$atts['data-hierarchical'] = true;
 			}

@@ -49,6 +49,65 @@ window.JetEngineMapsProvider = function() {
 		return 'leaflet';
 	}
 
+	this.getContainer = function( map ) {
+		return map.getContainer();
+	}
+
+	this.getBoundsJSON = function( map ) {
+		const bounds = map.getBounds();
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		return {
+			east: bounds.getEast(),
+			north: bounds.getNorth(),
+			south: bounds.getSouth(),
+			west: bounds.getWest()
+		};
+	}
+
+	this.updateSyncBounds = function() {
+
+		const map = this;
+
+		const bounds = map.getBounds();
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		window.JetEngineMaps.dispatchMapSyncEvent(
+			map,
+			{
+				east: bounds.getEast(),
+				north: bounds.getNorth(),
+				south: bounds.getSouth(),
+				west: bounds.getWest()
+			}
+		);
+	}
+
+	this.initSync = function( map ) {
+		
+		if ( map?.isJetEngineSyncInited || ! window.JetEngineMaps || ! window.JetSmartFilters ) {
+			return;
+		}
+
+		map.on( 'zoomend', this.updateSyncBounds );
+		map.on( 'moveend', this.updateSyncBounds );
+		map.on( 'resize', this.updateSyncBounds );
+
+		map.whenReady(
+			() => {
+				window.JetEngineMaps.dispatchMapSyncInitEvent( map );
+			}
+		);
+
+		map.isJetEngineSyncInited = true;
+	}
+
 	this.initMap = function( container, settings ) {
 
 		settings = settings || {};
@@ -71,23 +130,25 @@ window.JetEngineMapsProvider = function() {
 		}
 
 		if ( parsedSettings.center ) {
-			parsedSettings.center = L.latLng( parsedSettings.center.lat, parsedSettings.center.lng );
+			parsedSettings.center = JetEngineLeaflet.latLng( parsedSettings.center.lat, parsedSettings.center.lng );
 		}
 
-		const map = L.map( container, parsedSettings );
+		const map = JetEngineLeaflet.map( container, parsedSettings );
 
 		const tileURL = window.JetPlugins.hooks.applyFilters( 'jet-engine.maps-listings.leaflet.tileURL', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' );
 		const tileOptions = window.JetPlugins.hooks.applyFilters( 'jet-engine.maps-listings.leaflet.tileOptions', {
 			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		} );
 
-		L.tileLayer( tileURL, tileOptions ).addTo( map );
+		JetEngineLeaflet.tileLayer( tileURL, tileOptions ).addTo( map );
+
+		this.initSync( map );
 
 		return map;
 	}
 
 	this.initBounds = function() {
-		const bounds = L.latLngBounds( [] );
+		const bounds = JetEngineLeaflet.latLngBounds( [] );
 		return bounds;
 	}
 
@@ -115,8 +176,8 @@ window.JetEngineMapsProvider = function() {
 
 	this.addMarker = function( data ) {
 		
-		var myIcon = L.divIcon( { html: data.content, iconSize: [ 32, 32 ] } );
-		var marker = L.marker( [ data.position.lat, data.position.lng ], { icon: myIcon } );
+		var myIcon = JetEngineLeaflet.divIcon( { html: data.content, iconSize: [ 32, 32 ] } );
+		var marker = JetEngineLeaflet.marker( [ data.position.lat, data.position.lng ], { icon: myIcon } );
 
 		if ( ! data.markerClustering ) {
 			marker.addTo( data.map );
@@ -140,6 +201,7 @@ window.JetEngineMapsProvider = function() {
 	this.openPopup = function( trigger, callback, infobox, map, openOn ) {
 
 		map.on( 'popupopen', ( e ) => {
+			map.isInternalInteraction = true;
 			if ( e.popup === infobox.popup ) {
 				callback();
 			}
@@ -150,6 +212,7 @@ window.JetEngineMapsProvider = function() {
 		if ( 'hover' === openOn ) {
 			trigger.on( 'mouseover', function () {
 				if ( ! trigger.isPopupOpen() ) {
+					map.isInternalInteraction = true;
 					trigger.openPopup();
 				}
 			} );
@@ -174,7 +237,7 @@ window.JetEngineMapsProvider = function() {
 			}
 		}
 
-		var markersGrpup = L.markerClusterGroup( options );
+		var markersGrpup = JetEngineLeaflet.markerClusterGroup( options );
 		markersGrpup.addLayers( data.markers );
 		data.map.addLayer( markersGrpup );
 		return markersGrpup;
@@ -214,6 +277,8 @@ window.JetEngineMapsProvider = function() {
 	}
 
 	this.setAutoCenter = function( data ) {
+		data.map.isInternalInteraction = true;
+
 		if ( ! this.fitMapBounds( data ) ) {
 			if ( window.JetEngineMapData && window.JetEngineMapData.mapCenter ) {
 				data.map.setView( window.JetEngineMapData.mapCenter, 10 );
@@ -226,7 +291,7 @@ window.JetEngineMapsProvider = function() {
 
 	this.addPopup = function( data ) {
 		
-		const popup = L.popup( {
+		const popup = JetEngineLeaflet.popup( {
 			maxWidth: data.width,
 			minWidth: data.width,
 			keepInView: true,

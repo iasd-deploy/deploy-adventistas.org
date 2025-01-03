@@ -107,6 +107,13 @@ class Queries_List extends \Jet_Engine_CPT_Page_Base {
 			true
 		);
 
+		wp_enqueue_style(
+			'jet-engine-query-dynamic-args',
+			Manager::instance()->component_url( 'assets/css/query-builder.css' ),
+			array(),
+			jet_engine()->get_version()
+		);
+
 		wp_localize_script(
 			'jet-engine-query-list',
 			'JetEngineQueryListConfig',

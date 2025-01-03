@@ -338,7 +338,7 @@ class Jet_Smart_Filters_Radio_Widget extends Jet_Smart_Filters_Base_Widget {
 					),
 				),
 				'default'    => array(
-					'size' => 15,
+					'size' => 16,
 					'unit' => 'px',
 				),
 				'selectors'  => array(

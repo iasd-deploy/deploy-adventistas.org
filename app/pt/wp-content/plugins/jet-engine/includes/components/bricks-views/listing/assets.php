@@ -4,8 +4,7 @@
  */
 namespace Jet_Engine\Bricks_Views\Listing;
 
-use Bricks\Query;
-use Jet_Engine\Query_Builder\Manager as Query_Manager;
+use Bricks\Elements;
 
 /**
  * Rewrite Bricks assets class
@@ -25,7 +24,6 @@ class Assets extends \Bricks\Assets {
 	public static $fonts_stack = [];
 
 	public function __construct() {
-
 		$wp_uploads_dir = wp_upload_dir( null, false );
 
 		self::$wp_uploads_dir = $wp_uploads_dir['basedir'];
@@ -56,7 +54,7 @@ class Assets extends \Bricks\Assets {
 	 *
 	 * @return string $inline_css
 	 */
-	public static function generate_inline_css( $post_id = 0 ) {
+	public static function generate_inline_css( $post_id = 0, $force = false ) {
 
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
@@ -65,8 +63,11 @@ class Assets extends \Bricks\Assets {
 		$inline_css = '';
 		$elements   = get_post_meta( $post_id, BRICKS_DB_PAGE_CONTENT, true );
 
-		$cached          = get_post_meta( $post_id, self::$css_cache_key, true );
-		$has_dynamic_css = false;
+		$cached = false;
+
+		if ( ! $force ) {
+			$cached = get_post_meta( $post_id, self::$css_cache_key, true );
+		}
 
 		if ( $cached ) {
 			/**
@@ -79,13 +80,6 @@ class Assets extends \Bricks\Assets {
 
 		if ( empty( $elements ) ) {
 			return '';
-		}
-
-		$any          = Query::is_any_looping();
-		$query_object = Query::get_query_object( $any );
-
-		if ( ! empty( $query_object ) ) {
-			$query_args = self::get_query_args( $query_object->settings, $post_id );
 		}
 
 		// Saves $inline_css before generating Listing grid styles
@@ -118,40 +112,13 @@ class Assets extends \Bricks\Assets {
 		// Clear the list of elements already styled (@since 1.5)
 		self::$css_looping_elements = [];
 
-		// Create a wrapper element representing a container element for generating dynamic css
-		if ( ! empty( $query_args ) ) {
-			$wrapper = [
-				'id'       => 'jet-listing-elements',
-				'name'     => 'div',
-				'parent'   => 0,
-				'settings' => [
-					'hasLoop' => 1,
-					'query'   => $query_args
-				],
-			];
-
-			$children = [];
-
-			// Iterate through each parent element and update it identifier to the wrapper's identifier
-			foreach ( $elements as $index => $element ) {
-				if ( $element['parent'] === 0 ) {
-					$elements[ $index ]['parent'] = $wrapper['id'];
-					$children[]                   = $element['id'];
-				}
-			}
-
-			$wrapper['children'] = $children;
-
-			array_unshift( $elements, $wrapper );
+		// Set the $post_id during Rest API request
+		if ( defined( 'REST_REQUEST' ) && ! empty( $_REQUEST['post_id'] ) ) {
+			self::$post_id = $_REQUEST['post_id'];
 		}
-
-		// Set the current loop iteration index
-		add_filter( 'bricks/query/force_loop_index', [ self::class, 'force_loop_index' ] );
 
 		// STEP: Content
 		self::generate_css_from_elements( $elements, 'content' );
-
-		remove_filter( 'bricks/query/force_loop_index', [ self::class, 'force_loop_index' ] );
 
 		// STEP: Global Classes
 		if ( is_callable( [ '\Jet_Engine\Bricks_Views\Listing\Assets', 'generate_global_classes' ] ) ) {
@@ -196,6 +163,7 @@ class Assets extends \Bricks\Assets {
 
 		// #5.2 Content
 		if ( self::$inline_css['content'] ) {
+
 			$inline_css .= "\n/* CONTENT CSS */\n" . self::$inline_css['content'];
 		}
 
@@ -207,11 +175,7 @@ class Assets extends \Bricks\Assets {
 		// #7 Dynamic data CSS
 		if ( ! empty( self::$inline_css_dynamic_data ) ) {
 			$inline_css .= self::$inline_css_dynamic_data;
-			$has_dynamic_css = true;
 		}
-
-		// Make CSS selector to nested listing elements builder agnostic
-		$inline_css = str_replace( '.brxe-jet-listing-elements', '.jet-listing-base', $inline_css );
 
 		/**
 		 * Build Google fonts array by scanning inline CSS for Google fonts
@@ -219,9 +183,7 @@ class Assets extends \Bricks\Assets {
 		self::jet_load_webfonts( $inline_css, $post_id );
 		self::jet_load_extra_assets( $elements, $post_id );
 
-		if ( $has_dynamic_css ) {
-			delete_post_meta( $post_id, self::$css_cache_key );
-		} else {
+		if ( ! $force ) {
 			update_post_meta( $post_id, self::$css_cache_key, $inline_css );
 		}
 
@@ -238,6 +200,7 @@ class Assets extends \Bricks\Assets {
 		}
 
 		return $inline_css;
+
 	}
 
 	public static function jet_load_extra_assets( $elements, $post_id ) {
@@ -251,10 +214,17 @@ class Assets extends \Bricks\Assets {
 
 			if ( false !== strpos( $bricks_settings_string, '"library":"fontawesome' ) ) {
 				$used_icons[] = [
-					'handle' => 'bricks-font-awesome',
-					'src' => BRICKS_URL_ASSETS . 'css/libs/font-awesome.min.css',
+					'handle' => 'bricks-font-awesome-6',
+					'src' => BRICKS_URL_ASSETS . 'css/libs/font-awesome-6.min.css',
 					'deps' => [ 'bricks-frontend' ],
-					'ver' => filemtime( BRICKS_PATH_ASSETS . 'css/libs/font-awesome.min.css' ),
+					'ver' => filemtime( BRICKS_PATH_ASSETS . 'css/libs/font-awesome-6.min.css' ),
+				];
+
+				$used_icons[] = [
+					'handle' => 'bricks-font-awesome-6-brands',
+					'src' => BRICKS_URL_ASSETS . 'css/libs/font-awesome-6-brands.min.css',
+					'deps' => [ 'bricks-frontend' ],
+					'ver' => filemtime( BRICKS_PATH_ASSETS . 'css/libs/font-awesome-6-brands.min.css' ),
 				];
 			}
 
@@ -562,34 +532,20 @@ class Assets extends \Bricks\Assets {
 		}
 	}
 
-	public static function force_loop_index() {
-		return Query::get_loop_object_id();
-	}
-
 	public static function get_query_args( $settings, $post_id ) {
-		$custom_query    = $settings['custom_query'] ?? false;
-		$custom_query    = filter_var( $custom_query, FILTER_VALIDATE_BOOLEAN );
-		$custom_query_id = $settings['custom_query_id'] ?? false;
+		// Obtain the query instance for a listing grid
+		$instance = jet_engine()->listings->get_render_instance( 'listing-grid', $settings );
 
-		// Check if the listing query builder is set
-		if ( $custom_query && intval( $custom_query_id ) ) {
-			$query_builder = Query_Manager::instance()->get_query_by_id( $custom_query_id );
-			$query_args    = ! empty( $query_builder->get_query_args() ) ? $query_builder->get_query_args() : [];
-		} else {
-			// Obtain the query instance for a listing grid
-			$instance = jet_engine()->listings->get_render_instance( 'listing-grid', $settings );
+		// Save the current listing data and set it based on the post ID
+		$current_listing = jet_engine()->listings->data->get_listing();
+		jet_engine()->listings->data->set_listing_by_id( $post_id );
 
-			// Save the current listing data and set it based on the post ID
-			$current_listing = jet_engine()->listings->data->get_listing();
-			jet_engine()->listings->data->set_listing_by_id( $post_id );
+		// Call the get_query method to generate the query_vars
+		$instance->get_query( $settings );
+		$query_args = ! empty( $instance->query_vars['request'] ) ? $instance->query_vars['request'] : [];
 
-			// Call the get_query method to generate the query_vars
-			$instance->get_query( $settings );
-			$query_args = ! empty( $instance->query_vars['request'] ) ? $instance->query_vars['request'] : [];
-
-			// Restore the original listing data
-			jet_engine()->listings->data->set_listing( $current_listing );
-		}
+		// Restore the original listing data
+		jet_engine()->listings->data->set_listing( $current_listing );
 
 		// Is that the calendar widget setting?
 		if ( isset( $settings['start_from_year'] ) ) {

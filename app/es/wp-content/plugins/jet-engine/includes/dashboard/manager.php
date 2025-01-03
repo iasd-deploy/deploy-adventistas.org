@@ -158,6 +158,7 @@ if ( ! class_exists( 'Jet_Engine_Dashboard' ) ) {
 						'shortode_generator' => jet_engine()->shortcodes->get_generator_config(),
 						'macros_generator'   => jet_engine()->listings->macros->get_macros_for_js(),
 						'_nonce'             => wp_create_nonce( $this->nonce_action ),
+						'has_bricks'         => $this->has_bricks(),
 					)
 				)
 			);
@@ -237,6 +238,10 @@ if ( ! class_exists( 'Jet_Engine_Dashboard' ) ) {
 		 */
 		public function get_setting( $setting = null, $default = false ) {
 
+		}
+
+		public function has_bricks() {
+			return ( defined( 'BRICKS_VERSION' ) && \Jet_Engine\Modules\Performance\Module::instance()->is_tweak_active( 'enable_bricks_views' ) );
 		}
 
 	}

@@ -110,6 +110,36 @@ class Jet_Smart_Filters_Bricks_Apply_Button extends \Jet_Engine\Bricks_Views\Ele
 		);
 
 		$this->register_jet_control(
+			'active_state',
+			[
+				'tab'     => 'content',
+				'label'   => esc_html__( 'Active button state', 'jet-smart-filters' ),
+				'type'    => 'select',
+				'options' => [
+					'always' => esc_html__( 'Always', 'jet-smart-filters' ),
+					'any'    => esc_html__( 'Any filter selected', 'jet-smart-filters' ),
+					'all'    => esc_html__( 'All filters selected', 'jet-smart-filters' )
+				],
+				'default' => 'always'
+			]
+		);
+
+		$this->register_jet_control(
+			'if_inactive',
+			[
+				'tab'      => 'content',
+				'label'    => esc_html__( 'If button inactive', 'jet-smart-filters' ),
+				'type'     => 'select',
+				'options'  => [
+					'disable' => esc_html__( 'Disable', 'jet-smart-filters' ),
+					'hide'    => esc_html__( 'Hide', 'jet-smart-filters' )
+				],
+				'default'  => 'disable',
+				'required' => [ 'active_state', '!=', 'always' ]
+			]
+		);
+
+		$this->register_jet_control(
 			'apply_redirect',
 			[
 				'tab'     => 'content',
@@ -250,6 +280,7 @@ class Jet_Smart_Filters_Bricks_Apply_Button extends \Jet_Engine\Bricks_Views\Ele
 
 		$data_atts = $this->container_data_atts($settings, $provider);
 		$settings['apply_button'] = 'yes';
+		$settings['apply_on']     = 'submit';
 
 		if ( empty( $settings['apply_button_text'] ) ) {
 			$settings['apply_button_text'] = '';

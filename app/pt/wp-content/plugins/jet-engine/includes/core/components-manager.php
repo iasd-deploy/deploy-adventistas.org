@@ -105,6 +105,11 @@ if ( ! class_exists( 'Jet_Engine_Components' ) ) {
 					'class_name' => '\Jet_Engine\Timber_Views\Package',
 					'singleton'  => true,
 				),
+				'website_builder' => array(
+					'filepath'   => jet_engine()->plugin_path( 'includes/components/website-builder/manager.php' ),
+					'class_name' => '\Jet_Engine\Website_Builder\Manager',
+					'singleton'  => true,
+				),
 			);
 
 			foreach ( $default_components as $component_slug => $component_data ) {

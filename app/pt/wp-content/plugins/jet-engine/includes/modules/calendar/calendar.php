@@ -137,6 +137,16 @@ if ( ! class_exists( 'Jet_Engine_Module_Calendar' ) ) {
 			require jet_engine()->plugin_path( 'includes/modules/calendar/advanced-date-field/manager.php' );
 			Jet_Engine_Advanced_Date_Field::instance();
 
+			add_action( 'jet-engine/listing/calendar/before', array( $this, 'add_frontend_query_editor' ), 10, 2 );
+
+		}
+
+		public function add_frontend_query_editor( $settings, $render ) {
+			if ( ! isset( \Jet_Engine\Query_Builder\Manager::instance()->frontend_editor ) ) {
+				return;
+			}
+	
+			\Jet_Engine\Query_Builder\Manager::instance()->frontend_editor->render_edit_buttons( $render );
 		}
 
 		/**

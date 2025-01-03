@@ -6,8 +6,6 @@ use \Elementor\Repeater;
 use \Elementor\Group_Control_Typography;
 use \Elementor\Group_Control_Border;
 use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Core\Schemes\Typography as Scheme_Typography;
-
 use Jet_Engine\Modules\Maps_Listings\Filters\Types\Location_Distance_Render;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,7 +46,7 @@ class Location_Distance extends \Elementor\Jet_Smart_Filters_Base_Widget {
 			array(
 				'label' => '',
 				'type' => Controls_Manager::RAW_HTML,
-				'raw' => sprintf( __( '<b>Please note!</b><br><div class="elementor-control-field-description">This filter is compatible only with queries from <a href="%s" target="_blank">JetEngine Query Builder</a>. ALso you need to set up <a href="https://crocoblock.com/knowledge-base/jetsmartfilters/location-distance-filter-overview/" target="_blank">Geo Query</a> in your query settings to meke filter to work correctly.</div>', 'jet-engine' ), $query_builder_link ),
+				'raw' => sprintf( __( '<b>Please note!</b><br><div class="elementor-control-field-description">This filter is compatible only with queries from <a href="%s" target="_blank">JetEngine Query Builder</a>. ALso you need to set up <a href="https://crocoblock.com/knowledge-base/jetsmartfilters/location-distance-filter-overview/" target="_blank">Geo Query</a> in your query settings to make the filter work correctly.</div>', 'jet-engine' ), $query_builder_link ),
 			)
 		);
 
@@ -541,15 +539,11 @@ class Location_Distance extends \Elementor\Jet_Smart_Filters_Base_Widget {
 		);
 
 		$this->end_controls_section();
-
 	}
 
 
 	protected function render() {
-
 		$render_instance = new Location_Distance_Render();
 		$render_instance->render( $this->get_settings(), $this->get_name() );
-
 	}
-
 }

@@ -233,7 +233,7 @@ class Maps {
 			case 'bricks':
 
 				$control_args = \Jet_Engine\Bricks_Views\Helpers\Options_Converter::convert( $control_args );
-				
+
 				$widget->register_jet_control( $control_name . '__image', array_merge( $control_args, array(
 					'required' => array(
 						'marker_type',

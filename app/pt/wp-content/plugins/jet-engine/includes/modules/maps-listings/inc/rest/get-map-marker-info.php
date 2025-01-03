@@ -33,6 +33,8 @@ class Get_Map_Marker_Info extends \Jet_Engine_Base_API_Endpoint {
 			) );
 		}
 
+		$queried_id = 0;
+
 		// Set the current queried object.
 		if ( ! empty( $params['queried_id'] ) ) {
 			$queried_obj_data = explode( '|', $params['queried_id'] );
@@ -43,6 +45,9 @@ class Get_Map_Marker_Info extends \Jet_Engine_Base_API_Endpoint {
 				jet_engine()->listings->data->set_current_object_by_id( $queried_id, $queried_class );
 			}
 		}
+
+		// Set the current element id.
+		$element_id = $params['element_id'] ?? '';
 
 		jet_engine()->listings->data->set_listing_by_id( $listing_id );
 
@@ -69,14 +74,28 @@ class Get_Map_Marker_Info extends \Jet_Engine_Base_API_Endpoint {
 			) );
 		}
 
+		$additional_attrs = array();
+
+		if ( isset( $params['geo_query_distance'] ) && $params['geo_query_distance'] >= 0 ) {
+			$post_obj->geo_query_distance = $params['geo_query_distance'];
+		}
+
 		jet_engine()->frontend->set_listing( $listing_id );
 
-		do_action( 'jet-engine/maps-listings/get-map-marker', $listing_id );
+		do_action( 'jet-engine/maps-listings/get-map-marker', $listing_id, $queried_id, $element_id );
 
 		ob_start();
 
 		$content = jet_engine()->frontend->get_listing_item( $post_obj );
-		$content = sprintf( '<div class="jet-map-popup-%1$s jet-listing-dynamic-post-%1$s" data-item-object="%1$s">%2$s</div>', $post_id, $content );
+
+		$additional_attrs = apply_filters( 'jet-engine/maps-listings/map-popup-additional-attrs', $additional_attrs, $params, $post_obj );
+
+		$content = sprintf(
+			'<div class="jet-map-popup-%1$s jet-listing-dynamic-post-%1$s" data-item-object="%1$s" data-additional-map-popup-data="%3$s">%2$s</div>',
+			$post_id,
+			$content,
+			! empty( $additional_attrs ) ? htmlspecialchars( json_encode( $additional_attrs ) ) : '{}'
+		);
 		$content = apply_filters( 'jet-engine/maps-listings/marker-content', $content, $post_obj, $listing_id );
 
 		$content .= ob_get_clean();
@@ -130,6 +149,10 @@ class Get_Map_Marker_Info extends \Jet_Engine_Base_API_Endpoint {
 			),
 			'queried_id' => array(
 				'default'  => '',
+				'required' => false,
+			),
+			'geo_query_distance' => array(
+				'default'  => -1,
 				'required' => false,
 			),
 		);

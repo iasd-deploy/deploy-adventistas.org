@@ -346,6 +346,9 @@ if ( ! class_exists( 'Jet_Elements_Ext_Section' ) ) {
 				}
 
 				//jet_elements_assets()->localize_data['jetParallaxSections'] = $this->parallax_sections;
+
+				//Register and enqueue parallax stylesheets
+				wp_enqueue_style( 'jet-elements' );
 			}
 
 			if ( $has_mouse_type || jet_elements()->elementor()->preview->is_preview_mode() ) {

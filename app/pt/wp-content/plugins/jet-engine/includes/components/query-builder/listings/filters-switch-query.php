@@ -16,7 +16,8 @@ class Filters_Switch_Query extends Filters_Options_Source {
 		add_action( 'jet-smart-filters/admin/register-dynamic-query', array( $this, 'register_query_var' ) );
 		add_action( 'jet-smart-filters/query/final-query', array( $this, 'store_switched_query' ) );
 		add_action( 'jet-engine/query-builder/listings/query-id', array( $this, 'switch_query' ), 10, 3 );
-		
+		add_action( 'jet-engine/bricks-views/query-builder/query-id', array( $this, 'switch_query' ), 10 );
+
 		add_filter( 'jet-smart-filters/service/filter/serialized-keys', array( $this, 'add_key_to_serialize' ) );
 		add_filter( 'jet-smart-filters/filters/indexed-data/query-type-data', array( $this, 'index_data' ), 0, 4 );
 
@@ -74,7 +75,7 @@ class Filters_Switch_Query extends Filters_Options_Source {
 	 * @param  [type] $query_id [description]
 	 * @return [type]           [description]
 	 */
-	public function switch_query( $query_id, $listing_id, $settings ) {
+	public function switch_query( $query_id, $listing_id = 0, $settings = array() ) {
 
 		$query = Manager::instance()->get_query_by_id( $query_id );
 
