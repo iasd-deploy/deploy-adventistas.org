@@ -294,7 +294,7 @@ class Plugin {
 	}
 
 	public function register_frontend_scripts() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = $this->get_assets_suffix();
 
 		wp_register_script(
 			'elementor-pro-webpack-runtime',
@@ -342,7 +342,7 @@ class Plugin {
 	}
 
 	public function register_preview_scripts() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = $this->get_assets_suffix();
 
 		wp_enqueue_script(
 			'elementor-pro-preview',
@@ -449,23 +449,6 @@ class Plugin {
 		$suffix = $this->get_assets_suffix();
 
 		return [
-			'styles' => [
-				'e-motion-fx' => [
-					'src' => ELEMENTOR_PRO_URL . 'assets/css/modules/motion-fx' . $suffix . '.css',
-					'version' => ELEMENTOR_PRO_VERSION,
-					'dependencies' => [],
-				],
-				'e-sticky' => [
-					'src' => ELEMENTOR_PRO_URL . 'assets/css/modules/sticky' . $suffix . '.css',
-					'version' => ELEMENTOR_PRO_VERSION,
-					'dependencies' => [],
-				],
-				'e-popup' => [
-					'src' => ELEMENTOR_PRO_URL . 'assets/css/conditionals/popup' . $suffix . '.css',
-					'version' => ELEMENTOR_PRO_VERSION,
-					'dependencies' => [],
-				],
-			],
 			'scripts' => [
 				'e-sticky' => [
 					'src' => ELEMENTOR_PRO_URL . 'assets/lib/sticky/jquery.sticky' . $suffix . '.js',
@@ -531,7 +514,7 @@ class Plugin {
 	}
 
 	private function get_assets_suffix() {
-		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		return Utils::is_script_debug() ? '' : '.min';
 	}
 
 	private static function get_frontend_file( $frontend_file_name ) {

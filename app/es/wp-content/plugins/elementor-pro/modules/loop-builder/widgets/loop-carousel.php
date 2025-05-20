@@ -43,6 +43,10 @@ class Loop_Carousel extends Base {
 		return [ 'widget-loop-carousel' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::elementor()->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	protected function get_initial_config() {
 		$config = parent::get_initial_config();
 
@@ -174,9 +178,7 @@ class Loop_Carousel extends Base {
 
 
 	public function get_loop_header_widget_classes(): array {
-		// TODO: Remove conditional logic in v3.28 [ED-15983].
-		$swiper_class = $this->is_swiper_upgrade_experiment_state_inactive() ? 'swiper-container' : 'swiper';
-		return [ $swiper_class ];
+		return [ 'swiper' ];
 	}
 
 	public function before_skin_render() {

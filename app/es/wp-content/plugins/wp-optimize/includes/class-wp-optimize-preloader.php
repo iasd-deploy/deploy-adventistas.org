@@ -108,7 +108,7 @@ abstract class WP_Optimize_Preloader extends Updraft_Task_Manager_1_4 {
 			if (true === $silent) {
 				$output = '';
 			} else {
-				$output = json_encode($response);
+				$output = wp_json_encode($response);
 			}
 
 			WP_Optimize()->close_browser_connection($output);
@@ -254,6 +254,7 @@ abstract class WP_Optimize_Preloader extends Updraft_Task_Manager_1_4 {
 		} else {
 			$preload_resuming_time = wp_next_scheduled('wpo_' . $this->preload_type . '_preload_continue');
 			$preload_resuming_in = $preload_resuming_time ? $preload_resuming_time - time() : 0;
+			// translators: %1$s: number of preloaded urls, %2$s: total number of urls
 			$preloaded_message = sprintf(_n('%1$s out of %2$s URL preloaded', '%1$s out of %2$s URLs preloaded', $status['all_tasks'], 'wp-optimize'), $status['complete_tasks'], $status['all_tasks']);
 			if ('sitemap' == $this->options->get_option('wpo_last_' . $this->preload_type . '_preload_type', '')) {
 				$preloaded_message = __('Preloading posts found in sitemap:', 'wp-optimize') .' '. $preloaded_message;
@@ -359,6 +360,7 @@ abstract class WP_Optimize_Preloader extends Updraft_Task_Manager_1_4 {
 			$this->options->update_option('wpo_last_' . $this->preload_type . '_preload_type', 'posts');
 		}
 
+		// translators: %d: number of urls
 		$this->log(sprintf(_n('%d url found.', '%d urls found.', count($urls), 'wp-optimize'), count($urls)));
 
 		/**
@@ -551,9 +553,9 @@ abstract class WP_Optimize_Preloader extends Updraft_Task_Manager_1_4 {
 		$domain = '';
 		$multisite_plugin_table_name = $wpdb->base_prefix.'domain_mapping';
 		// Check if table exists
-		if ($wpdb->get_var("SHOW TABLES LIKE '$multisite_plugin_table_name'") != $multisite_plugin_table_name) {
+		if ($wpdb->get_var("SHOW TABLES LIKE '" . esc_sql($multisite_plugin_table_name) . "'") != $multisite_plugin_table_name) {
 			// This table created in WordPress MU Domain Mapping plugin.
-			$row = $wpdb->get_row("SELECT `domain` FROM {$multisite_plugin_table_name} WHERE `blog_id` = {$blog_id} AND `active` = 1", ARRAY_A);
+			$row = $wpdb->get_row($wpdb->prepare("SELECT `domain` FROM " . esc_sql($multisite_plugin_table_name) . " WHERE `blog_id` = %d AND `active` = %d", $blog_id, 1), ARRAY_A);
 			if (!empty($row)) {
 				$domain = $row['domain'];
 			}

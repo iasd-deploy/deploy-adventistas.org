@@ -1,12 +1,12 @@
 <?php if (!defined('WPO_VERSION')) die('No direct access allowed'); ?>
-<a id="wp-optimize-nav-page-menu" href="#" role="toggle-menu">
+<button id="wp-optimize-nav-page-menu" aria-expanded="false" aria-controls="wpo-menu">
 	<span class="dashicons dashicons-no-alt"></span>
 	<span class="dashicons dashicons-menu"></span>
 	<span><?php esc_html_e('Menu', 'wp-optimize'); ?></span>
-</a>
-<div class="wpo-pages-menu">
+</button>
+<div id="wpo-menu" class="wpo-pages-menu">
 	<?php
-	$active_page = !empty($_REQUEST['page']) ? sanitize_text_field(wp_unslash($_REQUEST['page'])) : '';
+	$active_page = !empty($_REQUEST['page']) ? sanitize_text_field(wp_unslash($_REQUEST['page'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only used to compare with a string literal.
 	foreach ($menu_items as $menu) :
 	?>
 
@@ -15,7 +15,7 @@
 		<?php else : ?>
 			<a class="<?php echo ($active_page === $menu['menu_slug']) ? 'active' : ''; ?>" href="<?php echo esc_url(menu_page_url($menu['menu_slug'], false)); ?>" data-menuslug="<?php echo esc_attr($menu['menu_slug']); ?>">
 				<span class="dashicons dashicons-<?php echo esc_attr($menu['icon']); ?>"></span>
-				<span class="title"><?php esc_html_e($menu['menu_title']); ?></span>
+				<span class="title"><?php echo esc_html($menu['menu_title']); ?></span>
 			</a>
 		<?php endif; ?>
 

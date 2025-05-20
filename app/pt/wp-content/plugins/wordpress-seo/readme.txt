@@ -4,9 +4,9 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
-Tested up to: 6.7
-Stable tag: 24.0
-Requires PHP: 7.2.5
+Tested up to: 6.8
+Stable tag: 25.1
+Requires PHP: 7.4
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
 
@@ -274,50 +274,35 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 24.0 =
+= 25.1 =
 
-Release date: 2024-12-03
+Release date: 2025-05-13
 
-Yoast SEO 24.0 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-3-12-24).
-
-#### Enhancements
-
-* Allows to set OpenGraph image HTML metadata `width`, `height`, and `type` to `null` in order not to show them. Props to [GiovanniMounir](https://github.com/GiovanniMounir).
-* Improves the _transition words_ assessment for Portuguese and English by updating the relevant lists of transition words. Props to [BrunoAseff](https://github.com/BrunoAseff).
-* Introduces an error message in the Yoast _General_ page in case of JavaScript errors.
-* Updates the design and translations of the country selector in the modal for related keyphrase suggestions.
-
-#### Bugfixes
-
-* Fixes a bug where the first step in the _First time configuration_ would not be considered finished unless the _Site representation_ step would be finished as well.
-* Fixes a bug where the settings for a post type are inaccessible when the permalink structure includes special characters that require encoding, e.g., when WooCommerce products are set to use the \"Shop base with category\" permalink structure.
-* Fixes a bug where the Yoast _General_ page would not reflect the active menu item properly if using a fallback.
-
-#### Other
-
-* Improves the documentation for `wpseo_enable_tracking` filter. Props to [kkmuffme](https://github.com/kkmuffme).
-
-= 23.9 =
-
-Release date: 2024-11-19
-
-Yoast SEO 23.9 brings enhancements to the Yoast SEO Semrush integration and various bug fixes. Find more about Yoast SEO 23.9 in [our release post](https://yoa.st/release-19-11-24)!
+Yoast SEO 25.1 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
 
 #### Enhancements
 
-* Adds a maximum width to the problems and notifications sections on the _General_ page.
-* Adds _Intent_ and _Difficulty_ to the metrics shown in the Semrush integration.
-* Improves the compatibility of the Yoast blocks with WordPress 6.7.
+* Adds more phrases regarding disability to the _inclusive language assessment_.
+* Improves the feedback for \"lame\" in the _inclusive language assessment_.
+* Makes the following SEO assessments available in the analysis by default, even when no content has been added: _keyphrase in introduction_, _keyphrase in meta description_, _keyphrase in SEO title_, _keyphrase in slug_ and _previously used keyphrase_.
+* Optimizes the function used to fetch post IDs which share the same focus keyphrase. Props to [dilipbheda](https://github.com/dilipbheda).
 
-#### Bugfixes
+= 25.0 =
 
-* Fixes a bug where a fatal error is triggered in PHP 8.x when a user's additional contact methods have been improperly set to `null`. Props to [PhilETaylor](https://github.com/PhilETaylor).
-* Fixes a bug where the _First time configuration_ would have a double separator for the title and content.
-* Fixes a bug where the _First time configuration_ would not resize properly on smaller width screens.
+Release date: 2025-04-29
+
+Yoast SEO 25.0 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
+
+#### Enhancements
+
+* Optimizes the `wp yoast cleanup` CLI command  `update_indexables_author_to_reassigned` step, which can become very slow for very large data sets. Props to [eddiesshop](https://github.com/eddiesshop).
+* Improves the feedback texts for the _passive voice_ and _consecutive sentences_ assessments in case there is nothing to report.
+* Makes the _images_, _internal links_, and _external links_ assessments available when no content has been added.
 
 #### Other
 
-* Stops PHP notices on WordPress 6.7 about `_load_textdomain_just_in_time` loading incorrectly.
+* Drops compatibility with PHP 7.2 and 7.3.
+* Improves the translatability of feedback strings for the keyphrase length assessment.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).

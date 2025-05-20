@@ -8,8 +8,11 @@ if (function_exists('mb_internal_encoding')) {
 }
 
 // must have
+// phpcs:disable
+// Squiz.PHP.DiscouragedFunctions.Discouraged -- Not applicable here
 ini_set('pcre.backtrack_limit', 5000000);
 ini_set('pcre.recursion_limit', 5000000);
+// phpcs:enable
 	
 use MatthiasMullie\Minify;
 
@@ -159,13 +162,13 @@ class WP_Optimize_Minify_Functions {
 		if (stripos($hurl, $wp_home) !== false) {
 			return true;
 		}
-		if (isset($_SERVER['HTTP_HOST']) && stripos($hurl, preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'])) !== false) {
+		if (isset($_SERVER['HTTP_HOST']) && stripos($hurl, preg_replace('/:\d+$/', '', sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])))) !== false) {
 			return true;
 		}
-		if (isset($_SERVER['SERVER_NAME']) && stripos($hurl, preg_replace('/:\d+$/', '', $_SERVER['SERVER_NAME'])) !== false) {
+		if (isset($_SERVER['SERVER_NAME']) && stripos($hurl, preg_replace('/:\d+$/', '', sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME'])))) !== false) {
 			return true;
 		}
-		if (isset($_SERVER['SERVER_ADDR']) && '::1' != $_SERVER['SERVER_ADDR'] && stripos($hurl, preg_replace('/:\d+$/', '', $_SERVER['SERVER_ADDR'])) !== false) {
+		if (isset($_SERVER['SERVER_ADDR']) && '::1' != sanitize_text_field(wp_unslash($_SERVER['SERVER_ADDR'])) && stripos($hurl, preg_replace('/:\d+$/', '', sanitize_text_field(wp_unslash($_SERVER['SERVER_ADDR'])))) !== false) {
 			return true;
 		}
 
@@ -511,7 +514,7 @@ class WP_Optimize_Minify_Functions {
 			// If $media_query contains print, and $remove_print_mediatypes is true, return empty string
 			if ($remove_print_mediatypes && false !== strpos($media_query, 'print') && apply_filters('wpo_minfy_remove_print_mediatypes_import', true, $url, $media_query, $matches[0], $file_url)) return ($debug ? '/*! Info: the import of "'.$url.'" was removed because the setting remove_print_mediatypes is enabled. */' : '');
 
-			$purl = parse_url($url);
+			$purl = wp_parse_url($url);
 			// If there's no host, the url is relative to $file_url, so prepend with the base url.
 			if (!isset($purl['host'])) {
 				$url = dirname($file_url).'/'.$url;
@@ -606,7 +609,7 @@ class WP_Optimize_Minify_Functions {
 				$log['debug'] = "$print_handle failed. Tried wp_remote_get and local file_get_contents.";
 			}
 			$return = array('request' => $dreq, 'log' => $log, 'code' => '', 'status' => false);
-			return json_encode($return);
+			return wp_json_encode($return);
 		}
 
 		if ('js' == $type) {
@@ -622,7 +625,7 @@ class WP_Optimize_Minify_Functions {
 		}
 		$log['success'] = true;
 		$return = array('request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true);
-		return json_encode($return);
+		return wp_json_encode($return);
 	}
 
 	/**
@@ -634,7 +637,7 @@ class WP_Optimize_Minify_Functions {
 	public static function get_asset_content($url) {
 
 		$wp_home = site_url();
-		$wp_domain = parse_url($wp_home, PHP_URL_HOST);
+		$wp_domain = wp_parse_url($wp_home, PHP_URL_HOST);
 		// If the file is local.
 		if (false !== stripos($url, $wp_domain)) {
 			// default
@@ -793,7 +796,7 @@ class WP_Optimize_Minify_Functions {
 		if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
 			$disable_on_url = array_filter(array_map('trim', explode("\n", get_option('wpo_min_disable_on_url', ''))));
 			foreach ($disable_on_url as $url) {
-				if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == $url) {
+				if (wp_parse_url(esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])), PHP_URL_PATH) == $url) {
 					return true;
 				}
 			}
@@ -821,12 +824,14 @@ class WP_Optimize_Minify_Functions {
 			|| (defined('SHORTINIT') && SHORTINIT)
 			|| (defined('REST_REQUEST') && REST_REQUEST)
 			|| (isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'])
-			|| (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-			|| (isset($_SERVER['REQUEST_URI']) && (strtolower(substr($_SERVER['REQUEST_URI'], -4)) == '.txt' || strtolower(substr($_SERVER['REQUEST_URI'], -4)) == '.xml'))
+			|| (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower(sanitize_text_field(wp_unslash($_SERVER['HTTP_X_REQUESTED_WITH']))) == 'xmlhttprequest')
+			|| (isset($_SERVER['REQUEST_URI']) && (strtolower(substr(esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])), -4)) == '.txt' || strtolower(substr(esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])), -4)) == '.xml'))
 		) {
 			return true;
 		}
 
+		// phpcs:disable
+		// WordPress.Security.NonceVerification.Recommended -- Using $_GET element only to compare, returns boolean
 		// Thrive plugins and other post_types
 		$arr = array('tve_form_type', 'tve_lead_shortcode', 'tqb_splash');
 		foreach ($arr as $a) {
@@ -871,6 +876,7 @@ class WP_Optimize_Minify_Functions {
 			);
 			return (bool) count(array_intersect($excluded_params, $get_params));
 		}
+		// phpcs:enable
 
 		/**
 		 * Whether to exclude the content or not from the minifying process.
@@ -1067,7 +1073,7 @@ class WP_Optimize_Minify_Functions {
 	 * @return boolean
 	 */
 	public static function is_google_font($href) {
-		return 'fonts.googleapis.com' === strtolower(parse_url($href, PHP_URL_HOST));
+		return 'fonts.googleapis.com' === strtolower(wp_parse_url($href, PHP_URL_HOST));
 	}
 
 	/**
@@ -1161,7 +1167,7 @@ class WP_Optimize_Minify_Functions {
 	 */
 	public static function fix_flatsome_google_fonts_url($href) {
 		// Get query from $href
-		$query = parse_url($href, PHP_URL_QUERY);
+		$query = wp_parse_url($href, PHP_URL_QUERY);
 		$query_arr = explode('&', $query);
 
 		// Separate 'family and display' arguments in query
@@ -1238,7 +1244,7 @@ class WP_Optimize_Minify_Functions {
 			if (false === $encoding) {
 				$message .= "Could not determine its character encoding.";
 			}
-			error_log($message);
+			error_log($message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Using for debugging purpose
 		}
 	}
 }

@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.26.0 - 22-12-2024 */
+/*! elementor-pro - v3.29.0 - 19-05-2025 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -3423,7 +3423,7 @@ class Module extends elementorModules.editor.utils.Module {
    * @deprecated since 3.5.0, use `$e.data.getCache( `document/global/global-widget/templates/${ id }` )` instead.
    */
   getGlobalModels(id) {
-    elementorCommon.helpers.softDeprecated('elementorPro.modules.globalWidget.getGlobalModels( id )', '3.5.0', '$e.data.getCache( `document/global/global-widget/templates/${ id }` )');
+    elementorDevTools.deprecation.deprecated('elementorPro.modules.globalWidget.getGlobalModels( id )', '3.5.0', '$e.data.getCache( `document/global/global-widget/templates/${ id }` )');
     return $e.data.getCache(this.component, `document/global/global-widget/templates/${id}`);
   }
 
@@ -3431,7 +3431,7 @@ class Module extends elementorModules.editor.utils.Module {
    * @deprecated since 3.5.0, use `$e.internal( 'document/global/save-templates' )` instead.
    */
   saveTemplates() {
-    elementorCommon.helpers.softDeprecated('elementorPro.modules.globalWidget.saveTemplates()', '3.5.0', "$e.internal( 'document/global/save-templates' )");
+    elementorDevTools.deprecation.deprecated('elementorPro.modules.globalWidget.saveTemplates()', '3.5.0', "$e.internal( 'document/global/save-templates' )");
     $e.internal('document/global/save-templates');
   }
 
@@ -3441,7 +3441,7 @@ class Module extends elementorModules.editor.utils.Module {
    * @deprecated since 3.5.0, use `$e.data.get( 'document/global/templates' )` instead.
    */
   requestGlobalModelSettings(globalModel, callback) {
-    elementorCommon.helpers.softDeprecated('elementorPro.modules.globalWidget.requestGlobalModelSettings()', '3.5.0', "$e.data.get( 'document/global/templates' )");
+    elementorDevTools.deprecation.deprecated('elementorPro.modules.globalWidget.requestGlobalModelSettings()', '3.5.0', "$e.data.get( 'document/global/templates' )");
     $e.data.get('document/global/templates', {
       ids: globalModel.id
     }).then(data => {
@@ -3822,7 +3822,7 @@ module.exports = function () {
         target: '_blank',
         class: 'elementor-button elementor-edit-template',
         href: editUrl,
-        html: '<i class="eicon-pencil" /> ' + __('Edit Template', 'elementor-pro')
+        html: '<i class="eicon-pencil" aria-hidden="true"></i>' + __('Edit Template', 'elementor-pro')
       });
       self.templateIdView.$el.find('.elementor-control-input-wrapper').after($editButton);
     }
@@ -6664,7 +6664,7 @@ class ThemeBuilderModule extends elementorModules.editor.utils.Module {
     super.__construct(...arguments);
     Object.defineProperty(elementorPro.config, 'theme_builder', {
       get() {
-        elementorCommon.helpers.softDeprecated('theme_builder', '2.9.0', 'elementor.config.document.theme_builder');
+        elementorDevTools.deprecation.deprecated('theme_builder', '2.9.0', 'elementor.config.document.theme_builder');
         return elementor.config.document.theme_builder;
       }
     });
@@ -7159,6 +7159,112 @@ exports["default"] = Component;
 
 /***/ }),
 
+/***/ "../modules/woocommerce/assets/js/editor/hints/store-tracking.js":
+/*!***********************************************************************!*\
+  !*** ../modules/woocommerce/assets/js/editor/hints/store-tracking.js ***!
+  \***********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+__webpack_require__(/*! core-js/modules/es.array.includes.js */ "../node_modules/core-js/modules/es.array.includes.js");
+__webpack_require__(/*! core-js/modules/es.array.push.js */ "../node_modules/core-js/modules/es.array.push.js");
+module.exports = elementorModules.editor.utils.Module.extend({
+  eventName: 'send_app_wc_widgets_notice',
+  suffix: '',
+  control: null,
+  onSectionActive(sectionName, editor) {
+    const editedElement = editor.getOption('editedElementView');
+    const widgetType = editedElement.model.get('widgetType');
+    const sectionWidgetMap = {
+      section_product: ['wc-add-to-cart'],
+      section_content: ['woocommerce-cart', 'woocommerce-checkout-page'],
+      section_layout: ['woocommerce-product-add-to-cart']
+    };
+    if (!sectionWidgetMap[sectionName]?.includes(widgetType)) {
+      return;
+    }
+    this.control = null;
+
+    // Check if control exists
+    if (!this.hasPromoControl()) {
+      return;
+    }
+
+    // Check if the user has dismissed the hint
+    if (elementor.config.user.dismissed_editor_notices.includes('send_app_wc_widgets_notice')) {
+      this.getPromoControl().remove();
+      return;
+    }
+    this.registerEvents();
+  },
+  registerEvents() {
+    // Handle dismiss and action buttons
+    const dismissBtn = this.getPromoControl().$el.find('.elementor-control-notice-dismiss');
+    const onDismissBtnClick = event => {
+      dismissBtn.off('click', onDismissBtnClick); // Remove the event listener
+      event.preventDefault();
+      this.dismiss();
+      this.getPromoControl().remove();
+    };
+    dismissBtn.on('click', onDismissBtnClick);
+
+    // Handle action button
+    const actionBtn = this.getPromoControl().$el.find('.e-btn-1');
+    const onActionBtn = event => {
+      actionBtn.off('click', onActionBtn); // Remove the event listener
+      event.preventDefault();
+      this.onAction(event);
+      this.getPromoControl().remove();
+    };
+    actionBtn.on('click', onActionBtn);
+  },
+  getPromoControl() {
+    if (!this.control && !!this.getEditorControlModel('send_app_promo' + this.suffix)) {
+      this.control = this.getEditorControlView('send_app_promo' + this.suffix);
+    }
+    return this.control;
+  },
+  hasPromoControl() {
+    return !!this.getPromoControl();
+  },
+  ajaxRequest(name, data) {
+    elementorCommon.ajax.addRequest(name, {
+      data
+    });
+  },
+  dismiss() {
+    this.ajaxRequest('dismissed_editor_notices', {
+      dismissId: this.eventName
+    });
+
+    // Prevent opening the same hint again in current editor session.
+    this.ensureNoPromoControlInSession();
+  },
+  ensureNoPromoControlInSession() {
+    // Prevent opening the same hint again in current editor session.
+    elementor.config.user.dismissed_editor_notices.push(this.eventName);
+  },
+  onAction(event) {
+    const {
+      action_url: actionURL = null
+    } = JSON.parse(event.target.closest('button').dataset.settings);
+    if (actionURL) {
+      window.open(actionURL, '_blank');
+    }
+    this.ajaxRequest('elementor_send_app_campaign', {
+      source: 'snd-wc-install'
+    });
+    this.ensureNoPromoControlInSession();
+  },
+  onElementorInit() {
+    elementor.channels.editor.on('section:activated', (sectionName, editor) => this.onSectionActive(sectionName, editor));
+  }
+});
+
+/***/ }),
+
 /***/ "../modules/woocommerce/assets/js/editor/hooks/data/create-widget-activate-settings-modal.js":
 /*!***************************************************************************************************!*\
   !*** ../modules/woocommerce/assets/js/editor/hooks/data/create-widget-activate-settings-modal.js ***!
@@ -7374,6 +7480,7 @@ Object.keys(_data).forEach(function (key) {
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 __webpack_require__(/*! core-js/modules/es.array.push.js */ "../node_modules/core-js/modules/es.array.push.js");
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/woocommerce/assets/js/editor/component.js"));
+var _storeTracking = _interopRequireDefault(__webpack_require__(/*! ./hints/store-tracking */ "../modules/woocommerce/assets/js/editor/hints/store-tracking.js"));
 class WoocommerceModule extends elementorModules.editor.utils.Module {
   constructor() {
     super(...arguments);
@@ -7416,6 +7523,9 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
       }
     };
     this.createdPageSettingsWidgets = [];
+    this.hints = {
+      storeTracking: new _storeTracking.default()
+    };
   }
   addWooCommerceClassToLoopWrapper(LoopGridHandler) {
     LoopGridHandler.$element.addClass('woocommerce');
@@ -7648,9 +7758,9 @@ module.exports = wp.i18n;
   \***********************************************************************/
 /***/ ((module) => {
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : {
+    "default": e
   };
 }
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;

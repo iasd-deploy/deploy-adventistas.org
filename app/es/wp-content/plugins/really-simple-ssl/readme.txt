@@ -1,12 +1,12 @@
 === Really Simple Security - Simple and Performant Security (formerly Really Simple SSL)===
-Contributors: RogierLankhorst, markwolters, hesseldejong, vicocotea, marcelsanting, janwoostendorp
+Contributors: RogierLankhorst, markwolters, hesseldejong, vicocotea, marcelsanting, janwoostendorp, wimbraam
 Donate link: https://www.paypal.me/reallysimplessl
 Tags: security, ssl, 2fa, vulnerabilities, two factor
 Requires at least: 5.9
 License: GPL2
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 9.1.3
+Stable tag: 9.3.5
 
 Easily improve site security with WordPress Hardening, Two-Factor Authentication (2FA), Login Protection, Vulnerability Detection and SSL certificate.
 
@@ -101,7 +101,7 @@ With Limit Login Attempts you can configure a threshold to temporarily or perman
 * [Security Definitions](https://really-simple-ssl.com/definitions/)
 * [Translate Really Simple Security](https://translate.wordpress.org/projects/wp-plugins/really-simple-ssl)
 * [Issues & pull requests](https://github.com/Really-Simple-Plugins/really-simple-ssl/issues)
-* [Feature requests](https://really-simple-ssl.com/feature-requests/)
+* [Feature requests](https://github.com/Really-Simple-Plugins/really-simple-ssl/labels/feature%20request)
 
 == Love Really Simple Security? ==
 If you want to support the continuing development of this plugin, please consider buying [Really Simple Security Pro](https://www.really-simple-ssl.com/pro/), which includes some excellent security features and premium support.
@@ -151,6 +151,47 @@ The plugin checks your certificate before enabling, but if, for example, you mig
 If you can't deactivate, do not just remove the plugin folder to uninstall! Follow these [instructions](https://really-simple-ssl.com/knowledge-base/uninstall-websitebackend-not-accessible/) instead.
 
 == Changelog ==
+= 9.3.5 =
+* April 29th, 2025
+* Improvement: Tested up to WordPress 6.8
+* Improvement: Some translation updates
+* Improvement: Check for autoloader in cron
+* Fix: 2FA methods can now be set on profile page
+
+= 9.3.3 =
+* April 2nd, 2025
+* Improvement: Added multiple WP-CLI commands to better align with recent plugin features
+* Improvement: Added support for custom/multiple roles in Two Factor Authentication
+
+= 9.3.2.1 =
+* March 20th, 2025
+* Fix: Properly handle unknown plugins in upgrade requests, preventing unintended behavior.
+
+= 9.3.2 =
+* March 5th, 2025
+* Improvement: Added filters to customize Let's Encrypt Wizard behavior
+* Fix: Removed default checkbox behavior from configuration settings.
+* Fix: Handle multiple tooltip reasons for disabled select fields
+
+= 9.3.1 =
+* February 12th, 2025
+* Improvement: Not able to use email needed functions when email is not yet verified.
+* Fix: All instruction links are now correct.
+* Fix: Undefined array key "m" when showing vulnerability details.
+* Fix: Prevent errors when downgrading to free.
+* Fix: Compatibility between 2FA and JetPack “Log in using WordPress.com account” setting
+
+= 9.2.0 =
+* January 20th, 2025
+* Fix: Added nonce check to certificate re-check button.
+* Fix: In some cases the review notice was not properly dismissible.
+
+= 9.1.4 =
+* Improvement: do not track 404's for logged in users
+* Improvement: implemented the rsssl_wpconfig_path filter in all wp-config functions
+* Improvement: Faster onboarding completion after clicking Finish button
+* Improvement: CSS. Shields in user interface on datatables are no longer cut off
+
 = 9.1.3 =
 * November 28th
 * Improvement: Width Vulnerabilities -> configuration

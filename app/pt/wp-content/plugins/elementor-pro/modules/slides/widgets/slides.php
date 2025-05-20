@@ -36,7 +36,7 @@ class Slides extends Base_Widget {
 	}
 
 	public function get_script_depends() {
-		return [ 'imagesloaded' ];
+		return [ 'imagesloaded', 'swiper' ];
 	}
 
 	protected function is_dynamic_content(): bool {
@@ -114,7 +114,7 @@ class Slides extends Base_Widget {
 		$repeater->add_control(
 			'background_image',
 			[
-				'label' => _x( 'Image', 'Background Control', 'elementor-pro' ),
+				'label' => esc_html__( 'Image', 'elementor-pro' ),
 				'type' => Controls_Manager::MEDIA,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}} .swiper-slide-bg' => 'background-image: url({{URL}})',
@@ -125,13 +125,13 @@ class Slides extends Base_Widget {
 		$repeater->add_control(
 			'background_size',
 			[
-				'label' => _x( 'Size', 'Background Control', 'elementor-pro' ),
+				'label' => esc_html__( 'Size', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'cover',
 				'options' => [
-					'cover' => _x( 'Cover', 'Background Control', 'elementor-pro' ),
-					'contain' => _x( 'Contain', 'Background Control', 'elementor-pro' ),
-					'auto' => _x( 'Auto', 'Background Control', 'elementor-pro' ),
+					'cover' => esc_html__( 'Cover', 'elementor-pro' ),
+					'contain' => esc_html__( 'Contain', 'elementor-pro' ),
+					'auto' => esc_html__( 'Auto', 'elementor-pro' ),
 				],
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}} .swiper-slide-bg' => 'background-size: {{VALUE}}',
@@ -1306,9 +1306,6 @@ class Slides extends Base_Widget {
 			]
 		);
 
-		// TODO: Remove conditional logic in v3.28 [ED-15983].
-		$swiper_class = $this->is_swiper_upgrade_experiment_state_inactive() ? 'swiper-container' : 'swiper';
-
 		$this->add_responsive_control(
 			'dots_size',
 			[
@@ -1328,7 +1325,7 @@ class Slides extends Base_Widget {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .swiper-pagination-bullet' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .' . $swiper_class . '-horizontal .swiper-pagination-progressbar' => 'height: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .swiper-horizontal .swiper-pagination-progressbar' => 'height: {{SIZE}}{{UNIT}}',
 					'{{WRAPPER}} .swiper-pagination-fraction' => 'font-size: {{SIZE}}{{UNIT}}',
 				],
 				'condition' => [
@@ -1376,15 +1373,12 @@ class Slides extends Base_Widget {
 			return;
 		}
 
-		// TODO: Remove conditional logic in v3.28 [ED-15983].
-		$swiper_class = $this->is_swiper_upgrade_experiment_state_inactive() ? 'swiper-container' : 'swiper';
-
 		$optimized_markup = Plugin::elementor()->experiments->is_feature_active( 'e_optimized_markup' );
 		$direction = is_rtl() ? 'rtl' : 'ltr';
 
 		$this->add_render_attribute( [
 			'wrapper' => [
-				'class' => [ 'elementor-slides-wrapper', 'elementor-main-swiper', $swiper_class ],
+				'class' => [ 'elementor-slides-wrapper', 'elementor-main-swiper', 'swiper' ],
 				'role' => 'region',
 				'aria-roledescription' => 'carousel',
 				'aria-label' => $settings['slides_name'],
@@ -1472,9 +1466,6 @@ class Slides extends Base_Widget {
 					<?php echo implode( '', $slides ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 				<?php if ( 1 < $slides_count ) : ?>
-					<?php if ( $show_dots ) : ?>
-						<div class="swiper-pagination"></div>
-					<?php endif; ?>
 					<?php if ( $show_arrows ) : ?>
 						<div class="elementor-swiper-button elementor-swiper-button-prev" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Previous slide', 'elementor-pro' ); ?>">
 							<?php $this->render_swiper_button( 'previous' ); ?>
@@ -1482,6 +1473,9 @@ class Slides extends Base_Widget {
 						<div class="elementor-swiper-button elementor-swiper-button-next" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Next slide', 'elementor-pro' ); ?>">
 							<?php $this->render_swiper_button( 'next' ); ?>
 						</div>
+					<?php endif; ?>
+					<?php if ( $show_dots ) : ?>
+						<div class="swiper-pagination"></div>
 					<?php endif; ?>
 				<?php endif; ?>
 			</div>
@@ -1560,9 +1554,6 @@ class Slides extends Base_Widget {
 					<# } ); #>
 				</div>
 				<# if ( 1 < settings.slides.length ) { #>
-					<# if ( showDots ) { #>
-						<div class="swiper-pagination"></div>
-					<# } #>
 					<# if ( showArrows ) { #>
 						<div class="elementor-swiper-button elementor-swiper-button-prev" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Previous slide', 'elementor-pro' ); ?>">
 							<i class="eicon-chevron-{{ prev }}" aria-hidden="true"></i>
@@ -1570,6 +1561,9 @@ class Slides extends Base_Widget {
 						<div class="elementor-swiper-button elementor-swiper-button-next" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Next slide', 'elementor-pro' ); ?>">
 							<i class="eicon-chevron-{{ next }}" aria-hidden="true"></i>
 						</div>
+					<# } #>
+					<# if ( showDots ) { #>
+						<div class="swiper-pagination"></div>
 					<# } #>
 				<# } #>
 			</div>
