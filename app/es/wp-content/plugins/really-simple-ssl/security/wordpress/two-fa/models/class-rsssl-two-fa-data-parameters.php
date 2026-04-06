@@ -29,8 +29,8 @@ class Rsssl_Two_FA_Data_Parameters {
         $this->page_size   = isset($data['currentRowsPerPage']) ? (int)$data['currentRowsPerPage'] : 5;
         $this->search_term = isset($data['search']) ? sanitize_text_field($data['search']) : '';
 
-        $allowed_filters = array_map('strtolower', array_values((new \WP_Roles())->get_names()));
-        $this->filter_value = in_array($data['filterValue'] ?? 'all', $allowed_filters, true)
+        $allowed_role_filters = array_keys( wp_roles()->get_names() );
+        $this->filter_value = in_array($data['filterValue'] ?? 'all', $allowed_role_filters, true)
             ? sanitize_text_field($data['filterValue'] ?? 'all')
             : 'all';
         $this->sort_direction = in_array(strtoupper($data['sortDirection'] ?? 'DESC'), ['ASC', 'DESC'], true)
@@ -50,10 +50,15 @@ class Rsssl_Two_FA_Data_Parameters {
      */
     public function getEnabledRoles(): array {
         if ($this->enabled_roles === null) {
-            $this->enabled_roles = array_unique(array_merge(
-                defined('rsssl_pro') ? rsssl_get_option('two_fa_enabled_roles_totp', []) : [],
-                rsssl_get_option('two_fa_enabled_roles_email', [])
-            ));
+            // if the passkey is enabled all roles are enabled
+            if (defined('rsssl_pro') && rsssl_get_option('enable_passkey_login', false)) {
+                $this->enabled_roles = array_keys( wp_roles()->get_names() );
+            } else {
+                $this->enabled_roles = array_unique(array_merge(
+                    defined('rsssl_pro') ? rsssl_get_option('two_fa_enabled_roles_totp', []) : [],
+                    rsssl_get_option('two_fa_enabled_roles_email', [])
+                ));
+            }
         }
         return $this->enabled_roles;
     }
@@ -81,7 +86,6 @@ class Rsssl_Two_FA_Data_Parameters {
     /**
      * Set the number of items to retrieve.
      *
-     * @param int $offset
      * @return Rsssl_Two_FA_Data_Parameters
      */
     public function setOffset(int $offset): self {
@@ -92,7 +96,6 @@ class Rsssl_Two_FA_Data_Parameters {
     /**
      * Set the number of items to retrieve.
      *
-     * @param int $batch_size
      * @return Rsssl_Two_FA_Data_Parameters
      */
     public function setNumber(int $batch_size): self
