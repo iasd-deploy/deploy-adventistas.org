@@ -65,77 +65,18 @@
             "install-path": "../intervention/httpauth"
         },
         {
-            "name": "marcusschwarz/lesserphp",
-            "version": "v0.5.5",
-            "version_normalized": "0.5.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/MarcusSchwarz/lesserphp.git",
-                "reference": "77ba82b5218ff228267d3b0e5ec8697be75e86a7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/MarcusSchwarz/lesserphp/zipball/77ba82b5218ff228267d3b0e5ec8697be75e86a7",
-                "reference": "77ba82b5218ff228267d3b0e5ec8697be75e86a7",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=4.8.35 <8"
-            },
-            "time": "2021-03-10T17:56:57+00:00",
-            "bin": [
-                "plessc"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.5.1-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "classmap": [
-                    "lessc.inc.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Leaf Corcoran",
-                    "email": "leafot@gmail.com",
-                    "homepage": "http://leafo.net"
-                },
-                {
-                    "name": "Marcus Schwarz",
-                    "email": "github@maswaba.de",
-                    "homepage": "https://www.maswaba.de"
-                }
-            ],
-            "description": "lesserphp is a compiler for LESS written in PHP based on leafo's lessphp.",
-            "homepage": "http://leafo.net/lessphp/",
-            "support": {
-                "issues": "https://github.com/MarcusSchwarz/lesserphp/issues",
-                "source": "https://github.com/MarcusSchwarz/lesserphp/tree/v0.5.5"
-            },
-            "install-path": "../marcusschwarz/lesserphp"
-        },
-        {
             "name": "matthiasmullie/minify",
-            "version": "1.3.73",
-            "version_normalized": "1.3.73.0",
+            "version": "1.3.75",
+            "version_normalized": "1.3.75.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "cb7a9297b4ab070909cefade30ee95054d4ae87a"
+                "reference": "76ba4a5f555fd7bf4aa408af608e991569076671"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/cb7a9297b4ab070909cefade30ee95054d4ae87a",
-                "reference": "cb7a9297b4ab070909cefade30ee95054d4ae87a",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/76ba4a5f555fd7bf4aa408af608e991569076671",
+                "reference": "76ba4a5f555fd7bf4aa408af608e991569076671",
                 "shasum": ""
             },
             "require": {
@@ -146,13 +87,12 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": ">=2.0",
                 "matthiasmullie/scrapbook": ">=1.3",
-                "phpunit/phpunit": ">=4.8",
-                "squizlabs/php_codesniffer": ">=3.0"
+                "phpunit/phpunit": ">=4.8"
             },
             "suggest": {
                 "psr/cache-implementation": "Cache implementation to use with Minify::cache"
             },
-            "time": "2024-03-15T10:27:10+00:00",
+            "time": "2025-06-25T09:56:19+00:00",
             "bin": [
                 "bin/minifycss",
                 "bin/minifyjs"
@@ -187,7 +127,7 @@
             ],
             "support": {
                 "issues": "https://github.com/matthiasmullie/minify/issues",
-                "source": "https://github.com/matthiasmullie/minify/tree/1.3.73"
+                "source": "https://github.com/matthiasmullie/minify/tree/1.3.75"
             },
             "funding": [
                 {
@@ -545,17 +485,17 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "1.0.23",
-            "version_normalized": "1.0.23.0",
+            "version": "1.0.27",
+            "version_normalized": "1.0.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "86990d518f4434719271fadd112d34b20208f3a9"
+                "reference": "56fa436a7a7b87e17d3f1b91d58afb1a6cbaedc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/86990d518f4434719271fadd112d34b20208f3a9",
-                "reference": "86990d518f4434719271fadd112d34b20208f3a9",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/56fa436a7a7b87e17d3f1b91d58afb1a6cbaedc9",
+                "reference": "56fa436a7a7b87e17d3f1b91d58afb1a6cbaedc9",
                 "shasum": ""
             },
             "require": {
@@ -563,7 +503,7 @@
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4",
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^8.5|^9.4",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
@@ -573,7 +513,7 @@
                 "ext-xml": "Install the XML extension to load XML formatted public keys.",
                 "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 5.0.0."
             },
-            "time": "2024-02-26T04:44:00+00:00",
+            "time": "2026-03-19T02:51:43+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -646,7 +586,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/1.0.23"
+                "source": "https://github.com/phpseclib/phpseclib/tree/1.0.27"
             },
             "funding": [
                 {
@@ -666,17 +606,17 @@
         },
         {
             "name": "pimple/pimple",
-            "version": "v3.5.0",
-            "version_normalized": "3.5.0.0",
+            "version": "v3.6.2",
+            "version_normalized": "3.6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "a94b3a4db7fb774b3d78dad2315ddc07629e1bed"
+                "reference": "8cfe7f74ac22a433d303914eba9ea4c2a834edce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/a94b3a4db7fb774b3d78dad2315ddc07629e1bed",
-                "reference": "a94b3a4db7fb774b3d78dad2315ddc07629e1bed",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/8cfe7f74ac22a433d303914eba9ea4c2a834edce",
+                "reference": "8cfe7f74ac22a433d303914eba9ea4c2a834edce",
                 "shasum": ""
             },
             "require": {
@@ -684,13 +624,13 @@
                 "psr/container": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "^5.4@dev"
+                "phpunit/phpunit": "*"
             },
-            "time": "2021-10-28T11:13:42+00:00",
+            "time": "2026-02-26T08:23:44+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -716,7 +656,7 @@
                 "dependency injection"
             ],
             "support": {
-                "source": "https://github.com/silexphp/Pimple/tree/v3.5.0"
+                "source": "https://github.com/silexphp/Pimple/tree/v3.6.2"
             },
             "install-path": "../pimple/pimple"
         },
@@ -1226,33 +1166,32 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DavidAnderson684/webp-convert.git",
-                "reference": "d51a1799d12997696681a535d1aa2d4354ea8b8d"
+                "reference": "dd2aa9d268393f229d886b6fe0f255aea83acea8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DavidAnderson684/webp-convert/zipball/d51a1799d12997696681a535d1aa2d4354ea8b8d",
-                "reference": "d51a1799d12997696681a535d1aa2d4354ea8b8d",
+                "url": "https://api.github.com/repos/DavidAnderson684/webp-convert/zipball/dd2aa9d268393f229d886b6fe0f255aea83acea8",
+                "reference": "dd2aa9d268393f229d886b6fe0f255aea83acea8",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 | ^7.0 | ^8.0",
-                "rosell-dk/exec-with-fallback": "^1.0.0",
+                "rosell-dk/exec-with-fallback": "^1.2.0",
                 "rosell-dk/image-mime-type-guesser": "^1.1.1",
                 "rosell-dk/locate-binaries": "^1.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.11",
-                "phpstan/phpstan": "^1.5",
+                "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^9.3",
                 "squizlabs/php_codesniffer": "3.*"
             },
             "suggest": {
                 "ext-gd": "to use GD extension for converting. Note: Gd must be compiled with webp support",
                 "ext-imagick": "to use Imagick extension for converting. Note: Gd must be compiled with webp support",
-                "ext-vips": "to use Vips extension for converting.",
-                "php-stan/php-stan": "Suggested for dev, in order to analyse code before committing"
+                "ext-vips": "to use Vips extension for converting."
             },
-            "time": "2022-11-09T10:15:51+00:00",
+            "time": "2026-03-21T17:23:49+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -1281,7 +1220,7 @@
                     "@test",
                     "@phpcs-all",
                     "@composer validate --no-check-all --strict",
-                    "@phpstan-global"
+                    "@phpstan"
                 ],
                 "phpunit": [
                     "phpunit --coverage-text"
@@ -1490,22 +1429,53 @@
         },
         {
             "name": "team-updraft/lib-central",
-            "version": "1.25.5",
-            "version_normalized": "1.25.5.0",
+            "version": "1.25.6",
+            "version_normalized": "1.25.6.0",
             "source": {
                 "type": "git",
                 "url": "ssh://git@source.updraftplus.com:20022/team-updraft/lib-central.git",
-                "reference": "2c57b2b7e5cd390ee78728ada88bbfe346bdcf6f"
+                "reference": "888161bd56e469a660c1c3607d9b16d82aead64d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://source.updraftplus.com/api/v4/projects/106/packages/composer/archives/team-updraft/lib-central.zip?sha=2c57b2b7e5cd390ee78728ada88bbfe346bdcf6f",
-                "reference": "2c57b2b7e5cd390ee78728ada88bbfe346bdcf6f",
+                "url": "https://source.updraftplus.com/api/v4/projects/106/packages/composer/archives/team-updraft/lib-central.zip?sha=888161bd56e469a660c1c3607d9b16d82aead64d",
+                "reference": "888161bd56e469a660c1c3607d9b16d82aead64d",
                 "shasum": ""
             },
             "type": "library",
             "installation-source": "dist",
             "install-path": "../team-updraft/lib-central"
+        },
+        {
+            "name": "team-updraft/lib-onboarding-wizard",
+            "version": "0.1.2",
+            "version_normalized": "0.1.2.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@source.updraftplus.com:20022/team-updraft/lib-onboarding-wizard.git",
+                "reference": "e49f14b4b49591ebf11d215f6c596c1cf335ac18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://source.updraftplus.com/api/v4/projects/140/packages/composer/archives/team-updraft/lib-onboarding-wizard.zip?sha=e49f14b4b49591ebf11d215f6c596c1cf335ac18",
+                "reference": "e49f14b4b49591ebf11d215f6c596c1cf335ac18",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "LibOnboardingWizard"
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "composer-plugin-extras"
+                ]
+            },
+            "description": "onboarding wizard",
+            "install-path": "../team-updraft/lib-onboarding-wizard"
         },
         {
             "name": "tubalmartin/cssmin",

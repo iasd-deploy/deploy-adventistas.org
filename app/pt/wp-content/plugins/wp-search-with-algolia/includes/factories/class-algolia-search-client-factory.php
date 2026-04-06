@@ -31,11 +31,27 @@ class Algolia_Search_Client_Factory {
 	 */
 	public static function create( string $app_id, string $api_key ): SearchClient {
 
+		/**
+		 * Filters the UA Integration name value.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  string $value Default: "WP Search with Algolia"
+		 * @return string $value New UA integration name.
+		 */
 		$integration_name = (string) apply_filters(
 			'algolia_ua_integration_name',
 			'WP Search with Algolia'
 		);
 
+		/**
+		 * Filters the UA Integration version value.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  string $value Default: Current Algolia plugin version.
+		 * @return string $value Custom UA integration version.
+		 */
 		$integration_version = (string) apply_filters(
 			'algolia_ua_integration_version',
 			ALGOLIA_VERSION
@@ -61,6 +77,7 @@ class Algolia_Search_Client_Factory {
 		 * Allows for providing custom configuration arguments for Algolia Search Client.
 		 *
 		 * @see https://www.algolia.com/doc/api-reference/api-methods/configuring-timeouts/
+		 *
 		 * @since 2.8.0
 		 *
 		 * @param array $value Array of values for Algolia Config. Default empty array.
@@ -69,6 +86,35 @@ class Algolia_Search_Client_Factory {
 			'algolia_custom_search_config',
 			[]
 		);
+
+		/**
+		 * Allows for customizing an Algolia secured API key.
+		 *
+		 * @see https://www.algolia.com/doc/api-reference/api-methods/generate-secured-api-key/
+		 *
+		 * @since 2.9.0
+		 *
+		 * @param array $value Array of secured API key arguments. Default empty array.
+		 */
+		$custom_secured_key_config = apply_filters(
+			'algolia_custom_secured_key',
+			[]
+		);
+
+		if ( ! empty( $custom_secured_key_config ) && is_array( $custom_secured_key_config ) ) {
+			$custom_secured_key_config = wp_parse_args(
+				$custom_secured_key_config,
+				[
+					'filters'         => '',
+					'validUntil'      => '',
+					'restrictIndices' => [],
+					'restrictSources' => '',
+					'userToken'       => '',
+				]
+			);
+
+			$api_key = SearchClient::generateSecuredApiKey( $api_key, $custom_secured_key_config );
+		}
 
 		if ( ! empty( $custom_config ) && is_array( $custom_config ) ) {
 			$config = SearchConfig::create( $app_id, $api_key );
@@ -82,6 +128,11 @@ class Algolia_Search_Client_Factory {
 			if ( ! empty( $custom_config['writeTimeout'] ) ) {
 				$config->setWriteTimeout( (int) $custom_config['writeTimeout'] );
 			}
+
+			if ( is_array( $custom_config['DefaultHeaders'] ) && ! empty( $custom_config['DefaultHeaders'] ) ) {
+				$config->setDefaultHeaders( $custom_config['DefaultHeaders'] );
+			}
+
 			return SearchClient::createWithConfig( $config );
 		}
 

@@ -128,6 +128,15 @@ class Algolia_Plugin {
 	private $compatibility;
 
 	/**
+	 * Instance of Algoolia_Health_Panel
+	 *
+	 * @since 2.10.0
+	 *
+	 * @var Algolia_Health_Panel
+	 */
+	private $health;
+
+	/**
 	 * Get the singleton instance of Algolia_Plugin.
 	 *
 	 * @author     WebDevStudios <contact@webdevstudios.com>
@@ -175,7 +184,8 @@ class Algolia_Plugin {
 
 		// Load admin or public part of the plugin.
 		if ( is_admin() ) {
-			$this->admin = new Algolia_Admin( $this );
+			$this->admin  = new Algolia_Admin( $this );
+			$this->health = new Algolia_Health_Panel( $this );
 		}
 	}
 
@@ -287,6 +297,15 @@ class Algolia_Plugin {
 			),
 			'names'
 		);
+
+		/**
+		 * Filters the array of searchable post types.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $searchable_post_types Array of registered post types that are not excluded from search.
+		 * @return array $value                 Filtered array of post types.
+		 */
 		$searchable_post_types = (array) apply_filters( 'algolia_searchable_post_types', $searchable_post_types );
 		$this->indices[]       = new Algolia_Searchable_Posts_Index( $searchable_post_types );
 
@@ -318,7 +337,14 @@ class Algolia_Plugin {
 		// Add the users index.
 		$this->indices[] = new Algolia_Users_Index();
 
-		// Allow developers to filter the indices.
+		/**
+		 * Filters the array of indices to load.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $indices Array of indices to load.
+		 * @return array $value   Filtered array of indices.
+		 */
 		$this->indices = (array) apply_filters( 'algolia_indices', $this->indices );
 
 		foreach ( $this->indices as $index ) {
@@ -338,6 +364,15 @@ class Algolia_Plugin {
 			}
 		}
 
+		/**
+		 * Filters the array of changes watchers to work with.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $change_watchers Array of watchers to work with.
+		 * @param  array $indices         Array of indices.
+		 * @return array $value           Filtered array of watchers.
+		 */
 		$this->changes_watchers = (array) apply_filters( 'algolia_changes_watchers', $this->changes_watchers, $this->indices );
 
 		foreach ( $this->changes_watchers as $watcher ) {

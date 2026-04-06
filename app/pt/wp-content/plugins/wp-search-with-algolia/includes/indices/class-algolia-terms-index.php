@@ -75,6 +75,17 @@ final class Algolia_Terms_Index extends Algolia_Index {
 		// For now we index the term if it is in use somewhere.
 		$should_index = $item->count > 0;
 
+		/**
+		 * Filters whether or not to index a term.
+		 *
+		 * This filter is based on if it is used on at least one post.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  bool  $should_index Whether or not the term should be indexed.
+		 * @param  mixed $item         The term object.
+		 * @return bool  $value        Filtered should index status.
+		 */
 		return (bool) apply_filters( 'algolia_should_index_term', $should_index, $item );
 	}
 
@@ -103,7 +114,28 @@ final class Algolia_Terms_Index extends Algolia_Index {
 			$record['permalink'] = get_term_link( $item );
 		}
 
+		/**
+		 * Filters the term information that will go into the Algolia object.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $record Array of term information.
+		 * @param  mixed $item   The term object.
+		 * @return array $value  Filtered term information.
+		 */
 		$record = (array) apply_filters( 'algolia_term_record', $record, $item );
+
+		/**
+		 * Filters the term information that will go into the Algolia object.
+		 *
+		 * This is a dynamic filter with the `$item->taxonomy` portion allowing to filter for just specific taxonomies.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $record Array of term information.
+		 * @param  mixed $item   The term object.
+		 * @return array $value  Filtered term information.
+		 */
 		$record = (array) apply_filters( 'algolia_term_' . $item->taxonomy . '_record', $record, $item );
 
 		return array( $record );
@@ -140,7 +172,27 @@ final class Algolia_Terms_Index extends Algolia_Index {
 			),
 		);
 
+		/**
+		 * Filters the settings for the terms index settings.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array  $settings Array of settings to use for the index.
+		 * @param  string $taxonomy Taxonomy slug for the current taxonomy index.
+		 * @return array  $value    Filtered index settings.
+		 */
 		$settings = (array) apply_filters( 'algolia_terms_index_settings', $settings, $this->taxonomy );
+
+		/**
+		 * Filters the settings for the terms index settings.
+		 *
+		 * This is a dynamic filter with the `$item->taxonomy` portion allowing to filter for just specific taxonomies.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $settings Array of settings to use for the index
+		 * @return array $value    Filtered index settings.
+		 */
 		$settings = (array) apply_filters( 'algolia_terms_' . $this->taxonomy . '_index_settings', $settings );
 
 		/**
@@ -173,6 +225,15 @@ final class Algolia_Terms_Index extends Algolia_Index {
 	 * @return array
 	 */
 	protected function get_synonyms() {
+
+		/**
+		 * Filters the terms index synonyms to use.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $value Array of synonyms to use. Default empty array.
+		 * @return array $value Filtered array of synonyms.
+		 */
 		return (array) apply_filters( 'algolia_terms_index_synonyms', array() );
 	}
 
@@ -195,24 +256,29 @@ final class Algolia_Terms_Index extends Algolia_Index {
 	 * @author WebDevStudios <contact@webdevstudios.com>
 	 * @since  1.0.0
 	 *
-	 * @param int $page       The page.
-	 * @param int $batch_size The batch size.
+	 * @param int   $page         The page.
+	 * @param int   $batch_size   The batch size.
+	 * @param array $specific_ids Array of terms to retrieve and index.
 	 *
 	 * @return array
 	 */
-	protected function get_items( $page, $batch_size ) {
+	protected function get_items( $page, $batch_size, $specific_ids = [] ) {
 		$offset = $batch_size * ( $page - 1 );
 
-		$args = array(
+		$args = [
+			'taxonomy'   => $this->taxonomy,
 			'order'      => 'ASC',
 			'orderby'    => 'id',
 			'offset'     => $offset,
 			'number'     => $batch_size,
 			'hide_empty' => false, // Let users choose what to index.
-		);
+		];
 
-		// We use prior to 4.5 syntax for BC purposes.
-		return get_terms( $this->taxonomy, $args );
+		if ( ! empty( $specific_ids ) && is_array( $specific_ids ) ) {
+			$args['include'] = $specific_ids;
+		}
+
+		return get_terms( $args );
 	}
 
 	/**
@@ -243,16 +309,32 @@ final class Algolia_Terms_Index extends Algolia_Index {
 	 * @author WebDevStudios <contact@webdevstudios.com>
 	 * @since  1.0.0
 	 *
-	 * @return array
+	 * @return array Autocomplete config.
 	 */
 	public function get_default_autocomplete_config() {
+		$default_config = parent::get_default_autocomplete_config();
+		$index_name     = $this->get_name();
+
+		/**
+		 * Filters the autocomplete debounce option for this index.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param int Debounce value in milliseconds.
+		 */
+		$debounce = apply_filters(
+			"algolia_autocomplete_debounce_{$index_name}",
+			$default_config['debounce']
+		);
+
 		$config = array(
 			'position'        => 20,
 			'max_suggestions' => 3,
+			'debounce'        => $debounce,
 			'tmpl_suggestion' => 'autocomplete-term-suggestion',
 		);
 
-		return array_merge( parent::get_default_autocomplete_config(), $config );
+		return array_merge( $default_config, $config );
 	}
 
 	/**

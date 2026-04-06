@@ -67,6 +67,37 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	}
 
 	/**
+	 * Get default autocomplete config.
+	 *
+	 * @author WebDevStudios <contact@webdevstudios.com>
+	 * @since  2.10.0
+	 *
+	 * @return array Autocomplete config.
+	 */
+	public function get_default_autocomplete_config() {
+		$default_config = parent::get_default_autocomplete_config();
+		$index_name     = $this->get_name();
+
+		/**
+		 * Filters the autocomplete debounce value for this index.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param int Debounce value in milliseconds.
+		 */
+		$debounce = apply_filters(
+			"algolia_autocomplete_debounce_{$index_name}",
+			$default_config['debounce']
+		);
+
+		$config = array(
+			'debounce' => $debounce,
+		);
+
+		return array_merge( $default_config, $config );
+	}
+
+	/**
 	 * Get the admin name for this index.
 	 *
 	 * @author WebDevStudios <contact@webdevstudios.com>
@@ -105,6 +136,17 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	private function should_index_post( WP_Post $post ) {
 		$should_index = 'publish' === $post->post_status && empty( $post->post_password );
 
+		/**
+		 * Filters whether or not to index a searchable post.
+		 *
+		 * This filter is based on if the post is published and not private.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  bool    $should_index Whether or not the post should be indexed.
+		 * @param  WP_Post $post         The post object.
+		 * @return bool    $value        Filtered should index status.
+		 */
 		return (bool) apply_filters( 'algolia_should_index_searchable_post', $should_index, $post );
 	}
 
@@ -142,7 +184,20 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 
 		$removed = remove_filter( 'the_content', 'wptexturize', 10 );
 
+		/**
+		 * Filters the searchable post's content before preparing to send to Algolia.
+		 *
+		 * This filter is run right before running through WordPress' `the_content` filter.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  string  $post_content The post's content to be indexed.
+		 * @param  WP_Post $post         The post object.
+		 * @return string  $value        The filtered content.
+		 */
 		$post_content = apply_filters( 'algolia_searchable_post_content', $post->post_content, $post );
+
+		/** This filter is documented in wp-includes/post-template.php */
 		$post_content = apply_filters( 'the_content', $post_content ); // phpcs:ignore -- Legitimate use of Core hook.
 
 		if ( true === $removed ) {
@@ -165,7 +220,28 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 			$records[]              = $record;
 		}
 
+		/**
+		 * Filters the searchable post information that will go into the Algolia object.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array   $records Array of post information.
+		 * @param  WP_Post $post    The post object.
+		 * @return array   $value   Filtered post information.
+		 */
 		$records = (array) apply_filters( 'algolia_searchable_post_records', $records, $post );
+
+		/**
+		 * Filters the searchable post information that will go into the Algolia object.
+		 *
+		 * This is a dynamic filter with the `$post->post_type` portion allowing to filter for just specific post types.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array   $records Array of post information.
+		 * @param  WP_Post $post    The post object.
+		 * @return array   $value   Filtered post information.
+		 */
 		$records = (array) apply_filters( 'algolia_searchable_post_' . $post->post_type . '_records', $records, $post );
 
 		return $records;
@@ -240,7 +316,28 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 
+		/**
+		 * Filters the shared attributes for a searchable post object going into Algolia.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array   $shared_attributes Array of shared attributes between posts.
+		 * @param  WP_Post $post              The post object.
+		 * @return array   $value             Array of attributes to include on the post objects.
+		 */
 		$shared_attributes = (array) apply_filters( 'algolia_searchable_post_shared_attributes', $shared_attributes, $post );
+
+		/**
+		 * Filters the shared attributes for a searchable post object going into Algolia.
+		 *
+		 * This is a dynamic filter with the `$post->post_type` portion allowing to filter for just specific post types.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array   $shared_attributes Array of shared attributes between posts.
+		 * @param  WP_Post $post              The post object.
+		 * @return array   $value             Array of attributes to include on the post objects.
+		 */
 		$shared_attributes = (array) apply_filters( 'algolia_searchable_post_' . $post->post_type . '_shared_attributes', $shared_attributes, $post );
 
 		return $shared_attributes;
@@ -281,6 +378,14 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 			'snippetEllipsisText'   => '…',
 		);
 
+		/**
+		 * Filters the settings for the searchable posts index settings.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $settings Array of settings to use for the index.
+		 * @return array $value    Filtered index settings.
+		 */
 		$settings = (array) apply_filters( 'algolia_searchable_posts_index_settings', $settings );
 
 		/**
@@ -313,6 +418,14 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	 * @return array
 	 */
 	protected function get_synonyms() {
+		/**
+		 * Filters the searchable posts index synonyms to use.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $value Array of synonyms to use. Default empty array.
+		 * @return array $value Filtered array of synonyms.
+		 */
 		$synonyms = (array) apply_filters( 'algolia_searchable_posts_index_synonyms', array() );
 
 		return $synonyms;
@@ -393,7 +506,26 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 		$new_records_count = count( $records );
 		$this->set_post_records_count( $post, $new_records_count );
 
+		/**
+		 * Fires after a given post was updated in Algolia.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param WP_Post $post    The post object being updated.
+		 * @param array   $records The records.
+		 */
 		do_action( 'algolia_searchable_posts_index_post_updated', $post, $records );
+
+		/**
+		 * Fires after a given post was updated in Algolia.
+		 *
+		 * This is a dynamic action hook with the `$post->post_type` portion allowing to hook in for only specific post types.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param WP_Post $post    The post object being updated.
+		 * @param array   $records The records.
+		 */
 		do_action( 'algolia_searchable_posts_index_post_' . $post->post_type . '_updated', $post, $records );
 	}
 
@@ -419,14 +551,13 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	 */
 	protected function get_re_index_items_count() {
 		$query = new WP_Query(
-			array(
+			[
 				'post_type'              => $this->post_types,
 				'post_status'            => 'any', // Let the `should_index` take care of the filtering.
 				'suppress_filters'       => true,
 				'cache_results'          => false,
-				'lazy_load_term_meta'    => false,
 				'update_post_term_cache' => false,
-			)
+			]
 		);
 
 		return (int) $query->found_posts;
@@ -441,7 +572,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	 *
 	 * @param int   $page         The page.
 	 * @param int   $batch_size   The batch size.
-	 * @param array $specific_ids Array of IDs to specifically fetch and index.
+	 * @param array $specific_ids Array of post IDs to retrieve and index.
 	 *
 	 * @return array
 	 */
@@ -458,8 +589,8 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 			'lazy_load_term_meta'    => false,
 			'update_post_term_cache' => false,
 		];
-		if ( ! empty( $specific_ids ) ) {
-			$args['post__in'] = (array) $specific_ids;
+		if ( ! empty( $specific_ids ) && is_array( $specific_ids ) ) {
+			$args['post__in'] = $specific_ids;
 		}
 		$query = new WP_Query( $args );
 

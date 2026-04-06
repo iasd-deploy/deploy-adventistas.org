@@ -27,11 +27,14 @@ class Algolia_Settings {
 		add_option( 'algolia_api_key', '' );
 		add_option( 'algolia_synced_indices_ids', array() );
 		add_option( 'algolia_autocomplete_enabled', 'no' );
+		add_option( 'algolia_autocomplete_debounce', 0 );
 		add_option( 'algolia_autocomplete_config', array() );
 		add_option( 'algolia_override_native_search', 'native' );
+		add_option( 'algolia_instantsearch_template_version', 'legacy' );
 		add_option( 'algolia_index_name_prefix', 'wp_' );
 		add_option( 'algolia_api_is_reachable', 'no' );
 		add_option( 'algolia_powered_by_enabled', 'yes' );
+		add_option( 'algolia_insights_enabled', 'no' );
 	}
 
 	/**
@@ -149,16 +152,15 @@ class Algolia_Settings {
 		$excluded = (array) apply_filters( 'algolia_excluded_post_types', $excluded );
 
 		// Native WordPress.
-		$excluded[] = 'revision';
-		$excluded[] = 'custom_css';
-		$excluded[] = 'customize_changeset';
-		$excluded[] = 'oembed_cache';
-		$excluded[] = 'user_request';
-		$excluded[] = 'wp_block';
-		$excluded[] = 'wp_global_styles';
-		$excluded[] = 'wp_navigation';
-		$excluded[] = 'wp_template';
-		$excluded[] = 'wp_template_part';
+		$builtin = get_post_types( [ '_builtin' => true ] );
+		// Preserve posts, pages, and attachments.
+		unset( $builtin['post'] );
+		unset( $builtin['page'] );
+		unset( $builtin['attachment'] );
+
+		foreach ( $builtin as $type ) {
+			$excluded[] = $type;
+		}
 
 		// Native to WordPress VIP platform.
 		$excluded[] = 'kr_request_token';
@@ -195,6 +197,14 @@ class Algolia_Settings {
 			$ids[] = $this->get_native_search_index_id();
 		}
 
+		/**
+		 * Filters the indices IDs that will be synced.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $ids   Array of IDs to sync.
+		 * @return array $value Filtered array of IDs.
+		 */
 		return (array) apply_filters( 'algolia_get_synced_indices_ids', $ids );
 	}
 
@@ -252,6 +262,14 @@ class Algolia_Settings {
 			'algolia_excluded_taxonomies'
 		);
 
+		/**
+		 * Filters the array of taxonomies to be excluded from syncing.
+		 *
+		 * @since 1.7.0
+		 *
+		 * @param  array $excluded Array of taxonomies to exclude.
+		 * @return array $value    Filtered array of taxonomies.
+		 */
 		$excluded = (array) apply_filters( 'algolia_excluded_taxonomies', $excluded );
 
 		return $excluded;
@@ -276,6 +294,28 @@ class Algolia_Settings {
 		 * @param string $enabled Can be 'yes' or 'no'.
 		 */
 		return apply_filters( 'algolia_should_override_autocomplete', $enabled );
+	}
+
+	/**
+	 * Get the autocomplete debounce timeout settings value in milliseconds.
+	 * 0 will disable the feature (default).
+	 *
+	 * @author  WebDevStudios <contact@webdevstudios.com>
+	 * @since   2.10.0
+	 *
+	 * @return int Debounce value in milliseconds.
+	 */
+	public function get_autocomplete_debounce() {
+		$debounce = (int) get_option( 'algolia_autocomplete_debounce', 0 );
+
+		/**
+		 * Filters the autocomplete debounce option for algolia autocomplete.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param int Debounce value in milliseconds.
+		 */
+		return (int) apply_filters( 'algolia_autocomplete_debounce', $debounce );
 	}
 
 	/**
@@ -332,6 +372,14 @@ class Algolia_Settings {
 	public function should_override_search_with_instantsearch() {
 		$value = $this->get_override_native_search() === 'instantsearch';
 
+		/**
+		 * Filters whether or not we should override search with instantsearch.js
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  bool $value Whether or not we should override.
+		 * @return bool $value Filtered determination of override.
+		 */
 		return (bool) apply_filters( 'algolia_should_override_search_with_instantsearch', $value );
 	}
 
@@ -344,6 +392,15 @@ class Algolia_Settings {
 	 * @return string
 	 */
 	public function get_native_search_index_id() {
+
+		/**
+		 * Filters the native search index ID.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  string $value The index ID for native search.
+		 * @return string $vaule The filtered index ID.
+		 */
 		return (string) apply_filters( 'algolia_native_search_index_id', 'searchable_posts' );
 	}
 
@@ -495,5 +552,49 @@ class Algolia_Settings {
 	 */
 	public function disable_powered_by() {
 		update_option( 'algolia_powered_by_enabled', 'no' );
+	}
+
+	/**
+	 * Determine if Insights is enabled.
+	 *
+	 * @since 2.10.2
+	 * @return bool
+	 */
+	public function is_insights_enabled() {
+		return 'yes' === get_option( 'algolia_insights_enabled', 'no' );
+	}
+
+	/**
+	 * Return the version keyword for Instantsearch version to use.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @return mixed|null
+	 */
+	public function get_instantsearch_template_version() {
+		$chosen = get_option( 'algolia_instantsearch_template_version', 'legacy' );
+
+		/**
+		 * Filters the chosen InstantSearch template version. Non-numerical.
+		 *
+		 * @since 2.9.0
+		 *
+		 * @param  string $chosen Current template version.
+		 * @return string $value  Final template version.
+		 */
+		return apply_filters( 'algolia_instantsearch_template_version', $chosen );
+	}
+
+	/**
+	 * Return whether or not the keyword version is set to 'modern' or 'legacy'.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @return bool
+	 */
+	public function should_use_instantsearch_modern() {
+		$version = $this->get_instantsearch_template_version();
+
+		return 'modern' === $version;
 	}
 }
