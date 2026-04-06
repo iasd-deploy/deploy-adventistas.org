@@ -20,7 +20,7 @@ class WPO_Cache_Config {
 	/**
 	 * Instance of this class
 	 *
-	 * @var mixed
+	 * @var WPO_Cache_Config | null
 	 */
 	public static $instance;
 
@@ -57,12 +57,12 @@ class WPO_Cache_Config {
 	 * Get a specific configuration option
 	 *
 	 * @param string  $option_key The option identifier
-	 * @param boolean $default    Default value if the option doesn't exist (Default to false)
+	 * @param mixed $default    Default value if the option doesn't exist (Default to false)
 	 * @return mixed
 	 */
 	public function get_option($option_key, $default = false) {
 		$options = $this->get();
-		return apply_filters("wpo_option_key_{$option_key}", (isset($options[$option_key]) ? $options[$option_key] : $default));
+		return apply_filters("wpo_option_key_{$option_key}", ($options[$option_key] ?? $default));
 	}
 
 	/**
@@ -78,6 +78,13 @@ class WPO_Cache_Config {
 
 		$config['page_cache_length_value'] = intval($config['page_cache_length_value']);
 		$config['page_cache_length'] = $this->calculate_page_cache_length($config['page_cache_length_value'], $config['page_cache_length_unit']);
+		
+		$fields_to_trim = array('cache_exception_conditional_tags', 'cache_exception_urls', 'cache_ignore_query_variables', 'cache_exception_cookies', 'cache_exception_browser_agents');
+		foreach ($fields_to_trim as $field) {
+			if (!empty($config[$field]) && is_array($config[$field])) {
+				$config[$field] = array_map('trim', $config[$field]);
+			}
+		}
 
 		/**
 		 * Filters the cookies used to set cache file names
@@ -182,8 +189,16 @@ class WPO_Cache_Config {
 		}
 
 		if ((!$only_if_present || file_exists($config_file)) && (!wp_is_writable(WPO_CACHE_CONFIG_DIR) || !file_put_contents($config_file, $config_content))) {
-			// translators: %s is the path to the cache config file
-			return new WP_Error('write_cache_config', sprintf(__('The cache configuration file could not be saved to the disk; please check the file/folder permissions of %s .', 'wp-optimize'), $config_file));
+			// If translations are already loaded, use the translated string
+			if (is_textdomain_loaded('wp-optimize')) {
+				/* translators: %s is the path to the cache config file */
+				$message = sprintf(__('The cache configuration file could not be saved to the disk; please check the file/folder permissions of %s .', 'wp-optimize'), $config_file);
+			} else {
+				// Fallback to plain English string to avoid triggering premature translation loading
+				$message = sprintf('The cache configuration file could not be saved to the disk; please check the file/folder permissions of %s .', $config_file);
+			}
+
+			return new WP_Error('write_cache_config', $message);
 		}
 
 		return true;
@@ -211,7 +226,10 @@ class WPO_Cache_Config {
 			'page_cache_length_unit'           => 'hours',
 			'page_cache_length'                => 86400,
 			'cache_exception_conditional_tags' => array(),
+			'cache_specific_urls_only'        => false,
+			'cache_include_urls'               => array(),
 			'cache_exception_urls'             => array(),
+			'cache_ignore_query_variables' 	   => array(),
 			'cache_exception_cookies'          => array(),
 			'cache_exception_browser_agents'   => array(),
 			'enable_sitemap_preload'           => false,
@@ -231,7 +249,8 @@ class WPO_Cache_Config {
 			'use_webp_images'                  => false,
 			'show_avatars'                     => 0,
 			'host_gravatars_locally'           => 0,
-			'auto_preload_purged_contents'     => true
+			'auto_preload_purged_contents'     => true,
+			'enable_rest_caching'              => false,
 		);
 
 		return apply_filters('wpo_cache_defaults', $defaults);
@@ -245,7 +264,7 @@ class WPO_Cache_Config {
 	public function get_cache_config_filename() {
 		$url = wp_parse_url(network_site_url());
 
-		if (isset($url['port']) && '' != $url['port'] && 80 != $url['port']) {
+		if (isset($url['port']) && '' !== (string) $url['port'] && 80 !== $url['port']) {
 			return 'config-'.strtolower($url['host']).'-port'.$url['port'].'.php';
 		} else {
 			return 'config-'.strtolower($url['host']).'.php';

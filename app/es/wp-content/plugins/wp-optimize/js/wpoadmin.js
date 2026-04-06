@@ -88,7 +88,9 @@ var WP_Optimize = function () {
 		 */
 
 		var elTable = document.getElementById('wpoptimize_table_list');
-		
+
+		if (null === elTable) return;
+
 		enhanceSortableAccessibility([elTable]);
 		
 		document.getElementById('wpoptimize_table_list_filter').addEventListener('input', function () {
@@ -365,12 +367,12 @@ var WP_Optimize = function () {
 			// Set the status to true, to prevent loading again.
 			database_tabs_loaded = true;
 
-			// Updtate the optimizations tab
+			// Update the optimizations tab
 			if (response.hasOwnProperty('optimizations')) {
 				container.find('.wp-optimize-optimizations-table-placeholder').replaceWith(response.optimizations);
 			}
 
-			// Updtate the optimizations tables list
+			// Update the optimizations tables list
 			update_tables_list(response);
 
 			$(document).trigger('wpo_database_tabs_loaded');
@@ -927,14 +929,13 @@ var WP_Optimize = function () {
 		wpo_settings_sites_list_items
 	);
 
-	var sites_list_clicked_count = 0;
+	var debounceTimer;
 
 	$([wpo_settings_all_sites_checkbox, wpo_settings_sites_list_items]).each(function() {
 		$(this).on('change', function() {
-			sites_list_clicked_count++;
-			setTimeout(function() {
-				sites_list_clicked_count--;
-				if (sites_list_clicked_count == 0) update_optimizations_info();
+			clearTimeout(debounceTimer);
+			debounceTimer = setTimeout(function() {
+				update_optimizations_info();
 			}, 1000);
 		});
 	});
@@ -1040,25 +1041,18 @@ var WP_Optimize = function () {
 	 * @return {[type]} optimizations
 	 */
 	function run_optimization() {
-		$optimizations = $('#optimizations_list .optimization_checkbox:checked');
+		var optimizations = $('#optimizations_list .optimization_checkbox:checked').toArray();
 
-		$optimizations.sort(function (a, b) {
-			// Convert to IDs.
-			a = $(a).closest('.wp-optimize-settings').data('optimization_run_sort_order');
-			b = $(b).closest('.wp-optimize-settings').data('optimization_run_sort_order');
-			if (a > b) {
-				return 1;
-			} else if (a < b) {
-				return -1;
-			} else {
-				return 0;
-			}
+		var sorted_optimizations = optimizations.sort(function (a, b) {
+			var aOrder = $(a).closest('.wp-optimize-settings').data('optimization_run_sort_order');
+			var bOrder = $(b).closest('.wp-optimize-settings').data('optimization_run_sort_order');
+			return aOrder - bOrder; // Ascending order - so all other optimizations will run before optimizetables
 		});
 
 		var optimization_options = {};
 
-		$optimizations.each(function (index) {
-			var optimization_id = $(this).closest('.wp-optimize-settings').data('optimization_id');
+		sorted_optimizations.forEach(function (element) {
+			var optimization_id = $(element).closest('.wp-optimize-settings').data('optimization_id');
 			if (!optimization_id) {
 				console.log("Optimization ID corresponding to pressed button not found");
 				return;
@@ -1113,6 +1107,22 @@ var WP_Optimize = function () {
 			shade.addClass('hidden');
 		});
 	});
+
+	$('#wpo-404-detector-form').on('click', '#wpo-404-clear-logs', function (e) {
+		e.preventDefault();
+		block_ui(wpoptimize.please_wait);
+		send_command('truncate_404_logs', {}, function (resp) {
+			if (resp && resp.hasOwnProperty('success') && resp.success) {
+				$('#wpo_404_detector_results').html('');
+			}
+			if (resp && resp.hasOwnProperty('message') && resp.message) {
+				block_ui(resp.message, {}, 3000);
+			}
+		}).fail(function() {
+			block_ui(wpoptimize.something_wrong_try_again, {}, 3000);
+		});
+	});
+
 
 	$('#database_settings_form, #settings_form, #wpo-404-detector-form').on('click', '.wpo-save-settings', function (e) {
 		e.preventDefault();
@@ -2476,5 +2486,11 @@ jQuery(function ($) {
 			$(this).remove();
 			$iframe.focus();
 		}
+	});
+
+	// Show/hide Enable the caching menu in the admin bar on cache/minify status change
+	$(document).on('wp-optimize/cache/toggle-status wp-optimize/minify/toggle-status', function() {
+		var minify_or_cache_enabled = $('#wpo_min_enable_minify').prop('checked') || $('#enable_page_caching').prop('checked');
+		$('#enable_cache_in_admin_bar_option').toggleClass('wpo_hidden', !minify_or_cache_enabled);
 	});
 });

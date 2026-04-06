@@ -1,18 +1,166 @@
 == Changelog ==
 
+= 4.5.1 - 23/Mar/2026 =
+
+* FIX: Fixed compatibility issue with WP Remote 
+* FIX: Notice: Function _load_textdomain_just_in_time was called incorrectly 
+* FIX: Resolved weekly cron not running on WordPress < 5.4 by switching to the wpo_weekly schedule
+* FIX: Database table error when upgrading from free to premium version
+* REFACTOR: Improved WebP conversion flow by separating capability checks from configuration changes
+* REFACTOR: Improved auto-optimization handling by correcting static method usage
+* REFACTOR: Introduced `WP_Optimize_Server_Compatibility` class to centralize all server environment checks
+* REFACTOR: Removed separate `get_schedule_types()` method in premium version
+* SECURITY: Enforced capability checks and allowed-command validation for Smush actions triggered via Heartbeat API. Thanks to WordFence for the responsible disclosure
+* TWEAK: Display the `Enable the caching menu in the admin bar` option only when Cache or Minify is enabled
+* TWEAK: Improved detection of LearnDash plugin tables
+* TWEAK: Improved onboarding wizard RTL support and eliminated dependency on the PHP Reflection class
+* TWEAK: Improved robustness of `uploads/wpo` directory removal during plugin uninstallation
+* TWEAK: Minify - Don't remove the version query argument when the source is not processed by Minify
+* TWEAK: Premium - Unused Images - Enhanced detection of edited WordPress images
+* TWEAK: Prevent deprecation notices in PHP 8.5
+* TWEAK: Add a notice when `.htaccess` file is not available or renamed in Apache servers
+
+= 4.5.0 - 11/Feb/2026 =
+
+* FEATURE: Premium - Cache – Added ability to cache only selected URLs
+* FEATURE: Premium - Minify - Host Google Fonts locally
+* FEATURE: Premium - Option to enhance page performance by applying Capo.js rules
+* FIX: Cache - fixed sitemap caching issue 
+* FIX: Improved compatibility with WordPress versions earlier than 6.1
+* FIX: Reset WebP conversion failure no longer appears in the popup
+* FIX: Resolved issues with detecting WebP conversion availability
+* FIX: Smush – Fixed missing tooltip in the 'Compress' pop-up in Media Library
+* FIX: Stop initialization of page optimizer for non-HTML requests
+* FIX: Remove marcusschwarz/lessc lib from autoload
+* TWEAK: Added support for bypassing WPO features via a URL query parameter defined by the WPO_DISABLE_MODE_URL_PARAM constant
+* TWEAK: Allow some database records cleanup for Kinsta users
+* TWEAK: Clear cache of archived pages when a related post is updated
+* TWEAK: Disabled CSS/JS merging by default.
+* TWEAK: Enhanced 404 detector compatibility with plain permalinks
+* TWEAK: WP_Optimize_Options::auto_option_settings() is not called in Premium version
+* TWEAK: Improved timestamp handling to prevent fatal errors on WordPress 4.9
+* TWEAK: Improved Minify settings UI so JavaScript options correctly show/hide when JS minification is enabled/disabled
+
+= 4.4.1 - 08/Jan/2026 =
+
+* FIX: Onboarding wizard RTL issue
+* FIX: Prevented plugin table JSON data in the uploads directory from being updated on every WP-Optimize admin page load
+
+= 4.4.0 - 12/Dec/2025 =
+
+* FEATURE: Added Onboarding Wizard
+* FIX: Ensured old cache purging cron job is scheduled successfully
+* FIX: Fixed a potential fatal error in the WPO_Page_Optimizer class
+* TWEAK: Fixed the ability to disable caching menu in admin bar
+* TWEAK: Updated file permissions for wpo-plugins-tables-list.json
+
+= 4.3.1 - 14/Nov/2025 =
+
+* FIX: Prevent PHP fatal error occurring when cache is enabled and the "Aelia Currency Switcher for WooCommerce" plugin is active
+* FIX: Cache – Fixed compatibility issue
+* FIX: Database - Table Usage - Fixed the issue with incorrect table name detection in certain cases
+* FIX: Fixed UI Issue - Content cut off in "Review Actions" modal under WP-Optimize > Database 
+* FIX: Fixed _load_textdomain_just_in_time trigger too early
+* FIX: Premium - Unused images - Fixed an issue with clearing the cache of unused images
+* FIX: Smush - Compressing an image larger than the reSmush.it service limit freezes the popup in the Media Library
+* FIX: Smush - Fixed issue with multiple images compression action
+* FIX: Undefined property: stdClass::$plugin_status bug fixed
+* REFACTOR: Database - Table Usage - enhanced variable names
+* REFACTOR: Using strict comparison throughout the codebase
+* TWEAK: Improve detection of cloudflare handling browser cache
+* TWEAK: Added validation for AJAX commands in the Premium version
+* TWEAK: Convert already compressed images to webp format when possible
+* TWEAK: Fix the compatibility issue with ALTCHA when using the ASE Pro Plugin
+* TWEAK: Improve browser caching by adding max-age option
+* TWEAK: Premium - Cache - Do not process the cache when the user cannot be identified
+* TWEAK: Premium - Database - Tables usage report shows data only for active plugins
+* TWEAK: Premium - Unused Images - Enhanced detection for Revolution Slider
+* TWEAK: Premium - Unused Images - Improved detection of unused images in Oxygen Builder
+* TWEAK: Premium - Unused Images - Recognize Oxygen 6 images
+* TWEAK: Premium - Prevent PHP warnings from Table Usage feature
+* TWEAK: Remove unused jQuery 1.12.4 dependency
+* TWEAK: Run database table optimization last
+* TWEAK: Updated links
+* TWEAK: Various tweaks and improvements to code
+
+= 4.3.0 - 22/Sep/2025 =
+
+* FEATURE: Premium - Cache - Cache REST API requests
+* FEATURE: Premium - Further reduce CSS files sizes by removing unused CSS rules
+* FIX: Added backward compatibility for timezone and datetime functions and improved status report support for older WordPress versions like 4.9.
+* FIX: PHP Warning file_exists(): open_basedir restriction in effect
+* FIX: Prevented buffer initialization during wp-cron when HTML DOM is unavailable.
+* REFACTOR: Database - Table Usage - Refactored execute_query_analysis() function
+* TWEAK: Added new UpdraftCentral endpoints
+* TWEAK: Enhanced multisite support: added performance widget to Network Dashboard and fixed sub-site widgets to show only site-specific 404 request counts.
+* TWEAK: Fix external loading of Gtag analytics script
+* TWEAK: Moved the tooltip tag outside the <label> tag
+* TWEAK: Performance - 404 Detector (Not Found Requests) added a button to clear all logs.
+* TWEAK: Publishing a post or custom post type (CPT) no longer clears the cache of all posts of the same type.
+* TWEAK: Removed return statements from constructors and added checks at the point of class instantiation.
+* TWEAK: Smush - Enhanced compatibility and performance with EWWW Image Optimizer installed
+* TWEAK: Premium - Added cache support for Nelio A/B Testing plugin
+* TWEAK: Added a hook to trigger custom code when a page is not cached
+
+= 4.2.4 - 30/Jul/2025 =
+
+* FIX: Potential PHP fatal error when no site is selected during database optimization in multisite
+* FIX: Issue where the database optimization spinner remained indefinitely active
+* FIX: PHP 8.4 compatibility warnings
+* FIX: Minify default exclusions fatal error
+* FIX: Premium - Potential PHP fatal error - type hinting error in the database table usage feature
+* FIX: Premium - Page cache and lazy load meta boxes no longer display on post edit screen when their respective options are disabled
+* FIX: Only purge relevant files when a published post is saved; also purge the author archive cache upon post save
+* FIX: Premium - Fixed compatibility of Table usage with WordPress versions earlier than 5.3
+* REFACTOR: Premium - Database - Table Usage - added missed translation functions
+* TWEAK: Purged content will preload only when cache is enabled, and the user-agent has been updated to a modern browser and OS version
+* TWEAK: Update seasonal advert banner logos, texts and links
+* TWEAK: Update plugin readme text and links
+* TWEAK: Premium - Cache - Add UI element to ignore query variables
+* TWEAK: Premium - Database - Table Usage - replaced loading state with native modal
+* TWEAK: Removed seasonal discount ads except Black Friday
+
+= 4.2.3 - 15/Jul/2025 =
+
+* FIX: Cache - Resolved PHP warning caused by excessively long cache file names
+* FIX: Corrected typo from `meta data` to `metadata`
+* FIX: Cron reschedule event error for hook `wpo_prune_404_log` when `is_minimum_requirement_met` is `false`
+* FIX: Premium - Fixed a rare PHP warning that could occur when saving a post
+* FIX: Unused image - incorrect image filtering in multisite
+* FIX: WP Remote sync conflict caused in v4.2.1 and v4.2.2 By replacing wp_salt with core PHP functions
+* FIX: YouTube lazy-load – Thumbnail image now falls back to JPG if browser doesn't support WebP
+* FIX: WebP images were not being served in Firefox on certain environments
+* TWEAK: 404 detector logs URLs on mobile screens goes out of viewport fixed.
+* TWEAK: CSS Improvements, better font size handling, remove duplication, and SASS instead of import
+* TWEAK: Delay YouTube preview image cache purging
+* TWEAK: Display notice when server does not allow database optimizations
+* TWEAK: Enhanced database optimization compatibility with jQuery 4
+* TWEAK: Fixed incorrect transients count in database optimizations UI
+* TWEAK: Improved sanitization of incoming data in `Updraft_Smush_Manager_Commands`
+* TWEAK: Minify - Improved compatibility with Divi theme's dynamically generated assets
+* TWEAK: Multisite corrected site count in database optimizations UI.
+* TWEAK: Preserve EXIF data is set to false by default in all places at codebase level.
+* TWEAK: Update URLs of links and images to point to https://teamupdraft.com
+
+= 4.2.2 - 02/June/2025 =
+
+* FIX: Cache - Resolved unwanted output in WP-CLI and fatal error related to WooCommerce's country-specific files, introduced in v4.2.0
+* TWEAK: Premium - Cache - Compatibility with WordPress 6.8
+
 = 4.2.1 - 05/May/2025 =
 
 * FIX: Cache - Compatibility issue with other plugins due to late start of output buffering
+* TWEAK: Improved array handling in `get_active_plugins()`, potentially avoiding edge-case fatal error
 
 = 4.2.0 - 01/May/2025 =
 
+* SECURITY: On multisite installs (only), a logged-in site administrator could use an unsanitised parameter to inject unwanted content into SQL queries. Thanks to Marc Montpas for the responsible disclosure.
 * FEATURE: Premium - Replace YouTube Iframes with preview images to improve page speed
 * FIX: Fix conflict with the WPML plugin
 * FIX: Smush - Fixed PHP warning on the Media Library page
 * FIX: Smush - Fixed issue where the Smush popup would freeze
 * FIX: WebP images not served after WP-Optimize reactivation
 * REFACTOR: Smush option removed from media upload modal
-* SECURITY: On multisite installs (only), a site administrator could use an unsanitised parameter to inject unwanted content into SQL queries. Thanks to Marc Montpas for the responsible disclosure.
 * TWEAK:  Update advert banner logos, texts and links
 * TWEAK: Add missing separator between compression items in media library
 * TWEAK: Avoid PHP warning thrown by Page Speed Ninja plugin
@@ -997,7 +1145,7 @@
 * TWEAK: Added option to clean "all" transient options and network-wide transient options for multisite WordPress installation
 * TWEAK: Links to UpdraftPlus automatically Install/Activate UpdraftPlus plugin
 * TWEAK: FAQ links point to getwpo.com
-* TWEAK: Auto-draft, revision posts and pingback comments removing with their meta data
+* TWEAK: Auto-draft, revision posts and pingback comments removing with their metadata
 * TWEAK: Scheduler is not using the WordPress timezone settings
 * TWEAK: Detecting corrupted tables in background.
 * TWEAK: Unused Images optimization correctly detects images in pages built with popular plugins - Page Builder by SiteOrigin, Visual Composer, Beaver Builder, Elementor.

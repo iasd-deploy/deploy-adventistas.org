@@ -4,8 +4,8 @@ Donate link: https://david.dw-perspective.org.uk/donate
 Tags: cache, caching, image cache, minify, performance cache, page speed, image optimizer, compress images, optimize database, clean database
 Requires PHP: 7.2
 Requires at least: 4.9
-Tested up to: 6.8
-Stable tag: 4.2.1
+Tested up to: 7.0
+Stable tag: 4.5.1
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,9 +15,7 @@ Get caching and more with this powerful cache plugin. Cache, optimize images, cl
 
 MORE THAN A CACHING PLUGIN
 
-<strong>WP-Optimize is trusted by more than 1 million WordPress website</strong> owners to <strong>boost performance</strong> and <strong>reduce page load times</strong> to improve your site's <strong>user experiences</strong> and <strong>SERP rankings in Google.</strong>
-
-[vimeo https://vimeo.com/333705073]
+<strong><a href="https://www.teamupdraft.com/wp-optimize?utm_source=wpo-wp-dir&utm_medium=referral&utm_campaign=plugin-dir&utm_content=wp_optimize&utm_creative_format=description">WP-Optimize</a> is trusted by more than 1 million WordPress website</strong> owners to <strong>boost performance</strong> and <strong>reduce page load times</strong> to improve your site's <strong>user experiences</strong> and <strong>SERP rankings in Google.</strong>
 
 It does this in four clever ways:
 
@@ -126,7 +124,7 @@ Cleans-up database tables, post revisions, auto draft posts, trashed posts, spam
 
 == WHY WP-OPTIMIZE? ==
 
-* It's brought to you by UpdraftPlus, the team behind the world's most trusted backup, migration and restoration plugin.
+* It's brought to you by [TeamUpdraft](https://www.teamupdraft.com?utm_source=wpo-wp-dir&utm_medium=referral&utm_campaign=plugin-dir&utm_content=teamupdraft&utm_creative_format=description), the team behind the world's most trusted backup, migration and restoration plugin.
 * It's easy to use.
 * It packs a punch for a free plugin.
 
@@ -135,7 +133,7 @@ WP-Optimize brings the best cache and optimization technology together into one 
 
 == PREMIUM FEATURES AT A GLANCE ==
 
-Our free version of WP-Optimize Cache is great, but we also have an even more powerful Premium version with extra features that offer the ultimate in freedom and flexibility:
+Our free version of WP-Optimize Cache is great, but we also have an even more powerful [Premium version](https://www.teamupdraft.com/wp-optimize/pricing?utm_source=wpo-wp-dir&utm_medium=referral&utm_campaign=plugin-dir&utm_content=premium_version&utm_creative_format=description) with extra features that offer the ultimate in freedom and flexibility:
 
 * <strong>Multisite Support:</strong> extends database optimisations so they function for multiple WordPress sites at a time. If you manage more than one website, you will need WP-Optimize Cache Premium.
 * <strong>Flexibility and Control:</strong> gives you the power to optimize select individual tables or a particular combination of tables on one or more WordPress websites, rather than having to optimize all database tables.
@@ -194,9 +192,6 @@ This is a "how long is string?" sort of question. It depends completely on your 
 = How do I get support? =
 In our support forum, here: https://wordpress.org/support/plugin/wp-optimize/
 
-= How do I use WP-Optimize Database Cleaning? =
-[vimeo https://vimeo.com/339511213]
-
 = WP-Optimize does not make large savings on my database =
 This is rare; it's probably because you're with a shared web hosting company that doesn't allow scripts to run an optimize command via SQL statements (SQL "OPTIMIZE" instruction). Please consult your web hosting company on this matter.
 
@@ -234,13 +229,12 @@ You think your site is fast without caching? A caching plugin will make your web
 Yes, your Gutenberg pages will be cached, as well as those created with page builder plugins such as Elementor.
 
 = How do I know my webpage is being cached (or why it isn't)? =
-If cache is enabled, and in order to see if your page is cached, use the "View Source" function in your web browser to view the page source. To find caching information, scroll down to the bottom, and you should see a line added by the cache: `<!-- Cached by WP Optimize - https://getwpo.com - Last modified: Sat, 20 Jul 2019 21:17:19 GMT ->`
-However, note that if you are using a further service that minifies HTML (e.g. Cloudflare), then this line may have been removed. Another method is to inspect the contents of the directory wpo-cache inside your wp-content directory. <a href="https://getwpo.com/faqs/how-do-i-know-my-webpage-is-being-cached/>Further information can be read here</a>
+If cache is enabled, and in order to see if your page is cached, use the "View Source" function in your web browser to view the page source. To find caching information, scroll down to the bottom, and you should see a line added by the cache: `<!-- Cached by WP Optimize - https://teamupdraft.com/wp-optimize/ - Last modified: Sat, 20 Jul 2019 21:17:19 GMT ->`
+However, note that if you are using a further service that minifies HTML (e.g. Cloudflare), then this line may have been removed. Another method is to inspect the contents of the directory wpo-cache inside your wp-content directory. <a href="https://teamupdraft.com/documentation/wp-optimize/topics/caching/faqs/how-do-i-know-my-webpage-is-being-cached/>Further information can be read here</a>
 Also note that if you do not preload the cache, a page or post will have to be visited once for the cache file to be generated.
 
 = How do I configure the page cache? =
-Go to WP-Optimize -> Cache and enable caching. For most people, that will be enough. If you run an e-commerce, have a custom login page or any page that has dynamic content, you might want to exclude certain urls from the cache. See <a href="https://getwpo.com/documentation/">Advanced caching options</a> in our cache documentation to know more on excluding an URL from the cache.
-[vimeo https://vimeo.com/337247770]
+Go to WP-Optimize -> Cache and enable caching. For most people, that will be enough. If you run an e-commerce, have a custom login page or any page that has dynamic content, you might want to exclude certain urls from the cache. Visit <a href="https://www.teamupdraft.com/documentation/wp-optimize?utm_source=wpo-wp-dir&utm_medium=referral&utm_campaign=plugin-dir&utm_content=documentation&utm_creative_format=faqs">documentation</a> for help.
 
 = Is the caching feature compatible with e-commerce plugins? =
 Yes, caching with WP-Optimize Cache allows you to safely cache your products, with plugins like WooCommerce or Easy Digital Downloads, or any e-commerce that uses `DONOTCACHEPAGE` to exclude sensitive pages from caching (e.g. my account, cart or checkout pages).
@@ -343,9 +337,6 @@ If you notice any issues due to high server load, set a higher interval for the 
 = Can WP-Optimize Cache minify JavaScript, CSS and HTML? =
 Yes, the newly added Minify enables you to minify JavaScript and CSS. It also enables you to minify HTML.
 
-= What is "Minify"? =
-[vimeo https://vimeo.com/402556749]
-
 = Why minify my WordPress site? =
 WP-Optimize Cache's Minify feature is all about increasing the speed of your WordPress site for your users.
 One way Minify does this is by reducing the size of your HTML, CSS and JavaScript files by removing unnecessary spaces and lines from the files and shortening long names internally within the code.
@@ -377,9 +368,6 @@ The first thing to try is to enable the setting "Contain each included file in i
 If the first option didn't work, try disabling merging of JavaScript files.
 If none of the above works, disable processing of JavaScript files in the minify settings, and <a href="https://wordpress.org/support/plugin/wp-optimize">open a support thread</a> with details about your issue. We'll do our best to help you troubleshoot the issue.
 
-= How do I use the image optimisation feature? =
-[vimeo https://vimeo.com/333938451]
-
 == Screenshots ==
 
 1. Cache - plugins comparison benchmark
@@ -395,9 +383,157 @@ If none of the above works, disable processing of JavaScript files in the minify
 
 == Changelog ==
 
+= 4.5.1 - 23/Mar/2026 =
+
+* FIX: Fixed compatibility issue with WP Remote 
+* FIX: Notice: Function _load_textdomain_just_in_time was called incorrectly 
+* FIX: Resolved weekly cron not running on WordPress < 5.4 by switching to the wpo_weekly schedule
+* FIX: Database table error when upgrading from free to premium version
+* REFACTOR: Improved WebP conversion flow by separating capability checks from configuration changes
+* REFACTOR: Improved auto-optimization handling by correcting static method usage
+* REFACTOR: Introduced `WP_Optimize_Server_Compatibility` class to centralize all server environment checks
+* REFACTOR: Removed separate `get_schedule_types()` method in premium version
+* SECURITY: Enforced capability checks and allowed-command validation for Smush actions triggered via Heartbeat API. Thanks to WordFence for the responsible disclosure
+* TWEAK: Display the `Enable the caching menu in the admin bar` option only when Cache or Minify is enabled
+* TWEAK: Improved detection of LearnDash plugin tables
+* TWEAK: Improved onboarding wizard RTL support and eliminated dependency on the PHP Reflection class
+* TWEAK: Improved robustness of `uploads/wpo` directory removal during plugin uninstallation
+* TWEAK: Minify - Don't remove the version query argument when the source is not processed by Minify
+* TWEAK: Premium - Unused Images - Enhanced detection of edited WordPress images
+* TWEAK: Prevent deprecation notices in PHP 8.5
+* TWEAK: Add a notice when `.htaccess` file is not available or renamed in Apache servers
+
+= 4.5.0 - 11/Feb/2026 =
+
+* FEATURE: Premium - Cache – Added ability to cache only selected URLs
+* FEATURE: Premium - Minify - Host Google Fonts locally
+* FEATURE: Premium - Option to enhance page performance by applying Capo.js rules
+* FIX: Cache - fixed sitemap caching issue 
+* FIX: Improved compatibility with WordPress versions earlier than 6.1
+* FIX: Reset WebP conversion failure no longer appears in the popup
+* FIX: Resolved issues with detecting WebP conversion availability
+* FIX: Smush – Fixed missing tooltip in the 'Compress' pop-up in Media Library
+* FIX: Stop initialization of page optimizer for non-HTML requests
+* FIX: Remove marcusschwarz/lessc lib from autoload
+* TWEAK: Added support for bypassing WPO features via a URL query parameter defined by the WPO_DISABLE_MODE_URL_PARAM constant
+* TWEAK: Allow some database records cleanup for Kinsta users
+* TWEAK: Clear cache of archived pages when a related post is updated
+* TWEAK: Disabled CSS/JS merging by default.
+* TWEAK: Enhanced 404 detector compatibility with plain permalinks
+* TWEAK: WP_Optimize_Options::auto_option_settings() is not called in Premium version
+* TWEAK: Improved timestamp handling to prevent fatal errors on WordPress 4.9
+* TWEAK: Improved Minify settings UI so JavaScript options correctly show/hide when JS minification is enabled/disabled
+
+= 4.4.1 - 08/Jan/2026 =
+
+* FIX: Onboarding wizard RTL issue
+* FIX: Prevented plugin table JSON data in the uploads directory from being updated on every WP-Optimize admin page load
+
+= 4.4.0 - 12/Dec/2025 =
+
+* FEATURE: Added Onboarding Wizard
+* FIX: Ensured old cache purging cron job is scheduled successfully
+* FIX: Fixed a potential fatal error in the WPO_Page_Optimizer class
+* TWEAK: Fixed the ability to disable caching menu in admin bar
+* TWEAK: Updated file permissions for wpo-plugins-tables-list.json
+
+= 4.3.1 - 14/Nov/2025 =
+
+* FIX: Prevent PHP fatal error occurring when cache is enabled and the "Aelia Currency Switcher for WooCommerce" plugin is active
+* FIX: Cache – Fixed compatibility issue
+* FIX: Database - Table Usage - Fixed the issue with incorrect table name detection in certain cases
+* FIX: Fixed UI Issue - Content cut off in "Review Actions" modal under WP-Optimize > Database 
+* FIX: Fixed _load_textdomain_just_in_time trigger too early
+* FIX: Premium - Unused images - Fixed an issue with clearing the cache of unused images
+* FIX: Smush - Compressing an image larger than the reSmush.it service limit freezes the popup in the Media Library
+* FIX: Smush - Fixed issue with multiple images compression action
+* FIX: Undefined property: stdClass::$plugin_status bug fixed
+* REFACTOR: Database - Table Usage - enhanced variable names
+* REFACTOR: Using strict comparison throughout the codebase
+* TWEAK: Improve detection of cloudflare handling browser cache
+* TWEAK: Added validation for AJAX commands in the Premium version
+* TWEAK: Convert already compressed images to webp format when possible
+* TWEAK: Fix the compatibility issue with ALTCHA when using the ASE Pro Plugin
+* TWEAK: Improve browser caching by adding max-age option
+* TWEAK: Premium - Cache - Do not process the cache when the user cannot be identified
+* TWEAK: Premium - Database - Tables usage report shows data only for active plugins
+* TWEAK: Premium - Unused Images - Enhanced detection for Revolution Slider
+* TWEAK: Premium - Unused Images - Improved detection of unused images in Oxygen Builder
+* TWEAK: Premium - Unused Images - Recognize Oxygen 6 images
+* TWEAK: Premium - Prevent PHP warnings from Table Usage feature
+* TWEAK: Remove unused jQuery 1.12.4 dependency
+* TWEAK: Run database table optimization last
+* TWEAK: Updated links
+* TWEAK: Various tweaks and improvements to code
+
+= 4.3.0 - 22/Sep/2025 =
+
+* FEATURE: Premium - Cache - Cache REST API requests
+* FEATURE: Premium - Further reduce CSS files sizes by removing unused CSS rules
+* FIX: Added backward compatibility for timezone and datetime functions and improved status report support for older WordPress versions like 4.9.
+* FIX: PHP Warning file_exists(): open_basedir restriction in effect
+* FIX: Prevented buffer initialization during wp-cron when HTML DOM is unavailable.
+* REFACTOR: Database - Table Usage - Refactored execute_query_analysis() function
+* TWEAK: Added new UpdraftCentral endpoints
+* TWEAK: Enhanced multisite support: added performance widget to Network Dashboard and fixed sub-site widgets to show only site-specific 404 request counts.
+* TWEAK: Fix external loading of Gtag analytics script
+* TWEAK: Moved the tooltip tag outside the <label> tag
+* TWEAK: Performance - 404 Detector (Not Found Requests) added a button to clear all logs.
+* TWEAK: Publishing a post or custom post type (CPT) no longer clears the cache of all posts of the same type.
+* TWEAK: Removed return statements from constructors and added checks at the point of class instantiation.
+* TWEAK: Smush - Enhanced compatibility and performance with EWWW Image Optimizer installed
+* TWEAK: Premium - Added cache support for Nelio A/B Testing plugin
+* TWEAK: Added a hook to trigger custom code when a page is not cached
+
+= 4.2.4 - 30/Jul/2025 =
+
+* FIX: Potential PHP fatal error when no site is selected during database optimization in multisite
+* FIX: Issue where the database optimization spinner remained indefinitely active
+* FIX: PHP 8.4 compatibility warnings
+* FIX: Minify default exclusions fatal error
+* FIX: Premium - Potential PHP fatal error - type hinting error in the database table usage feature
+* FIX: Premium - Page cache and lazy load meta boxes no longer display on post edit screen when their respective options are disabled
+* FIX: Only purge relevant files when a published post is saved; also purge the author archive cache upon post save
+* FIX: Premium - Fixed compatibility of Table usage with WordPress versions earlier than 5.3
+* REFACTOR: Premium - Database - Table Usage - added missed translation functions
+* TWEAK: Purged content will preload only when cache is enabled, and the user-agent has been updated to a modern browser and OS version
+* TWEAK: Update seasonal advert banner logos, texts and links
+* TWEAK: Update plugin readme text and links
+* TWEAK: Premium - Cache - Add UI element to ignore query variables
+* TWEAK: Premium - Database - Table Usage - replaced loading state with native modal
+* TWEAK: Removed seasonal discount ads except Black Friday
+
+= 4.2.3 - 15/Jul/2025 =
+
+* FIX: Cache - Resolved PHP warning caused by excessively long cache file names
+* FIX: Corrected typo from `meta data` to `metadata`
+* FIX: Cron reschedule event error for hook `wpo_prune_404_log` when `is_minimum_requirement_met` is `false`
+* FIX: Premium - Fixed a rare PHP warning that could occur when saving a post
+* FIX: Unused image - incorrect image filtering in multisite
+* FIX: WP Remote sync conflict caused in v4.2.1 and v4.2.2 By replacing wp_salt with core PHP functions
+* FIX: YouTube lazy-load – Thumbnail image now falls back to JPG if browser doesn't support WebP
+* FIX: WebP images were not being served in Firefox on certain environments
+* TWEAK: 404 detector logs URLs on mobile screens goes out of viewport fixed.
+* TWEAK: CSS Improvements, better font size handling, remove duplication, and SASS instead of import
+* TWEAK: Delay YouTube preview image cache purging
+* TWEAK: Display notice when server does not allow database optimizations
+* TWEAK: Enhanced database optimization compatibility with jQuery 4
+* TWEAK: Fixed incorrect transients count in database optimizations UI
+* TWEAK: Improved sanitization of incoming data in `Updraft_Smush_Manager_Commands`
+* TWEAK: Minify - Improved compatibility with Divi theme's dynamically generated assets
+* TWEAK: Multisite corrected site count in database optimizations UI.
+* TWEAK: Preserve EXIF data is set to false by default in all places at codebase level.
+* TWEAK: Update URLs of links and images to point to https://teamupdraft.com
+
+= 4.2.2 - 02/June/2025 =
+
+* FIX: Cache - Resolved unwanted output in WP-CLI and fatal error related to WooCommerce's country-specific files, introduced in v4.2.0
+* TWEAK: Premium - Cache - Compatibility with WordPress 6.8
+
 = 4.2.1 - 05/May/2025 =
 
 * FIX: Cache - Compatibility issue with other plugins due to late start of output buffering
+* TWEAK: Improved array handling in `get_active_plugins()`, potentially avoiding edge-case fatal error
 
 = 4.2.0 - 01/May/2025 =
 
@@ -682,162 +818,7 @@ If none of the above works, disable processing of JavaScript files in the minify
 * TWEAK: Update seasonal notices
 * TWEAK: Prevent deprecation notices in PHP 8.2+
 
-= 3.2.13 - 13/Mar/2023 =
-
-* FEATURE: WebP - Ability to convert to webp format from media library
-* FIX: Prevent PHP warning when minify-log files are missing or corrupted, also added appropriate error message
-* FIX: Delete webp files and uncompressed file when media is deleted
-* FIX: Polylang compatibility - now upon updating any post, caches for all translated languages are cleared
-* FIX: Prevent adding unsupported media types to the smush task list
-* FIX: WebP - Unsupported formats throws a fatal error
-* FIX: Compress image UI for webp images
-* FIX: Premium - WebP Images are marked as unused images
-* FIX: Resolved an issue where Beaver Builder's edit mode was not functioning properly when WebP conversion was enabled
-* FIX: Prevent creating multiple cache directories for URLs that contain non-English characters
-* TWEAK: Preload allowed time difference is set to be the same as max execution time
-* TWEAK: Premium - Unused images feature - Add compatibility with Yoast SEO social images
-* TWEAK: Prevent jQuery deprecation notices
-* SECURITY: Fixed a non-persistent XSS vulnerability that could occur on certain servers when the WebP conversion option was enabled. This vulnerability could allow an attacker to execute arbitrary JavaScript code in the victim's browser by tricking them into clicking on a specially crafted link. Thanks to Paolo Elia for reporting this.
-
-= 3.2.12 - 06/Feb/2023 =
-
-* SECURITY: Today's 3.2.11 release (free version only - there was no 3.2.11 Premium release) checked nonces incorrectly, opening up the possibility of an attacker tricking an admin into clicking links crafted to perform unauthorised actions on the WP Optimize configuration on his site.
-
-= 3.2.11 - 06/Feb/2023 =
-
-* FIX: Empty query string updates cache
-* FIX: Cache - Purge cache after string translation update in WPML
-* FIX: Cache - Preload stuck and fails to complete
-* FIX: Prevent PHP warning when `.htaccess` files don't have write permission
-* FIX: Premium – Fixed compatibility issue with WP Hide plugin
-* FIX: Minify - Less than 20KB stylesheets loading order
-* TWEAK: Add cron event only if clear backup images is enabled
-* TWEAK: Cache - Use WordPress GMT offset for cache comment
-* TWEAK: Only allow image types that can be compressed
-* TWEAK: Cached page is not served for sites that have own directory for WordPress files
-
-= 3.2.10 - 28/Nov/2022 =
-
-* FIX: Prevent php warning and increase SendInBlue `mailin` plugin compatibility
-* FIX: Avoid screen juggling while selecting optimizations from dropdown in scheduled clean up
-* FIX: Prevent cache purge upon deactivation using filter
-* FIX: Cache purge ability of all registered user
-* FIX: Recognise WooCommerce product category images as used images
-* FIX: Multisite support in `cached-file-log.php` template
-* TWEAK: Improve Optimization Schedule UI
-* TWEAK: Consolidated error notices by the use of a global WPO notice object.
-* TWEAK: Remove `Reset WebP serving method` button when there are no webp conversion tools
-* TWEAK: Remove query strings from scripts
-* TWEAK: Add `Restrict Content Pro` plugin slug to `plugin.json`
-* TWEAK: Add option to remove orphaned `user meta` data upon run optimization
-* TWEAK: Add `no-cache` headers when minify is enabled and page caching is not
-* TWEAK: Ability to remove `.htaccess` rules when gzip compression is not available
-* TWEAK: WebP: Avoid PHP warnings when using hot linked images (Alter HTML method)
-* TWEAK: WebP conversion is unavailable when php shell functions do not exist
-* TWEAK: Improved UI settings for asynchronous loading and page speed testing exclusion tools
-* TWEAK: Add a constant to enable/disable webp feature
-* TWEAK: Set a global context for $wp_file_descriptions context so that it gets assigned to correctly, preventing a subtle visual change in the theme editor
-* TWEAK: Prevent php warning from `webp-convert` library
-* TWEAK: Update currently-active installs number in thank you for installing notice.
-* TWEAK: Replaced deprecated use of jQuery.change()
-
-= 3.2.9 - 06/Sep/2022 =
-
-* FEATURE: Import and export settings
-* FIX: Avoid infinite loop while using unused images export csv
-* FIX: Scheduled cache preloading issue
-* FIX: WebP testing making unnecessary background HTTP checks
-* FIX: Google fonts compatibility with The7 theme
-* FIX: Prevent console error for undefined `wp_optimize` for smush scripts
-* TWEAK: Avoid PHP warnings on cache cleanup
-* FIX: Ability to disable webp serving while caching is on
-* TWEAK: Reset webp conversion method flags daily using cron job
-* TWEAK: Remove orphaned `wpo_weekly_cron_tasks` cron job upon uninstallation
-
-= 3.2.8 - 23/Aug/2022 =
-
-* FIX: Build system error led to a missing file in 3.2.7 which could cause an error when using related functions
-* FIX: Fix incorrect function name in admin class
-
-= 3.2.7 - 15/Aug/2022 =
-
-* FEATURE: A CLI command for generating lists of unused images as a CSV file (Premium)
-* FIX: The unused images CSV downloads have a few redundant images listed
-* FIX: ACF block field images are listed as unused images
-* FIX: Correctly recognize `inherit` in google fonts async loading
-* FIX: Cache - Do not purge when `wp_update_nav_menu` is removed from `wpo_purge_cache_hooks` array
-* TWEAK: Prevent PHP warnings when using `json_decode` result
-* TWEAK: Create cache config file if not present because of site migration
-* TWEAK: Update notice class
-* TWEAK: Recognize WooCommerce scheduled sales and cache accordingly
-* TWEAK: Prevent duplicate `wp-optimize` entry in tables optimization list
-* TWEAK: Test htaccess capability only when needed by webp feature
-* TWEAK: Increase compatibility with Aelia plugins
-
-= 3.2.6 - 15/Jun/2022 =
-
-* FIX: Incorrect static method calling causes parse Error in PHP 5.6.36
-* FIX: WebP - Trailing slash file creation issue in PHP 8 
-* FIX: PHP warning in cache rules file
-* FIX: Asynchronous google fonts loaded twice
-* TWEAK: Conditional Tags anchor tag fix
-
-= 3.2.5 - 03/Jun/2022 =
-
-* FIX: Fix a fatal error that could occur in 3.2.4 if settings had not been saved
-
-= 3.2.4 - 24/May/2022 =
-
-* FEATURE: Create a cron job to delete expired cache files
-* FEATURE: WebP image format can be used to serve images
-* FIX: Incorrect record count after importing
-* FIX: Image smushing issues
-* FIX: Problem with Redirect – Trailing Slash on URLs
-* FIX: Unused images issue with ACF `repeater` and nested fields
-* TWEAK: Added functionality for exclude caching based on conditional tags
-* TWEAK: Update last optimized time for scheduled optimizations
-* TWEAK: Cache - Prevent already header sent warnings while importing posts
-* TWEAK: Improved UI for `actionscheduler_` tables
-* TWEAK: Add filter to allow/disallow `gz` file generation
-* TWEAK: Show error message to user when WP_CACHE constant can't be removed from wp-config.php due to file permission issue.
-
-= 3.2.3 - 09/Mar/2022 =
-
-* FEATURE: Minify: Pre-generate assets
-* FIX: Cache - 'Purge cache permissions' setting does not allow additional roles to access the purge cache tool
-* TWEAK: Make smush details button work in media modal window
-* TWEAK: Do not show overhead in red when the amount is small
-* TWEAK: Avoid PHP Notices caused by "upgrader_process_complete" action
-* TWEAK: Force monolog 2.3.* in order to avoid PHP 7.2+ dependency
-
-= 3.2.2 - 24/Jan/2022 =
-
-* FEATURE: Cache - Allow debugging of which cache file is chosen
-* FEATURE: Premium - Cache - Serve cached content for logged in users, per role
-* FIX: Premium - Unused Images - Fixed trashed images listing
-* FIX: Image selection issue in compressed and unused image is fixed.
-* FIX: ACF plugin compatibility issue with select2 JS library
-* FIX: Premium - Unused Images - Multibyte characters in filename are not recognised correctly
-* FIX: Table optimization displays wrong information about WP All Import plugin tables
-* FIX: Potential PHP fatal error - Call to undefined function _wp_get_current_user()
-* FIX: Minify - correctly minify multiple `calc` function in single property value
-* FIX: SQL error when keeping post revisions and optimizing
-* FIX: Cache - Prevent caching WordPress critical error page
-* FIX: Minify - Google fonts merging issue when the same font is enqueued in both API V1 and V2
-* FIX: Minify - Make `inherit` and `inline` settings work with Google fonts
-* FIX: Database error upon plugin activation
-* TWEAK: Minify - Show a notice if other minification plugins are installed and active
-* TWEAK: Remove unused bundled JavaScript from minify library to avoid irrelevant scan results
-* TWEAK: Image compression - Image compression stats include gains on image sizes
-* TWEAK: Make sure that messages from WP_Error objects in gzip compression are displayed to users.
-* TWEAK: Prevent PHP notice from WooCommerce deprecation
-* TWEAK: Create `task` tables upon activation, if needed.
-* TWEAK: Show error instead of success when table doesn't exist
-* TWEAK: Update seasonal notices
-* TWEAK: Prevent PHP fatal error in media list view, when images are makred as compressed
-* TWEAK: Image edit window - Link does not go to image settings and more/less link not working
-
 [See changelog for all versions](https://plugins.svn.wordpress.org/wp-optimize/trunk/changelog.txt).
 
 == Upgrade Notice ==
-* 4.2.1: Cache - Fixed compatibility issues with other plugins - a recommended update for all
+* 4.5.1: A lot of bug fixes and tweaks - a recommended update for all

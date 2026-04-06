@@ -22,7 +22,7 @@ class WPO_Cache_Rules {
 	/**
 	 * Instance of this class
 	 *
-	 * @var mixed
+	 * @var WPO_Cache_Rules | null
 	 */
 	public static $instance;
 
@@ -104,7 +104,7 @@ class WPO_Cache_Rules {
 	}
 
 	/**
-	 * Every time a comment's status changes, purge it's parent posts cache
+	 * Every time a comment's status changes, purge its parent posts cache
 	 *
 	 * @param int $comment_id Comment ID.
 	 */
@@ -136,12 +136,12 @@ class WPO_Cache_Rules {
 			 * @param WP_Comment $comment
 			 * @return boolean
 			 */
-			$add_cookie = apply_filters('wpo_add_commented_post_cookie', '' == $comment->comment_type || 'comment' == $comment->comment_type, $comment);
+			$add_cookie = apply_filters('wpo_add_commented_post_cookie', '' === $comment->comment_type || 'comment' === $comment->comment_type, $comment);
 			if (!$add_cookie) return;
 
 			$url = get_permalink($comment->comment_post_ID);
 			$url_info = wp_parse_url($url);
-			setcookie('wpo_commented_post', 1, time() + WEEK_IN_SECONDS, isset($url_info['path']) ? $url_info['path'] : '/');
+			setcookie('wpo_commented_post', 1, time() + WEEK_IN_SECONDS, $url_info['path'] ?? '/');
 		}
 	}
 
@@ -157,13 +157,17 @@ class WPO_Cache_Rules {
 	 * We want the whole cache purged here as different parts
 	 * of the site could potentially change on post updates
 	 *
-	 * @param Integer $post_id - WP post id
+	 * @param int $post_id - WP post id
 	 */
 	public function purge_post_on_update($post_id) {
 		$post_type = get_post_type($post_id);
 		$post_type_object = get_post_type_object($post_type);
 
 		if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || 'revision' === $post_type || null === $post_type_object || !$post_type_object->public) {
+			return;
+		}
+		$post_status = get_post_status($post_id);
+		if ('publish' !== $post_status) {
 			return;
 		}
 
@@ -202,7 +206,12 @@ class WPO_Cache_Rules {
 
 		if (null === $post_obj) return;
 
-		if ('post' == $post_type) {
+		$post_status = get_post_status($post_id);
+		if ('publish' !== $post_status) {
+			return;
+		}
+
+		if ('post' === $post_type) {
 			// delete blog page cache
 			$blog_post_id = get_option('page_for_posts');
 			if ($blog_post_id) {
@@ -211,7 +220,7 @@ class WPO_Cache_Rules {
 			}
 		
 			// delete next and previous posts cache.
-			$globals_post = isset($GLOBALS['post']) ? $GLOBALS['post'] : false;
+			$globals_post = $GLOBALS['post'] ?? false;
 			$GLOBALS['post'] = get_post($post_id);
 			$previous_post = function_exists('get_previous_post') ? get_previous_post() : false;
 			$next_post = function_exists('get_next_post') ? get_next_post() : false;
@@ -240,10 +249,22 @@ class WPO_Cache_Rules {
 				WPO_Page_Cache::delete_cache_by_url($link, true);
 			}
 			WPO_Page_Cache::instance()->file_log("Cache for all archives page associated with post_type: " . $post_type . " and Title: {{title}} have been purged, triggered by action: " . current_filter(), $post_id);
-		} elseif ($post_obj->has_archive) {
+		}
+		if ($post_obj->has_archive) {
 			// delete archive page for custom post type.
 			WPO_Page_Cache::delete_cache_by_url(get_post_type_archive_link($post_type), true);
 			WPO_Page_Cache::instance()->file_log("Cache for archive page associated with post_type: " . $post_type . " and Title: {{title}} has been purged, triggered by action: " . current_filter(), $post_id);
+		}
+		if (post_type_supports($post_type, 'author')) {
+			$author_id  = get_post_field('post_author', $post_id);
+			$post_author = get_user_by('id', $author_id);
+			if ($author_id && $post_author) {
+				$author_url = get_author_posts_url($author_id);
+				if (!empty($author_url)) {
+					WPO_Page_Cache::delete_cache_by_url($author_url, true);
+					WPO_Page_Cache::instance()->file_log("Cache for author page URL: " . $author_url . " associated with post_type: " . $post_type . " and Title: {{title}} has been purged, triggered by action: " . current_filter(), $post_id);
+				}
+			}
 		}
 	}
 
@@ -313,7 +334,7 @@ class WPO_Cache_Rules {
 		/**
 		 * Adds a way to exit the purge of terms permalink using the provided parameters.
 		 *
-		 * @param bool   $purge      The value filtered, whether or not to purge the related elements
+		 * @param bool   $purge      The value filtered, whether to purge the related elements or not
 		 * @param int    $object_id  Object ID.
 		 * @param array  $terms      An array of object terms.
 		 * @param array  $tt_ids     An array of term taxonomy IDs.
@@ -391,14 +412,14 @@ class WPO_Cache_Rules {
 		}
 		WPO_Page_Cache::instance()->file_log("Cache for homepage has been purged due to changes in the Posts page options, triggered by action: " . current_filter());
 	}
-	
+
 	/**
 	 * Purges cache if the avatars option is changed
 	 *
 	 * @param boolean $old_value
 	 * @param boolean $value
 	 */
-	public function purge_cache_on_avatars_change(bool $old_value, ?bool $value): void {
+	public function purge_cache_on_avatars_change($old_value, $value) {
 		if ($old_value !== $value) {
 			$this->purge_cache();
 		}
@@ -430,7 +451,7 @@ class WPO_Cache_Rules {
 	/**
 	 * Returns an instance of the current class, creates one if it doesn't exist
 	 *
-	 * @return object
+	 * @return self
 	 */
 	public static function instance() {
 		if (empty(self::$instance)) {

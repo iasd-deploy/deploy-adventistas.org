@@ -54,6 +54,17 @@ final class Algolia_Users_Index extends Algolia_Index {
 			$should_index = (int) count_user_posts( $item->ID ) > 0;
 		}
 
+		/**
+		 * Filters whether or not to index a user.
+		 *
+		 * This filter is based on if the user has a published post.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  bool  $should_index Whether or not the user should be indexed.
+		 * @param  mixed $item         The user object.
+		 * @return bool  $value        Filtered should index status.
+		 */
 		return (bool) apply_filters( 'algolia_should_index_user', $should_index, $item );
 	}
 
@@ -94,6 +105,15 @@ final class Algolia_Users_Index extends Algolia_Index {
 			$record['avatar_url'] = 'https://www.gravatar.com/avatar/' . $email_hash . '?s=' . $avatar_size;
 		}
 
+		/**
+		 * Filters the user information that will go into the Algolia object.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $record Array of user information.
+		 * @param  mixed $item   The user object.
+		 * @return array $value  Filtered user information.
+		 */
 		$record = (array) apply_filters( 'algolia_user_record', $record, $item );
 
 		return array( $record );
@@ -131,6 +151,14 @@ final class Algolia_Users_Index extends Algolia_Index {
 			),
 		);
 
+		/**
+		 * Filters the settings for the users index settings.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $settings Array of settings to use for the index.
+		 * @return array $value    Filtered index settings.
+		 */
 		$settings = (array) apply_filters( 'algolia_users_index_settings', $settings );
 
 		/**
@@ -163,6 +191,15 @@ final class Algolia_Users_Index extends Algolia_Index {
 	 * @return array
 	 */
 	protected function get_synonyms() {
+
+		/**
+		 * Filters the users index synonyms to use.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $value Array of synonyms to use.
+		 * @return array $value Filtered array of synonyms.
+		 */
 		return (array) apply_filters( 'algolia_users_index_synonyms', array() );
 	}
 
@@ -185,20 +222,25 @@ final class Algolia_Users_Index extends Algolia_Index {
 	 * @author WebDevStudios <contact@webdevstudios.com>
 	 * @since  1.0.0
 	 *
-	 * @param int $page       The page.
-	 * @param int $batch_size The batch size.
+	 * @param int   $page         The page.
+	 * @param int   $batch_size   The batch size.
+	 * @param array $specific_ids Array of user to retrieve and index.
 	 *
 	 * @return array
 	 */
-	protected function get_items( $page, $batch_size ) {
+	protected function get_items( $page, $batch_size, $specific_ids = [] ) {
 		$offset = $batch_size * ( $page - 1 );
 
-		$args = array(
+		$args = [
 			'order'   => 'ASC',
 			'orderby' => 'ID',
 			'offset'  => $offset,
 			'number'  => $batch_size,
-		);
+		];
+
+		if ( ! empty( $specific_ids ) && is_array( $specific_ids ) ) {
+			$args['include'] = $specific_ids;
+		}
 
 		// We use prior to 4.5 syntax for BC purposes, no `paged` arg.
 		return get_users( $args );
@@ -229,16 +271,32 @@ final class Algolia_Users_Index extends Algolia_Index {
 	 * @author WebDevStudios <contact@webdevstudios.com>
 	 * @since  1.0.0
 	 *
-	 * @return array
+	 * @return array Autocomplete config.
 	 */
 	public function get_default_autocomplete_config() {
+		$default_config = parent::get_default_autocomplete_config();
+		$index_name     = $this->get_name();
+
+		/**
+		 * Filters the autocomplete debounce value for this index.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param int Debounce value in milliseconds.
+		 */
+		$debounce = apply_filters(
+			"algolia_autocomplete_debounce_{$index_name}",
+			$default_config['debounce']
+		);
+
 		$config = array(
 			'position'        => 30,
 			'max_suggestions' => 3,
+			'debounce'        => $debounce,
 			'tmpl_suggestion' => 'autocomplete-user-suggestion',
 		);
 
-		return array_merge( parent::get_default_autocomplete_config(), $config );
+		return array_merge( $default_config, $config );
 	}
 
 	/**
