@@ -1,16 +1,3 @@
 #!/bin/bash
 
-if [ -n "$NEWRELIC_KEY" ]; then
-  NR_INI="$(php -r 'echo PHP_CONFIG_FILE_SCAN_DIR;')/newrelic.ini"
-  if [ -f "$NR_INI" ]; then
-    sed -i \
-      -e "s/REPLACE_WITH_REAL_KEY/$NEWRELIC_KEY/" \
-      -e "s/newrelic.appname[[:space:]]=[[:space:]].*/newrelic.appname=\"$NEWRELIC_APP_NAME\"/" \
-      -e '$anewrelic.distributed_tracing_enabled=true' \
-      -e '$anewrelic.framework.wordpress.hooks=true' \
-      -e '$anewrelic.loglevel=error' \
-      "$NR_INI"
-  fi
-fi
-
 exec "$@"
