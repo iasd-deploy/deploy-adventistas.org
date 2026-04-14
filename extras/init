@@ -18,8 +18,14 @@ echo "Fim da instalação do NewRelic"
 
 echo "Ajuste nas permissões da pasta uploads"
 rm -rf /var/www/html/wp-content
+chown -R www-data:www-data /var/www/html
 find /var/www/html -type d -exec chmod 755 {} \;
 find /var/www/html -type f -exec chmod 644 {} \;
+# wp-content/uploads precisa ser writable pelo PHP (Elementor gera Google Fonts CSS em runtime,
+# Contact Form 7 gera captchas/uploads, iThemes Security grava logs). Sem 775, o processo
+# PHP (www-data) não consegue criar sites/{N}/elementor/google-fonts/css/*.css e o WordPress
+# serve 404 HTML — navegador rejeita por MIME mismatch ('text/html' não é stylesheet).
+find /var/www/html -type d -path '*/wp-content/uploads*' -exec chmod 775 {} \;
 chmod 755 /var/www/html
 
 echo "Fim do script"
