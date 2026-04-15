@@ -29,7 +29,18 @@
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,
-      "mountPoints": [],
+      "mountPoints": [
+        {
+          "sourceVolume": "uploads-pt",
+          "containerPath": "/var/www/html/pt/wp-content/uploads",
+          "readOnly": false
+        },
+        {
+          "sourceVolume": "uploads-es",
+          "containerPath": "/var/www/html/es/wp-content/uploads",
+          "readOnly": false
+        }
+      ],
       "workingDirectory": null,
       "secrets": null,
       "dockerSecurityOptions": null,
@@ -104,5 +115,28 @@
   "cpu": null,
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
-  "volumes": []
+  "volumes": [
+    {
+      "name": "uploads-pt",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "fs-REPLACE_ME",
+        "rootDirectory": "/pt-uploads",
+        "transitEncryption": "ENABLED",
+        "authorizationConfig": {
+          "iam": "DISABLED"
+        }
+      }
+    },
+    {
+      "name": "uploads-es",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "fs-REPLACE_ME",
+        "rootDirectory": "/es-uploads",
+        "transitEncryption": "ENABLED",
+        "authorizationConfig": {
+          "iam": "DISABLED"
+        }
+      }
+    }
+  ]
 }
